@@ -16,9 +16,6 @@ class TestAzureSQL
         // Replace with your Azure SQL Database connection string
         string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
-        connectionString =
-            "Server=tcp:swamp-locks.database.windows.net,1433;Initial Catalog=swamp_db;Persist Security Info=False;User ID=swamplocks;Password=kbfjkndlmLASB598*;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-
         if (string.IsNullOrEmpty(connectionString))
         {
             Console.WriteLine("❌ Connection string is missing. Make sure it's set in the .env file.");
