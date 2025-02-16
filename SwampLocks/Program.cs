@@ -16,6 +16,8 @@ class TestAzureSQL
         // Replace with your Azure SQL Database connection string
         string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
+        Console.WriteLine(connectionString);
+
         if (string.IsNullOrEmpty(connectionString))
         {
             Console.WriteLine("❌ Connection string is missing. Make sure it's set in the .env file.");

@@ -13,3 +13,5 @@
 /dataSources.local.xml
 # Enviroment variables 
 .env
+bin/
+obj/
