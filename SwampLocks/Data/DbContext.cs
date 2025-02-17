@@ -19,6 +19,7 @@ public class FinancialContext : DbContext
             throw new InvalidOperationException("Database connection string is missing.");
         }
 
+        
         optionsBuilder.UseSqlServer(connectionString);
     }
 

@@ -1,0 +1,6 @@
+@SwampLocksAPI_HostAddress = http://localhost:5196
+
+GET {{SwampLocksAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
