@@ -9,18 +9,9 @@ public class FinancialContext : DbContext
     public DbSet<Stock> Stocks { get; set; }
     public DbSet<StockData> StockDataEntries { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public FinancialContext(DbContextOptions<FinancialContext> options) : base(options)
     {
-        Env.Load();
-        string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            throw new InvalidOperationException("Database connection string is missing.");
-        }
-
-        
-        optionsBuilder.UseSqlServer(connectionString);
+    
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
