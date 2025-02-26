@@ -106,6 +106,7 @@ def fetch_sector_data(ticker, period="1y", interval="1d"):
     return df
 
 
+
 def economic_calendar_us(from_date="01/01/2017", to_date=None):
     if to_date is None:
         to_date = datetime.now().strftime("%d/%m/%Y")
@@ -167,7 +168,7 @@ def economic_calendar_us(from_date="01/01/2017", to_date=None):
                 timescope = int(row.xpath("td")[0].get("id").replace("theDay", ""))
                 curr_date = datetime.fromtimestamp(
                     timescope, tz=pytz.timezone("GMT")
-                ).strftime("%d/%m/%Y")
+                ).strftime("%m/%d/%Y")
             else:
                 row_id = row_id.replace("eventRowId_", "")
                 event_time = None
@@ -211,5 +212,11 @@ def economic_calendar_us(from_date="01/01/2017", to_date=None):
                 })
         last_id = results[-1]["id"]
         data["limit_from"] += 1
-
-    return pd.DataFrame(results)
+    cal_data = pd.DataFrame(results)
+    first_clean_cond = cal_data['importance'] != 'low'
+    second_clean_cond = cal_data['actual'].notna()
+    third_clean_cond = cal_data['time'] != 'All Day'
+    fourth_clean_cond = ~cal_data['event'].str.contains('Speaks', na=False)
+    clean_combo = first_clean_cond & second_clean_cond & third_clean_cond & fourth_clean_cond
+    final_results = cal_data[clean_combo]
+    return pd.DataFrame(final_results)
