@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+namespace SwampLocksDb.Models
+{
 public class Stock
 {
     [Key]
@@ -11,10 +13,14 @@ public class Stock
     public string Ticker { get; set; } // Unique Identifier for the Stock
 
     [Required]
-    [ForeignKey("Sector")]
-    public string SectorName { get; set; }  // Reference to the Sector it belongs to
+    public string SectorName { get; set; }  
 
-    public Sector Sector { get; set; }
+    [ForeignKey("SectorName")]
+    public virtual Sector Sector { get; set; }
 
     public List<StockData> DataEntries { get; set; } = new List<StockData>(); // List of StockData (Per Date)
+
+	public virtual List<Article> Articles { get; set; } = new List<Article>(); // articles related to stock (Per Date)
+
+}
 }
