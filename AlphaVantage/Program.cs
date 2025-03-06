@@ -38,12 +38,13 @@ class Program
             Console.WriteLine("3. Fetch and Store Exchange Rates");
             Console.WriteLine("4. Fetch and Store Stock Data");
             Console.WriteLine("5. Fetch and Store Cash Flow Statements");
-            Console.WriteLine("6. Exit");
-            Console.Write("Enter choice (1-5): ");
+            Console.WriteLine("6. Fetch and Store Income Statements");
+            Console.WriteLine("7. Exit");
+            Console.Write("Enter choice (1-7): ");
 
             string? choice = Console.ReadLine()?.Trim();
 
-            if (choice == "6")
+            if (choice == "7")
             {
                 Console.WriteLine("Exiting program. Goodbye! 👋");
                 break;
@@ -67,6 +68,10 @@ class Program
             else if (choice == "5")
             {
                 FetcCashFlowStatements(service);
+            }
+            else if (choice == "6")
+            {
+                FetcIncomeStatements(service);
             }
             else
             {
@@ -214,6 +219,57 @@ class Program
                 Console.WriteLine(success
                     ? "✅ Cash flow statements fetched and stored successfully!"
                     : "❌ Failed to store cash flow statements.");
+            }
+            else
+            {
+                Console.WriteLine("❌ Invalid input. Sector name cannot be empty.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
+        }
+    }
+    
+    static void FetcIncomeStatements(AlphaVantageService service)
+    {
+        Console.WriteLine("\nWould you like to fetch income statements by:");
+        Console.WriteLine("1. Stock Ticker");
+        Console.WriteLine("2. Sector Name");
+        Console.Write("Enter choice (1/2): ");
+
+        string? fetchChoice = Console.ReadLine()?.Trim();
+
+        if (fetchChoice == "1")
+        {
+            Console.Write("Enter Stock Ticker (e.g., AAPL): ");
+            string ticker = Console.ReadLine()?.Trim().ToUpper() ?? "";
+
+            if (!string.IsNullOrEmpty(ticker))
+            {
+                Console.WriteLine($"📥 Fetching and storing income statements for stock: {ticker}...");
+                bool success = service.FetchAndStoreAllIncomeStatemetsFromStock(ticker);
+                Console.WriteLine(success
+                    ? "✅ Income statements fetched and stored successfully!"
+                    : "❌ Failed to store Income statements.");
+            }
+            else
+            {
+                Console.WriteLine("❌ Invalid input. Stock ticker cannot be empty.");
+            }
+        }
+        else if (fetchChoice == "2")
+        {
+            Console.Write("Enter Sector Name (e.g., Financials): ");
+            string sector = Console.ReadLine()?.Trim() ?? "";
+
+            if (!string.IsNullOrEmpty(sector))
+            {
+                Console.WriteLine($"📥 Fetching and storing income statements for sector: {sector}...");
+                bool success = service.FetchAndStoreAllIncomeStatemetsFromSector(sector);
+                Console.WriteLine(success
+                    ? "✅ Income statements fetched and stored successfully!"
+                    : "❌ Failed to store income statements.");
             }
             else
             {

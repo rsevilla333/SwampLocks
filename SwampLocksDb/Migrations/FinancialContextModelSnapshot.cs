@@ -158,6 +158,97 @@ namespace SwampLocks.Migrations
                     b.ToTable("ExchangeRates");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.IncomeStatement", b =>
+                {
+                    b.Property<string>("Ticker")
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("FiscalDateEnding")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ComprehensiveIncomeNetOfTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CostOfGoodsAndServicesSold")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CostOfRevenue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Depreciation")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DepreciationAndAmortization")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Ebit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Ebitda")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GrossProfit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("IncomeBeforeTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("IncomeTaxExpense")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("InterestAndDebtExpense")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("InterestExpense")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("InterestIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("InvestmentIncomeNet")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("NetIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetIncomeFromContinuingOperations")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetInterestIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NonInterestIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OperatingExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OperatingIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OtherNonOperatingIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ReportedCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ResearchAndDevelopment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SellingGeneralAndAdministrative")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalRevenue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Ticker", "FiscalDateEnding");
+
+                    b.ToTable("IncomeStatements");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.InterestRate", b =>
                 {
                     b.Property<string>("Id")
@@ -374,6 +465,17 @@ namespace SwampLocks.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.IncomeStatement", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.Stock", "Stock")
+                        .WithMany("IncomeStatements")
+                        .HasForeignKey("Ticker")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.SectorPerformance", b =>
                 {
                     b.HasOne("SwampLocksDb.Models.Sector", "Sector")
@@ -434,6 +536,8 @@ namespace SwampLocks.Migrations
                     b.Navigation("CashFlowStatements");
 
                     b.Navigation("DataEntries");
+
+                    b.Navigation("IncomeStatements");
                 });
 #pragma warning restore 612, 618
         }

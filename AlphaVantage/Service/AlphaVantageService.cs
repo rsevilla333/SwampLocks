@@ -319,6 +319,121 @@ namespace SwampLocks.AlphaVantage.Service
             return true;
         }
         
+        public bool FetchAndStoreAllIncomeStatemetsFromSector(string sectorName)
+        {
+            List<string> stockTickers = _context.Stocks
+                .Where(s => s.Sector.Name == sectorName)
+                .Select(s => s.Ticker)
+                .ToList();
+
+            foreach (var ticker in stockTickers)
+            {
+                try
+                {
+                    FetchAndStoreAllIncomeStatemetsFromStock(ticker);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error processing income statements for {ticker}: {ex.Message}");
+                }
+            }
+            
+            Console.WriteLine($"Populated {sectorName} sector");
+            return true;
+        }
+        
+        public bool FetchAndStoreAllIncomeStatemetsFromStock(string ticker)
+        {
+            // get response from client
+            List<List<string>> incomeStatements = _client.GetIncomeStatementsByStock(ticker);
+            
+            // loop through every balance sheet in ticker
+            foreach (var incomeStatementItem in incomeStatements)
+            {
+                DateTime date = DateTime.TryParse(incomeStatementItem[0], out var fde) ? fde : DateTime.MinValue;
+                try
+                {
+                    // create balance sheet object 
+                    var incomeStatement = new IncomeStatement
+                    {
+                        Ticker = ticker,
+                        FiscalDateEnding = date,
+                        ReportedCurrency = incomeStatementItem[1],
+                        GrossProfit = decimal.TryParse(incomeStatementItem[2], out var gp) ? gp : 0,
+                        TotalRevenue = decimal.TryParse(incomeStatementItem[3], out var tr) ? tr : 0,
+                        CostOfRevenue = decimal.TryParse(incomeStatementItem[4], out var cor) ? cor : 0,
+                        CostOfGoodsAndServicesSold = decimal.TryParse(incomeStatementItem[5], out var cgs) ? cgs : 0,
+                        OperatingIncome = decimal.TryParse(incomeStatementItem[6], out var oi) ? oi : 0,
+                        SellingGeneralAndAdministrative = decimal.TryParse(incomeStatementItem[7], out var sgna) ? sgna : 0,
+                        ResearchAndDevelopment = decimal.TryParse(incomeStatementItem[8], out var rnd) ? rnd : 0,
+                        OperatingExpenses = decimal.TryParse(incomeStatementItem[9], out var oe) ? oe : 0,
+                        InvestmentIncomeNet = incomeStatementItem[10],
+                        NetInterestIncome = decimal.TryParse(incomeStatementItem[11], out var nii) ? nii : 0,
+                        InterestIncome = decimal.TryParse(incomeStatementItem[12], out var ii) ? ii : 0,
+                        InterestExpense = decimal.TryParse(incomeStatementItem[13], out var ie) ? ie : 0,
+                        NonInterestIncome = decimal.TryParse(incomeStatementItem[14], out var nii2) ? nii2 : 0,
+                        OtherNonOperatingIncome = decimal.TryParse(incomeStatementItem[15], out var onoi) ? onoi : 0,
+                        Depreciation = decimal.TryParse(incomeStatementItem[16], out var dep) ? dep : 0,
+                        DepreciationAndAmortization = decimal.TryParse(incomeStatementItem[17], out var da) ? da : 0,
+                        IncomeBeforeTax = decimal.TryParse(incomeStatementItem[18], out var ibt) ? ibt : 0,
+                        IncomeTaxExpense = decimal.TryParse(incomeStatementItem[19], out var itx) ? itx : 0,
+                        InterestAndDebtExpense = incomeStatementItem[20],
+                        NetIncomeFromContinuingOperations = decimal.TryParse(incomeStatementItem[21], out var nic) ? nic : 0,
+                        ComprehensiveIncomeNetOfTax = decimal.TryParse(incomeStatementItem[22], out var cinot) ? cinot : 0,
+                        Ebit = decimal.TryParse(incomeStatementItem[23], out var ebit) ? ebit : 0,
+                        Ebitda = decimal.TryParse(incomeStatementItem[24], out var ebitda) ? ebitda : 0,
+                        NetIncome = decimal.TryParse(incomeStatementItem[25], out var ni) ? ni : 0
+                    };
+
+                    
+                    // Check if the entry exists in DB
+                    var existingEntry = _context.IncomeStatements
+                        .AsNoTracking()
+                        .FirstOrDefault(b => b.Ticker == ticker && b.FiscalDateEnding == date);
+
+                    if (existingEntry != null)
+                    {
+                        Console.WriteLine($"⏩ Skipping {ticker} (Date: {date}) - Already Exists in DB");
+                        continue; // Skip adding the duplicate entry
+                    }
+
+                    // Check if EF Core is tracking a duplicate
+                    var duplicateEntry = _context.ChangeTracker.Entries<IncomeStatement>()
+                        .FirstOrDefault(e => e.Entity.Ticker == ticker && e.Entity.FiscalDateEnding == date);
+
+                    if (duplicateEntry != null)
+                    {
+                        Console.WriteLine($"🛑 Removing duplicate from tracker: {ticker} ({date})");
+                        _context.Entry(duplicateEntry.Entity).State = EntityState.Detached;
+                    }
+
+                    // Add the new entry
+                    _context.IncomeStatements.Add(incomeStatement);
+                    Console.WriteLine($"✅ Added Income Statement for: {ticker} (date: {date})");
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error processing Income Statement for {ticker} in {date}: {ex.Message}");
+                    continue;
+                }
+            }
+
+
+            try
+            {
+                int savedChanges = _context.SaveChanges();
+                Console.WriteLine($"✅ Successfully saved {savedChanges} Cash Flow Statement for {ticker}.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Database error when saving: {ex.Message}");
+                return false;
+            }
+
+            return true;
+        }
+        
         public void FetchAndStoreArticlesBySector(string sectorName, DateTime from, DateTime to)
         {
             try

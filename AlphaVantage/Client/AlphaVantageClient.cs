@@ -347,6 +347,59 @@ namespace SwampLocks.AlphaVantage.Client
 		    }
 		    return result;
 		}
+        
+        public List<List<string>> GetIncomeStatementsByStock(string ticker)
+		{
+		    string function = "INCOME_STATEMENT"; // Change to INCOME_STATEMENT
+		    string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
+		    Console.WriteLine(queryURL);
+		    
+		    string data = client.DownloadString(queryURL);
+		    JObject jsonData = JObject.Parse(data);
+		    var quarterlyReports = jsonData["quarterlyReports"] as JArray; // Use quarterlyReports
+
+		    var result = new List<List<string>>();
+
+		    if (quarterlyReports != null)
+		    {
+		        foreach (var report in quarterlyReports)
+		        {
+		            var incomeStatement = new List<string>
+		            {
+		                report["fiscalDateEnding"]?.ToString(),
+		                report["reportedCurrency"]?.ToString(),
+		                report["grossProfit"]?.ToString(),
+		                report["totalRevenue"]?.ToString(),
+		                report["costOfRevenue"]?.ToString(),
+		                report["costofGoodsAndServicesSold"]?.ToString(),
+		                report["operatingIncome"]?.ToString(),
+		                report["sellingGeneralAndAdministrative"]?.ToString(),
+		                report["researchAndDevelopment"]?.ToString(),
+		                report["operatingExpenses"]?.ToString(),
+		                report["investmentIncomeNet"]?.ToString(),
+		                report["netInterestIncome"]?.ToString(),
+		                report["interestIncome"]?.ToString(),
+		                report["interestExpense"]?.ToString(),
+		                report["nonInterestIncome"]?.ToString(),
+		                report["otherNonOperatingIncome"]?.ToString(),
+		                report["depreciation"]?.ToString(),
+		                report["depreciationAndAmortization"]?.ToString(),
+		                report["incomeBeforeTax"]?.ToString(),
+		                report["incomeTaxExpense"]?.ToString(),
+		                report["interestAndDebtExpense"]?.ToString(),
+		                report["netIncomeFromContinuingOperations"]?.ToString(),
+		                report["comprehensiveIncomeNetOfTax"]?.ToString(),
+		                report["ebit"]?.ToString(),
+		                report["ebitda"]?.ToString(),
+		                report["netIncome"]?.ToString()
+		            };
+
+		            result.Add(incomeStatement);
+		        }
+		    }
+		    return result;
+		}
+
 
         
     }

@@ -25,6 +25,8 @@ public class Stock
 	public virtual List<StockBalanceSheet> BalanceSheets { get; set; } = new List<StockBalanceSheet>();
 
 	public virtual List<CashFlowStatement> CashFlowStatements { get; set; } = new List<CashFlowStatement>();
+	
+	public virtual List<IncomeStatement> IncomeStatements { get; set; } = new List<IncomeStatement>();
 
 }
 }
