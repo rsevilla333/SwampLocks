@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Globalization;
+
 
 namespace SwampLocks.AlphaVantage.Client
 {
@@ -108,25 +110,13 @@ namespace SwampLocks.AlphaVantage.Client
 		Retail & Wholesale: retail_wholesale
 		Technology: technology
 		*/
-		public List<Tuple<DateTime,string, Decimal>> GetNewsSentimentBySector(string sector, DateTime DateFrom, DateTime DateTo) {
+		
+
+		public List<Tuple<DateTime,string, Decimal>> GetNewsSentimentByStock(string ticker, DateTime DateFrom, DateTime DateTo, double relevanceScore = 0.1) {
 			string function = "NEWS_SENTIMENT";
 			string dateFormat = "yyyyMMddTHHmm";
-			string queryURL = $"{BaseUrl}?function={function}&topics{sector}&time_from={DateFrom.ToString(dateFormat)}&time_to={DateTo.ToString(dateFormat)}&apikey={_apiKey}";
-			Console.WriteLine(queryURL);
-
-			string data = client.DownloadString(queryURL);
-			Console.WriteLine(data);
-
-			dynamic apiResponse = JsonConvert.DeserializeObject<dynamic>(data);
-			List<Tuple<DateTime, string, decimal>> result = new List<Tuple<DateTime, string, decimal>>();
-
-			return result;
-		}
-
-		public List<Tuple<DateTime,string, Decimal>> GetNewsSentimentByStock(string ticker, DateTime DateFrom, DateTime DateTo, double relevanceScore = 0.5) {
-			string function = "NEWS_SENTIMENT";
-			string dateFormat = "yyyyMMddTHHmm";
-			string queryURL = $"{BaseUrl}?function={function}&tickers={ticker}&time_from={DateFrom.ToString(dateFormat)}&time_to={DateTo.ToString(dateFormat)}&apikey={_apiKey}";
+			int limit = 1000;
+			string queryURL = $"{BaseUrl}?function={function}&tickers={ticker}&time_from={DateFrom.ToString(dateFormat)}&time_to={DateTo.ToString(dateFormat)}&limit={1000}&apikey={_apiKey}";
 			Console.WriteLine(queryURL);
 
 			string data = client.DownloadString(queryURL);
@@ -148,13 +138,14 @@ namespace SwampLocks.AlphaVantage.Client
                 {
                     if (tickerSentiment.ticker == ticker && tickerSentiment.relevance_score >= relevanceScore)
                     { 
-						Console.WriteLine(tickerSentiment.relevance_score);
                        	DateTime articleDate = DateTime.ParseExact((string)article.time_published, "yyyyMMddTHHmmss", null);
+						decimal sentimentScore = (decimal)double.Parse(tickerSentiment.ticker_sentiment_score.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture);
+						Console.WriteLine(tickerSentiment.relevance_score + " " + sentimentScore);
                         
                         result.Add(new Tuple<DateTime, string, decimal>(
                             articleDate,
                             article.title.ToString(),
-                            (decimal)tickerSentiment.ticker_sentiment_score
+                            sentimentScore
                         ));
                     }
                 }
@@ -166,7 +157,7 @@ namespace SwampLocks.AlphaVantage.Client
         private List<Tuple<DateTime, Decimal>> GetExchangeRate(string interval, string from, string to)
         {
             string function = $"FX_{interval}";
-            string queryURL = $"{BaseUrl}?function={function}&from_symbol={from}&to_symbol={to}&apikey={_apiKey}";
+            string queryURL = $"{BaseUrl}?function={function}&from_symbol={from}&to_symbol={to}&outputsize=full&apikey={_apiKey}";
             Console.WriteLine(queryURL);
             string data = client.DownloadString(queryURL);
             
@@ -200,12 +191,11 @@ namespace SwampLocks.AlphaVantage.Client
         //https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=USD&to_symbol=EUR&apikey=YOUR_API_KEY
         //url = 'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=' + tickers + '&topics=' + topics + '&time_from=20170101T0000&time_to=20241231T2359&sort=EARLIEST&limit=1000&apikey=' + api_key
         
-        
-        
+      
         private List<Tuple<DateTime, Decimal>> GetCLosingStockData(string ticker, string interval)
         {
             string function = $"TIME_SERIES_{interval}";
-            string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
+            string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&outputsize=full&apikey={_apiKey}";
             Console.WriteLine(queryURL);
             string data = client.DownloadString(queryURL);
             
@@ -238,6 +228,126 @@ namespace SwampLocks.AlphaVantage.Client
 
             return closingPrices;
         }
+
+        public List<List<string>> GetBalanceSheetsByStock(string ticker)
+		{
+	        string function = "BALANCE_SHEET";
+	        string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
+	        Console.WriteLine(queryURL);
+	        
+	        string data = client.DownloadString(queryURL);
+	        JObject jsonData = JObject.Parse(data);
+	        var annualReports = jsonData["annualReports"] as JArray;
+
+	        var result = new List<List<string>>();
+
+	        if (annualReports != null)
+	        {
+	            foreach (var report in annualReports)
+	            {
+	                var balanceSheet = new List<string>
+	                {
+	                    report["fiscalDateEnding"]?.ToString(),
+	                    report["reportedCurrency"]?.ToString(),
+	                    report["totalAssets"]?.ToString(),
+	                    report["totalCurrentAssets"]?.ToString(),
+	                    report["cashAndCashEquivalentsAtCarryingValue"]?.ToString(),
+	                    report["cashAndShortTermInvestments"]?.ToString(),
+	                    report["inventory"]?.ToString(),
+	                    report["currentNetReceivables"]?.ToString(),
+	                    report["totalNonCurrentAssets"]?.ToString(),
+	                    report["propertyPlantEquipment"]?.ToString(),
+	                    report["accumulatedDepreciationAmortizationPPE"]?.ToString(),
+	                    report["intangibleAssets"]?.ToString(),
+	                    report["intangibleAssetsExcludingGoodwill"]?.ToString(),
+	                    report["goodwill"]?.ToString(),
+	                    report["investments"]?.ToString(),
+	                    report["longTermInvestments"]?.ToString(),
+	                    report["shortTermInvestments"]?.ToString(),
+	                    report["otherCurrentAssets"]?.ToString(),
+	                    report["otherNonCurrentAssets"]?.ToString(),
+	                    report["totalLiabilities"]?.ToString(),
+	                    report["totalCurrentLiabilities"]?.ToString(),
+	                    report["currentAccountsPayable"]?.ToString(),
+	                    report["deferredRevenue"]?.ToString(),
+	                    report["currentDebt"]?.ToString(),
+	                    report["shortTermDebt"]?.ToString(),
+	                    report["totalNonCurrentLiabilities"]?.ToString(),
+	                    report["capitalLeaseObligations"]?.ToString(),
+	                    report["longTermDebt"]?.ToString(),
+	                    report["currentLongTermDebt"]?.ToString(),
+	                    report["longTermDebtNoncurrent"]?.ToString(),
+	                    report["shortLongTermDebtTotal"]?.ToString(),
+	                    report["otherCurrentLiabilities"]?.ToString(),
+	                    report["otherNonCurrentLiabilities"]?.ToString(),
+	                    report["totalShareholderEquity"]?.ToString(),
+	                    report["treasuryStock"]?.ToString(),
+	                    report["retainedEarnings"]?.ToString(),
+	                    report["commonStock"]?.ToString(),
+	                    report["commonStockSharesOutstanding"]?.ToString()
+	                };
+
+	                result.Add(balanceSheet);
+	            }
+	        }
+	        return result;
+		}
+        
+        public List<List<string>> GetCashFlowStatementsByStock(string ticker)
+		{
+		    string function = "CASH_FLOW";
+		    string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
+		    Console.WriteLine(queryURL);
+		    
+		    string data = client.DownloadString(queryURL);
+		    JObject jsonData = JObject.Parse(data);
+		    var quarterlyReports = jsonData["quarterlyReports"] as JArray;
+
+		    var result = new List<List<string>>();
+
+		    if (quarterlyReports != null)
+		    {
+		        foreach (var report in quarterlyReports)
+		        {
+		            var cashFlowStatement = new List<string>
+		            {
+		                report["fiscalDateEnding"]?.ToString(),
+		                report["reportedCurrency"]?.ToString(),
+		                report["operatingCashflow"]?.ToString(),
+		                report["paymentsForOperatingActivities"]?.ToString(),
+		                report["proceedsFromOperatingActivities"]?.ToString(),
+		                report["changeInOperatingLiabilities"]?.ToString(),
+		                report["changeInOperatingAssets"]?.ToString(),
+		                report["depreciationDepletionAndAmortization"]?.ToString(),
+		                report["capitalExpenditures"]?.ToString(),
+		                report["changeInReceivables"]?.ToString(),
+		                report["changeInInventory"]?.ToString(),
+		                report["profitLoss"]?.ToString(),
+		                report["cashflowFromInvestment"]?.ToString(),
+		                report["cashflowFromFinancing"]?.ToString(),
+		                report["proceedsFromRepaymentsOfShortTermDebt"]?.ToString(),
+		                report["paymentsForRepurchaseOfCommonStock"]?.ToString(),
+		                report["paymentsForRepurchaseOfEquity"]?.ToString(),
+		                report["paymentsForRepurchaseOfPreferredStock"]?.ToString(),
+		                report["dividendPayout"]?.ToString(),
+		                report["dividendPayoutCommonStock"]?.ToString(),
+		                report["dividendPayoutPreferredStock"]?.ToString(),
+		                report["proceedsFromIssuanceOfCommonStock"]?.ToString(),
+		                report["proceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet"]?.ToString(),
+		                report["proceedsFromIssuanceOfPreferredStock"]?.ToString(),
+		                report["proceedsFromRepurchaseOfEquity"]?.ToString(),
+		                report["proceedsFromSaleOfTreasuryStock"]?.ToString(),
+		                report["changeInCashAndCashEquivalents"]?.ToString(),
+		                report["changeInExchangeRate"]?.ToString(),
+		                report["netIncome"]?.ToString()
+		            };
+
+		            result.Add(cashFlowStatement);
+		        }
+		    }
+		    return result;
+		}
+
         
     }
 }

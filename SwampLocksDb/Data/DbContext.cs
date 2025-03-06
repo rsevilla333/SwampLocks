@@ -18,6 +18,8 @@ public class FinancialContext : DbContext
     public DbSet<Article> Articles { get; set; }
 	public DbSet<ExchangeRate> ExchangeRates { get; set; }
     public DbSet<InterestRate> InterestRates { get; set; }
+    public DbSet<StockBalanceSheet> StockBalanceSheets { get; set; }
+    public DbSet<CashFlowStatement> CashFlowStatements { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -65,7 +67,7 @@ public class FinancialContext : DbContext
             .HasForeignKey(a => a.Ticker)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Configure SectorPerformance composite key
+        // SectorPerformance 
         modelBuilder.Entity<SectorPerformance>()
             .HasKey(sp => new { sp.SectorName, sp.Date }); // Composite key for SectorPerformance
 
@@ -75,11 +77,34 @@ public class FinancialContext : DbContext
             .HasForeignKey(sp => sp.SectorName)
             .OnDelete(DeleteBehavior.Cascade);
 
+            // Exchangerate
             modelBuilder.Entity<ExchangeRate>()
                 .HasKey(er => new { er.Date, er.TargetCurrency });
 
+            // InterestRate
 			modelBuilder.Entity<InterestRate>()
                 .HasKey(r => r.Id);
+            
+            // StockBalanceSeheet
+            modelBuilder.Entity<StockBalanceSheet>()
+                .HasKey(s => new { s.Ticker, s.FiscalYear });
+
+            modelBuilder.Entity<StockBalanceSheet>()
+                .HasOne(s => s.Stock)
+                .WithMany(s => s.BalanceSheets)
+                .HasForeignKey(s => s.Ticker)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            // CashFlow
+            
+            modelBuilder.Entity<CashFlowStatement>()
+                .HasKey(s => new { s.Ticker, s.FiscalDateEnding });
+
+            modelBuilder.Entity<CashFlowStatement>()
+                .HasOne(s => s.Stock)
+                .WithMany(s => s.CashFlowStatements)
+                .HasForeignKey(s => s.Ticker)
+                .OnDelete(DeleteBehavior.Cascade);
     }
 }
 }

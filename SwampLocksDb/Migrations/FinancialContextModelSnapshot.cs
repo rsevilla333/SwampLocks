@@ -41,6 +41,107 @@ namespace SwampLocks.Migrations
                     b.ToTable("Articles");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.CashFlowStatement", b =>
+                {
+                    b.Property<string>("Ticker")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnOrder(0);
+
+                    b.Property<DateTime>("FiscalDateEnding")
+                        .HasColumnType("datetime2")
+                        .HasColumnOrder(1);
+
+                    b.Property<decimal>("CapitalExpenditures")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CashFlowFromFinancing")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CashFlowFromInvestment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ChangeInCashAndCashEquivalents")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ChangeInExchangeRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ChangeInInventory")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ChangeInOperatingAssets")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ChangeInOperatingLiabilities")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ChangeInReceivables")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DepreciationDepletionAndAmortization")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DividendPayout")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DividendPayoutCommonStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DividendPayoutPreferredStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OperatingCashFlow")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PaymentsForOperatingActivities")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PaymentsForRepurchaseOfCommonStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PaymentsForRepurchaseOfEquity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PaymentsForRepurchaseOfPreferredStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProceedsFromIssuanceOfCommonStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProceedsFromIssuanceOfPreferredStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProceedsFromOperatingActivities")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProceedsFromRepaymentsOfShortTermDebt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProceedsFromRepurchaseOfEquity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProceedsFromSaleOfTreasuryStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProfitLoss")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ReportedCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Ticker", "FiscalDateEnding");
+
+                    b.ToTable("CashFlowStatements");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.ExchangeRate", b =>
                 {
                     b.Property<DateTime>("Date")
@@ -125,6 +226,110 @@ namespace SwampLocks.Migrations
                     b.ToTable("Stocks");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.StockBalanceSheet", b =>
+                {
+                    b.Property<string>("Ticker")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("FiscalYear")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    b.Property<decimal>("CashAndCashEquivalents")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CashAndShortTermInvestments")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommonStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long>("CommonStockSharesOutstanding")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("CurrentAccountsPayable")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CurrentDebt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CurrentNetReceivables")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DeferredRevenue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Goodwill")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("IntangibleAssets")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Inventory")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Investments")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LongTermDebt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LongTermInvestments")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OtherCurrentAssets")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OtherCurrentLiabilities")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PropertyPlantEquipment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ReportedCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("RetainedEarnings")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ShortTermDebt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ShortTermInvestments")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAssets")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalCurrentAssets")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalCurrentLiabilities")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalLiabilities")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalNonCurrentAssets")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalNonCurrentLiabilities")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalShareholderEquity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TreasuryStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Ticker", "FiscalYear");
+
+                    b.ToTable("StockBalanceSheets");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.StockData", b =>
                 {
                     b.Property<string>("Ticker")
@@ -158,6 +363,17 @@ namespace SwampLocks.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.CashFlowStatement", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.Stock", "Stock")
+                        .WithMany("CashFlowStatements")
+                        .HasForeignKey("Ticker")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.SectorPerformance", b =>
                 {
                     b.HasOne("SwampLocksDb.Models.Sector", "Sector")
@@ -178,6 +394,17 @@ namespace SwampLocks.Migrations
                         .IsRequired();
 
                     b.Navigation("Sector");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.StockBalanceSheet", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.Stock", "Stock")
+                        .WithMany("BalanceSheets")
+                        .HasForeignKey("Ticker")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("SwampLocksDb.Models.StockData", b =>
@@ -201,6 +428,10 @@ namespace SwampLocks.Migrations
             modelBuilder.Entity("SwampLocksDb.Models.Stock", b =>
                 {
                     b.Navigation("Articles");
+
+                    b.Navigation("BalanceSheets");
+
+                    b.Navigation("CashFlowStatements");
 
                     b.Navigation("DataEntries");
                 });

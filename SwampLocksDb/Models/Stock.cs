@@ -21,6 +21,10 @@ public class Stock
     public List<StockData> DataEntries { get; set; } = new List<StockData>(); // List of StockData (Per Date)
 
 	public virtual List<Article> Articles { get; set; } = new List<Article>(); // articles related to stock (Per Date)
+	
+	public virtual List<StockBalanceSheet> BalanceSheets { get; set; } = new List<StockBalanceSheet>();
+
+	public virtual List<CashFlowStatement> CashFlowStatements { get; set; } = new List<CashFlowStatement>();
 
 }
 }
