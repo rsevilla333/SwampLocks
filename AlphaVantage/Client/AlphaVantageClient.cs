@@ -228,176 +228,98 @@ namespace SwampLocks.AlphaVantage.Client
 
             return closingPrices;
         }
-
-        public List<List<string>> GetBalanceSheetsByStock(string ticker)
-		{
-	        string function = "BALANCE_SHEET";
+        
+        // Fetch General Report Statements for a Stock
+        public List<List<string>> GetFinancialReportByStock(string ticker, string function, string reportKey, List<string> fields)
+        {
 	        string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
 	        Console.WriteLine(queryURL);
-	        
+
 	        string data = client.DownloadString(queryURL);
 	        JObject jsonData = JObject.Parse(data);
-	        var annualReports = jsonData["annualReports"] as JArray;
+	        var reports = jsonData[reportKey] as JArray;
 
 	        var result = new List<List<string>>();
 
-	        if (annualReports != null)
+	        if (reports != null)
 	        {
-	            foreach (var report in annualReports)
-	            {
-	                var balanceSheet = new List<string>
-	                {
-	                    report["fiscalDateEnding"]?.ToString(),
-	                    report["reportedCurrency"]?.ToString(),
-	                    report["totalAssets"]?.ToString(),
-	                    report["totalCurrentAssets"]?.ToString(),
-	                    report["cashAndCashEquivalentsAtCarryingValue"]?.ToString(),
-	                    report["cashAndShortTermInvestments"]?.ToString(),
-	                    report["inventory"]?.ToString(),
-	                    report["currentNetReceivables"]?.ToString(),
-	                    report["totalNonCurrentAssets"]?.ToString(),
-	                    report["propertyPlantEquipment"]?.ToString(),
-	                    report["accumulatedDepreciationAmortizationPPE"]?.ToString(),
-	                    report["intangibleAssets"]?.ToString(),
-	                    report["intangibleAssetsExcludingGoodwill"]?.ToString(),
-	                    report["goodwill"]?.ToString(),
-	                    report["investments"]?.ToString(),
-	                    report["longTermInvestments"]?.ToString(),
-	                    report["shortTermInvestments"]?.ToString(),
-	                    report["otherCurrentAssets"]?.ToString(),
-	                    report["otherNonCurrentAssets"]?.ToString(),
-	                    report["totalLiabilities"]?.ToString(),
-	                    report["totalCurrentLiabilities"]?.ToString(),
-	                    report["currentAccountsPayable"]?.ToString(),
-	                    report["deferredRevenue"]?.ToString(),
-	                    report["currentDebt"]?.ToString(),
-	                    report["shortTermDebt"]?.ToString(),
-	                    report["totalNonCurrentLiabilities"]?.ToString(),
-	                    report["capitalLeaseObligations"]?.ToString(),
-	                    report["longTermDebt"]?.ToString(),
-	                    report["currentLongTermDebt"]?.ToString(),
-	                    report["longTermDebtNoncurrent"]?.ToString(),
-	                    report["shortLongTermDebtTotal"]?.ToString(),
-	                    report["otherCurrentLiabilities"]?.ToString(),
-	                    report["otherNonCurrentLiabilities"]?.ToString(),
-	                    report["totalShareholderEquity"]?.ToString(),
-	                    report["treasuryStock"]?.ToString(),
-	                    report["retainedEarnings"]?.ToString(),
-	                    report["commonStock"]?.ToString(),
-	                    report["commonStockSharesOutstanding"]?.ToString()
-	                };
-
-	                result.Add(balanceSheet);
-	            }
+		        foreach (var report in reports)
+		        {
+			        var reportData = fields.Select(field => report[field]?.ToString()).ToList();
+			        result.Add(reportData);
+		        }
 	        }
 	        return result;
-		}
-        
-        public List<List<string>> GetCashFlowStatementsByStock(string ticker)
+        }
+
+        // Fetch Balance Sheets
+        public List<List<string>> GetBalanceSheetsByStock(string ticker)
 		{
-		    string function = "CASH_FLOW";
-		    string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
-		    Console.WriteLine(queryURL);
-		    
-		    string data = client.DownloadString(queryURL);
-		    JObject jsonData = JObject.Parse(data);
-		    var quarterlyReports = jsonData["quarterlyReports"] as JArray;
-
-		    var result = new List<List<string>>();
-
-		    if (quarterlyReports != null)
+		    return GetFinancialReportByStock(ticker, "BALANCE_SHEET", "annualReports", new List<string>
 		    {
-		        foreach (var report in quarterlyReports)
-		        {
-		            var cashFlowStatement = new List<string>
-		            {
-		                report["fiscalDateEnding"]?.ToString(),
-		                report["reportedCurrency"]?.ToString(),
-		                report["operatingCashflow"]?.ToString(),
-		                report["paymentsForOperatingActivities"]?.ToString(),
-		                report["proceedsFromOperatingActivities"]?.ToString(),
-		                report["changeInOperatingLiabilities"]?.ToString(),
-		                report["changeInOperatingAssets"]?.ToString(),
-		                report["depreciationDepletionAndAmortization"]?.ToString(),
-		                report["capitalExpenditures"]?.ToString(),
-		                report["changeInReceivables"]?.ToString(),
-		                report["changeInInventory"]?.ToString(),
-		                report["profitLoss"]?.ToString(),
-		                report["cashflowFromInvestment"]?.ToString(),
-		                report["cashflowFromFinancing"]?.ToString(),
-		                report["proceedsFromRepaymentsOfShortTermDebt"]?.ToString(),
-		                report["paymentsForRepurchaseOfCommonStock"]?.ToString(),
-		                report["paymentsForRepurchaseOfEquity"]?.ToString(),
-		                report["paymentsForRepurchaseOfPreferredStock"]?.ToString(),
-		                report["dividendPayout"]?.ToString(),
-		                report["dividendPayoutCommonStock"]?.ToString(),
-		                report["dividendPayoutPreferredStock"]?.ToString(),
-		                report["proceedsFromIssuanceOfCommonStock"]?.ToString(),
-		                report["proceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet"]?.ToString(),
-		                report["proceedsFromIssuanceOfPreferredStock"]?.ToString(),
-		                report["proceedsFromRepurchaseOfEquity"]?.ToString(),
-		                report["proceedsFromSaleOfTreasuryStock"]?.ToString(),
-		                report["changeInCashAndCashEquivalents"]?.ToString(),
-		                report["changeInExchangeRate"]?.ToString(),
-		                report["netIncome"]?.ToString()
-		            };
-
-		            result.Add(cashFlowStatement);
-		        }
-		    }
-		    return result;
+		        "fiscalDateEnding", "reportedCurrency", "totalAssets", "totalCurrentAssets",
+		        "cashAndCashEquivalentsAtCarryingValue", "cashAndShortTermInvestments",
+		        "inventory", "currentNetReceivables", "totalNonCurrentAssets",
+		        "propertyPlantEquipment", "accumulatedDepreciationAmortizationPPE",
+		        "intangibleAssets", "intangibleAssetsExcludingGoodwill", "goodwill",
+		        "investments", "longTermInvestments", "shortTermInvestments",
+		        "otherCurrentAssets", "otherNonCurrentAssets", "totalLiabilities",
+		        "totalCurrentLiabilities", "currentAccountsPayable", "deferredRevenue",
+		        "currentDebt", "shortTermDebt", "totalNonCurrentLiabilities",
+		        "capitalLeaseObligations", "longTermDebt", "currentLongTermDebt",
+		        "longTermDebtNoncurrent", "shortLongTermDebtTotal",
+		        "otherCurrentLiabilities", "otherNonCurrentLiabilities",
+		        "totalShareholderEquity", "treasuryStock", "retainedEarnings",
+		        "commonStock", "commonStockSharesOutstanding"
+		    });
 		}
-        
-        public List<List<string>> GetIncomeStatementsByStock(string ticker)
+
+		// Fetch Cash Flow Statements
+		public List<List<string>> GetCashFlowStatementsByStock(string ticker)
 		{
-		    string function = "INCOME_STATEMENT"; // Change to INCOME_STATEMENT
-		    string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
-		    Console.WriteLine(queryURL);
-		    
-		    string data = client.DownloadString(queryURL);
-		    JObject jsonData = JObject.Parse(data);
-		    var quarterlyReports = jsonData["quarterlyReports"] as JArray; // Use quarterlyReports
-
-		    var result = new List<List<string>>();
-
-		    if (quarterlyReports != null)
+		    return GetFinancialReportByStock(ticker, "CASH_FLOW", "quarterlyReports", new List<string>
 		    {
-		        foreach (var report in quarterlyReports)
-		        {
-		            var incomeStatement = new List<string>
-		            {
-		                report["fiscalDateEnding"]?.ToString(),
-		                report["reportedCurrency"]?.ToString(),
-		                report["grossProfit"]?.ToString(),
-		                report["totalRevenue"]?.ToString(),
-		                report["costOfRevenue"]?.ToString(),
-		                report["costofGoodsAndServicesSold"]?.ToString(),
-		                report["operatingIncome"]?.ToString(),
-		                report["sellingGeneralAndAdministrative"]?.ToString(),
-		                report["researchAndDevelopment"]?.ToString(),
-		                report["operatingExpenses"]?.ToString(),
-		                report["investmentIncomeNet"]?.ToString(),
-		                report["netInterestIncome"]?.ToString(),
-		                report["interestIncome"]?.ToString(),
-		                report["interestExpense"]?.ToString(),
-		                report["nonInterestIncome"]?.ToString(),
-		                report["otherNonOperatingIncome"]?.ToString(),
-		                report["depreciation"]?.ToString(),
-		                report["depreciationAndAmortization"]?.ToString(),
-		                report["incomeBeforeTax"]?.ToString(),
-		                report["incomeTaxExpense"]?.ToString(),
-		                report["interestAndDebtExpense"]?.ToString(),
-		                report["netIncomeFromContinuingOperations"]?.ToString(),
-		                report["comprehensiveIncomeNetOfTax"]?.ToString(),
-		                report["ebit"]?.ToString(),
-		                report["ebitda"]?.ToString(),
-		                report["netIncome"]?.ToString()
-		            };
+		        "fiscalDateEnding", "reportedCurrency", "operatingCashflow",
+		        "paymentsForOperatingActivities", "proceedsFromOperatingActivities",
+		        "changeInOperatingLiabilities", "changeInOperatingAssets",
+		        "depreciationDepletionAndAmortization", "capitalExpenditures",
+		        "changeInReceivables", "changeInInventory", "profitLoss",
+		        "cashflowFromInvestment", "cashflowFromFinancing",
+		        "proceedsFromRepaymentsOfShortTermDebt", "paymentsForRepurchaseOfCommonStock",
+		        "paymentsForRepurchaseOfEquity", "paymentsForRepurchaseOfPreferredStock",
+		        "dividendPayout", "dividendPayoutCommonStock", "dividendPayoutPreferredStock",
+		        "proceedsFromIssuanceOfCommonStock", "proceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet",
+		        "proceedsFromIssuanceOfPreferredStock", "proceedsFromRepurchaseOfEquity",
+		        "proceedsFromSaleOfTreasuryStock", "changeInCashAndCashEquivalents",
+		        "changeInExchangeRate", "netIncome"
+		    });
+		}
 
-		            result.Add(incomeStatement);
-		        }
-		    }
-		    return result;
+		// Fetch Income Statements
+		public List<List<string>> GetIncomeStatementsByStock(string ticker)
+		{
+		    return GetFinancialReportByStock(ticker, "INCOME_STATEMENT", "quarterlyReports", new List<string>
+		    {
+		        "fiscalDateEnding", "reportedCurrency", "grossProfit", "totalRevenue",
+		        "costOfRevenue", "costofGoodsAndServicesSold", "operatingIncome",
+		        "sellingGeneralAndAdministrative", "researchAndDevelopment",
+		        "operatingExpenses", "investmentIncomeNet", "netInterestIncome",
+		        "interestIncome", "interestExpense", "nonInterestIncome",
+		        "otherNonOperatingIncome", "depreciation", "depreciationAndAmortization",
+		        "incomeBeforeTax", "incomeTaxExpense", "interestAndDebtExpense",
+		        "netIncomeFromContinuingOperations", "comprehensiveIncomeNetOfTax",
+		        "ebit", "ebitda", "netIncome"
+		    });
+		}
+		
+		// Fetch Earning Statements
+		public List<List<string>> GetEarningStatementsByStock(string ticker)
+		{
+			return GetFinancialReportByStock(ticker, "EARNINGS", "quarterlyEarnings", new List<string>
+			{
+				"fiscalDateEnding", "reportedDate", "reportedEPS", "estimatedEPS", 
+				"surprise", "surprisePercentage", "reportTime"
+			});
 		}
 
 

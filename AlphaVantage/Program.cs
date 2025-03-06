@@ -1,4 +1,5 @@
-﻿using SwampLocks.AlphaVantage.Client;
+﻿
+using SwampLocks.AlphaVantage.Client;
 using SwampLocks.AlphaVantage.Service;
 using System;
 using System.Net;
@@ -8,7 +9,6 @@ using Newtonsoft.Json.Linq;
 using DotNetEnv;
 using SwampLocksDb.Models;
 using SwampLocksDb.Data;
-
 using System;
 using System.Threading.Tasks;
 using DotNetEnv;
@@ -20,31 +20,32 @@ class Program
         // Load environment variables
         Env.Load();
         string? apiKey = Environment.GetEnvironmentVariable("ALPHA_VANTAGE_KEY");
-
-        // Initialize API client and database context
-        AlphaVantageClient client = new AlphaVantageClient(apiKey);
-        var context = new FinancialContext();
-        AlphaVantageService service = new AlphaVantageService(context, client);
+        
+        AlphaVantageClient client = new AlphaVantageClient(apiKey); // get client
+        var context = new FinancialContext(); // get context (db)
+        
+        AlphaVantageService service = new AlphaVantageService(context, client); // get service
 
         RunCLI(service);
     }
     static void RunCLI(AlphaVantageService service)
     {
-        while (true) // Keep CLI running until user exits
+        while (true) 
         {
-            Console.WriteLine("\n📊 DATABASE POPULATION TOOL 📊");
+            Console.WriteLine("\n📊 DATABASE POPULATION TOOL USING ALPHA VANTAGE RESOURCES 📊");
             Console.WriteLine("1. Fetch and Store News Articles");
             Console.WriteLine("2. Fetch and Store Balance Sheets");
             Console.WriteLine("3. Fetch and Store Exchange Rates");
             Console.WriteLine("4. Fetch and Store Stock Data");
             Console.WriteLine("5. Fetch and Store Cash Flow Statements");
             Console.WriteLine("6. Fetch and Store Income Statements");
-            Console.WriteLine("7. Exit");
-            Console.Write("Enter choice (1-7): ");
+            Console.WriteLine("7. Fetch and Store Earning Statements");
+            Console.WriteLine("8. Exit");
+            Console.Write("Enter choice (1-8): ");
 
             string? choice = Console.ReadLine()?.Trim();
 
-            if (choice == "7")
+            if (choice == "8")
             {
                 Console.WriteLine("Exiting program. Goodbye! 👋");
                 break;
@@ -67,11 +68,15 @@ class Program
             }
             else if (choice == "5")
             {
-                FetcCashFlowStatements(service);
+                FetchCashFlowStatements(service);
             }
             else if (choice == "6")
             {
-                FetcIncomeStatements(service);
+                FetchIncomeStatements(service);
+            }
+            else if (choice == "7")
+            {
+                FetchEarningStatements(service);
             }
             else
             {
@@ -80,16 +85,99 @@ class Program
         }
     }
 
-    static void FetchNewsArticles(AlphaVantageService service)
+    static void FetchFinancialData(AlphaVantageService service, string dataType,
+        Func<string, bool> fetchByStock, Func<string, bool> fetchBySector)
     {
-        Console.WriteLine("\nWould you like to fetch news by:");
+        Console.WriteLine($"\nWould you like to fetch {dataType} by:");
         Console.WriteLine("1. Stock Ticker");
         Console.WriteLine("2. Sector Name");
         Console.Write("Enter choice (1/2): ");
 
         string? fetchChoice = Console.ReadLine()?.Trim();
-        DateTime startDate = DateTime.Parse("2021-01-01");
-        DateTime endDate = DateTime.Parse("2021-12-31");
+
+        Func<string, bool>? fetchFunction = fetchChoice switch
+        {
+            "1" => fetchByStock,
+            "2" => fetchBySector,
+            _ => null
+        };
+
+        if (fetchFunction != null)
+        {
+            Console.Write(fetchChoice == "1" ? "Enter Stock Ticker (e.g., AAPL): " : "Enter Sector Name (e.g., Financials): ");
+            string input = Console.ReadLine()?.Trim();
+            if (!string.IsNullOrEmpty(input))
+            {
+                Console.WriteLine($"📥 Fetching and storing {dataType} for {input}...");
+                bool success = fetchFunction(input);
+                Console.WriteLine(success
+                    ? $"✅ {dataType} fetched and stored successfully!"
+                    : $"❌ Failed to store {dataType}.");
+            }
+            else
+            {
+                Console.WriteLine("❌ Invalid input. Cannot be empty.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
+        }
+    }
+    
+    static void FetchEarningStatements(AlphaVantageService service)
+    {
+        FetchFinancialData(service, "Earning Statement",
+            service.FetchAndStoreAllEarningStatementsFromStock,
+            service.FetchAndStoreAllEarningStatementsFromSector);
+    }
+    
+    static void FetchBalanceSheets(AlphaVantageService service)
+    {
+        FetchFinancialData(service, "Balance Sheets",
+            service.FetchAndStoreAllBalanceSheetsFromStock,
+            service.FetchAndStoreAllBalanceSheetsFromSector);
+    }
+    
+    static void FetchCashFlowStatements(AlphaVantageService service)
+    {
+        FetchFinancialData(service, "Cash Flow Statements",
+            service.FetchAndStoreAllCashFlowStatementsFromStock,
+            service.FetchAndStoreAllCashFlowStatementsFromSector);
+    }
+
+    static void FetchIncomeStatements(AlphaVantageService service)
+    {
+        FetchFinancialData(service, "Income Statements",
+            service.FetchAndStoreAllIncomeStatementsFromStock,
+            service.FetchAndStoreAllIncomeStatementsFromSector);
+    }
+
+    static void FetchExchangeRates(AlphaVantageService service)
+    {
+        Console.WriteLine("1. Get Exchange Rates for main currencies");
+        Console.WriteLine("2. Get Exchange Rates for a specific currency");
+        Console.Write("Enter choice (1/2): ");
+        string? fetchChoice = Console.ReadLine()?.Trim();
+
+        if (fetchChoice == "1")
+            service.PopulateExchangeRates();
+    }
+    
+    static void FetchNewsArticles(AlphaVantageService service)
+    {
+        Console.WriteLine("\nWould you like to fetch news by:");
+        Console.WriteLine("1. Stock Ticker");
+        Console.WriteLine("2. Sector Name");
+        
+        Console.Write("Enter choice (1/2): ");
+        string? fetchChoice = Console.ReadLine()?.Trim();
+        
+        Console.Write("Give me a year: ");
+        string? year = Console.ReadLine()?.Trim();    
+        
+        DateTime startDate = DateTime.Parse($"{year}-01-01");
+        DateTime endDate = DateTime.Parse($"{year}-12-31");
 
         if (fetchChoice == "1")
         {
@@ -129,169 +217,6 @@ class Program
         }
     }
 
-    static void FetchBalanceSheets(AlphaVantageService service)
-    {
-        Console.WriteLine("\nWould you like to fetch balance sheets by:");
-        Console.WriteLine("1. Stock Ticker");
-        Console.WriteLine("2. Sector Name");
-        Console.Write("Enter choice (1/2): ");
-
-        string? fetchChoice = Console.ReadLine()?.Trim();
-
-        if (fetchChoice == "1")
-        {
-            Console.Write("Enter Stock Ticker (e.g., AAPL): ");
-            string ticker = Console.ReadLine()?.Trim().ToUpper() ?? "";
-
-            if (!string.IsNullOrEmpty(ticker))
-            {
-                Console.WriteLine($"📥 Fetching and storing balance sheets for stock: {ticker}...");
-                bool success = service.FetchAndStoreAllBalanceSheetsFromStock(ticker);
-                Console.WriteLine(success
-                    ? "✅ Balance sheets fetched and stored successfully!"
-                    : "❌ Failed to store balance sheets.");
-            }
-            else
-            {
-                Console.WriteLine("❌ Invalid input. Stock ticker cannot be empty.");
-            }
-        }
-        else if (fetchChoice == "2")
-        {
-            Console.Write("Enter Sector Name (e.g., Financials): ");
-            string sector = Console.ReadLine()?.Trim() ?? "";
-
-            if (!string.IsNullOrEmpty(sector))
-            {
-                Console.WriteLine($"📥 Fetching and storing balance sheets for sector: {sector}...");
-                bool success = service.FetchAndStoreAllBalanceSheetsFromSector(sector);
-                Console.WriteLine(success
-                    ? "✅ Balance sheets fetched and stored successfully!"
-                    : "❌ Failed to store balance sheets.");
-            }
-            else
-            {
-                Console.WriteLine("❌ Invalid input. Sector name cannot be empty.");
-            }
-        }
-        else
-        {
-            Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
-        }
-    }
-    
-    static void FetcCashFlowStatements(AlphaVantageService service)
-    {
-        Console.WriteLine("\nWould you like to fetch cash flow statements by:");
-        Console.WriteLine("1. Stock Ticker");
-        Console.WriteLine("2. Sector Name");
-        Console.Write("Enter choice (1/2): ");
-
-        string? fetchChoice = Console.ReadLine()?.Trim();
-
-        if (fetchChoice == "1")
-        {
-            Console.Write("Enter Stock Ticker (e.g., AAPL): ");
-            string ticker = Console.ReadLine()?.Trim().ToUpper() ?? "";
-
-            if (!string.IsNullOrEmpty(ticker))
-            {
-                Console.WriteLine($"📥 Fetching and storing cash flow statements for stock: {ticker}...");
-                bool success = service.FetchAndStoreAllCashFlowStatemetsFromStock(ticker);
-                Console.WriteLine(success
-                    ? "✅ Cash flow statements fetched and stored successfully!"
-                    : "❌ Failed to store Cash flow statements.");
-            }
-            else
-            {
-                Console.WriteLine("❌ Invalid input. Stock ticker cannot be empty.");
-            }
-        }
-        else if (fetchChoice == "2")
-        {
-            Console.Write("Enter Sector Name (e.g., Financials): ");
-            string sector = Console.ReadLine()?.Trim() ?? "";
-
-            if (!string.IsNullOrEmpty(sector))
-            {
-                Console.WriteLine($"📥 Fetching and storing cash flow statements for sector: {sector}...");
-                bool success = service.FetchAndStoreAllCashFlowStatemetsFromSector(sector);
-                Console.WriteLine(success
-                    ? "✅ Cash flow statements fetched and stored successfully!"
-                    : "❌ Failed to store cash flow statements.");
-            }
-            else
-            {
-                Console.WriteLine("❌ Invalid input. Sector name cannot be empty.");
-            }
-        }
-        else
-        {
-            Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
-        }
-    }
-    
-    static void FetcIncomeStatements(AlphaVantageService service)
-    {
-        Console.WriteLine("\nWould you like to fetch income statements by:");
-        Console.WriteLine("1. Stock Ticker");
-        Console.WriteLine("2. Sector Name");
-        Console.Write("Enter choice (1/2): ");
-
-        string? fetchChoice = Console.ReadLine()?.Trim();
-
-        if (fetchChoice == "1")
-        {
-            Console.Write("Enter Stock Ticker (e.g., AAPL): ");
-            string ticker = Console.ReadLine()?.Trim().ToUpper() ?? "";
-
-            if (!string.IsNullOrEmpty(ticker))
-            {
-                Console.WriteLine($"📥 Fetching and storing income statements for stock: {ticker}...");
-                bool success = service.FetchAndStoreAllIncomeStatemetsFromStock(ticker);
-                Console.WriteLine(success
-                    ? "✅ Income statements fetched and stored successfully!"
-                    : "❌ Failed to store Income statements.");
-            }
-            else
-            {
-                Console.WriteLine("❌ Invalid input. Stock ticker cannot be empty.");
-            }
-        }
-        else if (fetchChoice == "2")
-        {
-            Console.Write("Enter Sector Name (e.g., Financials): ");
-            string sector = Console.ReadLine()?.Trim() ?? "";
-
-            if (!string.IsNullOrEmpty(sector))
-            {
-                Console.WriteLine($"📥 Fetching and storing income statements for sector: {sector}...");
-                bool success = service.FetchAndStoreAllIncomeStatemetsFromSector(sector);
-                Console.WriteLine(success
-                    ? "✅ Income statements fetched and stored successfully!"
-                    : "❌ Failed to store income statements.");
-            }
-            else
-            {
-                Console.WriteLine("❌ Invalid input. Sector name cannot be empty.");
-            }
-        }
-        else
-        {
-            Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
-        }
-    }
-
-    static void FetchExchangeRates(AlphaVantageService service)
-    {
-        Console.WriteLine("1. Get Exchange Rates for main currencies");
-        Console.WriteLine("2. Get Exchange Rates for a specific currency");
-        Console.Write("Enter choice (1/2): ");
-        string? fetchChoice = Console.ReadLine()?.Trim();
-
-        if (fetchChoice == "1")
-            service.PopulateExchangeRates();
-    }
 
     static void FetchStockData(AlphaVantageService service)
     {
@@ -314,4 +239,3 @@ class Program
         }
     }
 }
-    

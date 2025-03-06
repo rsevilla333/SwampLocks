@@ -61,7 +61,7 @@ namespace SwampLocks.AlphaVantage.Service
             return true;
         }
         
-        public bool FetchAndStoreAllCashFlowStatemetsFromSector(string sectorName)
+        public bool FetchAndStoreAllReportsFromSector(string sectorName, string reportType, Func<string, bool> fetchAndStoreByStock)
         {
             List<string> stockTickers = _context.Stocks
                 .Where(s => s.Sector.Name == sectorName)
@@ -72,11 +72,15 @@ namespace SwampLocks.AlphaVantage.Service
             {
                 try
                 {
-                    FetchAndStoreAllCashFlowStatemetsFromStock(ticker);
+                    bool result = fetchAndStoreByStock(ticker);
+                    if (!result)
+                    {
+                        Console.WriteLine($"Failed to process {reportType} for {ticker}");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error processing cash flow statements for {ticker}: {ex.Message}");
+                    Console.WriteLine($"Error processing {reportType} for {ticker}: {ex.Message}");
                 }
             }
             
@@ -84,18 +88,114 @@ namespace SwampLocks.AlphaVantage.Service
             return true;
         }
         
-        public bool FetchAndStoreAllCashFlowStatemetsFromStock(string ticker)
+        public bool FetchAndStoreAllCashFlowStatementsFromSector(string sectorName)
+        {
+            return FetchAndStoreAllReportsFromSector(sectorName, "Cash Flow Statement", 
+                FetchAndStoreAllCashFlowStatementsFromStock);
+        }
+        
+        public bool FetchAndStoreAllBalanceSheetsFromSector(string sectorName)
+        {
+            return FetchAndStoreAllReportsFromSector(sectorName, "Balance Sheet", 
+                FetchAndStoreAllBalanceSheetsFromStock);
+        }
+        
+        public bool FetchAndStoreAllIncomeStatementsFromSector(string sectorName)
+        {
+            return FetchAndStoreAllReportsFromSector(sectorName, "Income Statement",
+                FetchAndStoreAllIncomeStatementsFromStock);
+        }
+        
+        public bool FetchAndStoreAllEarningStatementsFromSector(string sectorName)
+        {
+            return FetchAndStoreAllReportsFromSector(sectorName, "Earning Statement",
+                FetchAndStoreAllEarningStatementsFromStock);
+        }
+        
+        public bool FetchAndStoreAllEarningStatementsFromStock(string ticker)
+        {
+            // get response from client
+            List<List<string>> earningStatements = _client.GetEarningStatementsByStock(ticker);
+            
+            // loop through every earning statement in ticker
+            foreach (var earningStatementItem in earningStatements)
+            {
+                DateTime date = DateTime.TryParse(earningStatementItem[0], out var fde) ? fde : DateTime.MinValue;
+                
+                try
+                {
+                    // create earning statement object 
+                    var earningStatement = new StockEarningStatement
+                    {
+                        Ticker = ticker,
+                        FiscalDateEnding = date,
+                        ReportedDate = DateTime.TryParse(earningStatementItem[1], out var rde) ? rde : DateTime.MinValue,
+                        ReportedEPS = decimal.TryParse(earningStatementItem[3], out var reps) ? reps : 0,
+                        estimatedEPS = decimal.TryParse(earningStatementItem[4], out var eeps) ? eeps : 0,
+                        Surprise = decimal.TryParse(earningStatementItem[4], out var spr) ? spr : 0,
+                        SuprisePercentage = decimal.TryParse(earningStatementItem[5], out var spp) ? spp : 0, 
+                        ReportTime = earningStatementItem[6]
+                    };
+                    
+                    // Check if the entry exists in DB
+                    var existingEntry = _context.StockEarnings
+                        .AsNoTracking()
+                        .FirstOrDefault(b => b.Ticker == ticker && b.FiscalDateEnding == date);
+                
+                    if (existingEntry != null)
+                    {
+                        Console.WriteLine($"⏩ Skipping {ticker} (Date: {date}) - Already Exists in DB");
+                        continue; // Skip adding the duplicate entry
+                    }
+                
+                    // Check if EF Core is tracking a duplicate
+                    var duplicateEntry = _context.ChangeTracker.Entries<StockEarningStatement>()
+                        .FirstOrDefault(e => e.Entity.Ticker == ticker && e.Entity.FiscalDateEnding == date);
+                
+                    if (duplicateEntry != null)
+                    {
+                        Console.WriteLine($"🛑 Removing duplicate from tracker: {ticker} ({date})");
+                        _context.Entry(duplicateEntry.Entity).State = EntityState.Detached;
+                    }
+                
+                    // Add the new entry
+                    _context.StockEarnings.Add(earningStatement);
+                    Console.WriteLine($"✅ Added Earning Statement for: {ticker} (date: {date})");
+                
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error processing Earning Statement for {ticker} in {date}: {ex.Message}");
+                    continue;
+                }
+            }
+            
+            try
+            {
+                int savedChanges = _context.SaveChanges();
+                Console.WriteLine($"✅ Successfully saved {savedChanges} Earning Statement for {ticker}.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Database error when saving: {ex.Message}");
+                return false;
+            }
+        
+            return true;
+        }
+        
+        public bool FetchAndStoreAllCashFlowStatementsFromStock(string ticker)
         {
             // get response from client
             List<List<string>> cashFlowStatements = _client.GetCashFlowStatementsByStock(ticker);
             
-            // loop through every balance sheet in ticker
+            // loop through every cash flow statement in ticker
             foreach (var cashFlowStatementItem in cashFlowStatements)
             {
                 DateTime date = DateTime.TryParse(cashFlowStatementItem[0], out var fde) ? fde : DateTime.MinValue;
                 try
                 {
-                    // create balance sheet object 
+                    // create cash flow statement object 
                     var cashFlow = new CashFlowStatement
                     {
                         Ticker = ticker,
@@ -163,8 +263,7 @@ namespace SwampLocks.AlphaVantage.Service
                     continue;
                 }
             }
-
-
+            
             try
             {
                 int savedChanges = _context.SaveChanges();
@@ -176,29 +275,6 @@ namespace SwampLocks.AlphaVantage.Service
                 return false;
             }
 
-            return true;
-        }
-
-        public bool FetchAndStoreAllBalanceSheetsFromSector(string sectorName)
-        {
-            List<string> stockTickers = _context.Stocks
-                .Where(s => s.Sector.Name == sectorName)
-                .Select(s => s.Ticker)
-                .ToList();
-
-            foreach (var ticker in stockTickers)
-            {
-                try
-                {
-                    FetchAndStoreAllBalanceSheetsFromStock(ticker);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error processing balance sheets for {ticker}: {ex.Message}");
-                }
-            }
-            
-            Console.WriteLine($"Populated {sectorName} sector");
             return true;
         }
         
@@ -283,8 +359,7 @@ namespace SwampLocks.AlphaVantage.Service
                     continue;
                 }
             }
-
-
+            
             try
             {
                 int savedChanges = _context.SaveChanges();
@@ -319,41 +394,18 @@ namespace SwampLocks.AlphaVantage.Service
             return true;
         }
         
-        public bool FetchAndStoreAllIncomeStatemetsFromSector(string sectorName)
-        {
-            List<string> stockTickers = _context.Stocks
-                .Where(s => s.Sector.Name == sectorName)
-                .Select(s => s.Ticker)
-                .ToList();
-
-            foreach (var ticker in stockTickers)
-            {
-                try
-                {
-                    FetchAndStoreAllIncomeStatemetsFromStock(ticker);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error processing income statements for {ticker}: {ex.Message}");
-                }
-            }
-            
-            Console.WriteLine($"Populated {sectorName} sector");
-            return true;
-        }
-        
-        public bool FetchAndStoreAllIncomeStatemetsFromStock(string ticker)
+        public bool FetchAndStoreAllIncomeStatementsFromStock(string ticker)
         {
             // get response from client
             List<List<string>> incomeStatements = _client.GetIncomeStatementsByStock(ticker);
             
-            // loop through every balance sheet in ticker
+            // loop through income statement sheet in ticker
             foreach (var incomeStatementItem in incomeStatements)
             {
                 DateTime date = DateTime.TryParse(incomeStatementItem[0], out var fde) ? fde : DateTime.MinValue;
                 try
                 {
-                    // create balance sheet object 
+                    // create income statement object 
                     var incomeStatement = new IncomeStatement
                     {
                         Ticker = ticker,
@@ -418,12 +470,11 @@ namespace SwampLocks.AlphaVantage.Service
                     continue;
                 }
             }
-
-
+            
             try
             {
                 int savedChanges = _context.SaveChanges();
-                Console.WriteLine($"✅ Successfully saved {savedChanges} Cash Flow Statement for {ticker}.");
+                Console.WriteLine($"✅ Successfully saved {savedChanges} Income Statement for {ticker}.");
             }
             catch (Exception ex)
             {
@@ -465,73 +516,73 @@ namespace SwampLocks.AlphaVantage.Service
             }
         }
         
-public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime to)
-{
-    List<Tuple<DateTime, string, Decimal>> articles = _client.GetNewsSentimentByStock(ticker, from, to, 0.05);
-
-    foreach (var article in articles)
+    public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime to)
     {
+        List<Tuple<DateTime, string, Decimal>> articles = _client.GetNewsSentimentByStock(ticker, from, to, 0.05);
 
-        DateTime articleDate = article.Item1.Date;
-        string articleTitle = article.Item2;
-        decimal sentimentScore = (decimal)Convert.ToDouble(article.Item3, CultureInfo.InvariantCulture);
-
-
-        var newsEntry = new Article
+        foreach (var article in articles)
         {
-            Ticker = ticker,
-            ArticleName = articleTitle,
-            Date = articleDate,
-            SentimentScore = sentimentScore
-        };
 
-        // Check if article already exists
-        var existingArticle = _context.Articles
-            .FirstOrDefault(a => a.Ticker == newsEntry.Ticker && a.ArticleName == newsEntry.ArticleName && a.Date == newsEntry.Date);
+            DateTime articleDate = article.Item1.Date;
+            string articleTitle = article.Item2;
+            decimal sentimentScore = (decimal)Convert.ToDouble(article.Item3, CultureInfo.InvariantCulture);
 
-        if (existingArticle != null)
-        {
-            // If the article exists, skip this iteration and continue
-            Console.WriteLine($"Article already exists: {existingArticle.ArticleName} (Date: {existingArticle.Date:yyyy-MM-dd})");
-            _context.Entry(existingArticle).State = EntityState.Detached;
-            continue;
-        }
 
-        var trackedArticle = _context.Entry(newsEntry);
-        if (trackedArticle.State == EntityState.Detached)
-        {
-            _context.Articles.Add(newsEntry);
-            Console.WriteLine($"Added: {newsEntry.ArticleName} (Date: {articleDate:yyyy-MM-dd}, sentiment: {sentimentScore})");
-        }
-
-        try
-        {
-            _context.SaveChanges();
-        }
-        catch (DbUpdateException dbEx)
-        {
-            // Catch the exception if a duplicate key violation occurs
-            var sqlException = dbEx.InnerException as SqlException;
-            if (sqlException != null && sqlException.Number == 2627)
+            var newsEntry = new Article
             {
-                // Duplicate key error, just log it and continue
-                Console.WriteLine($"Duplicate key violation: {newsEntry.ArticleName} (Date: {articleDate:yyyy-MM-dd}). Skipping...");
+                Ticker = ticker,
+                ArticleName = articleTitle,
+                Date = articleDate,
+                SentimentScore = sentimentScore
+            };
+
+            // Check if article already exists
+            var existingArticle = _context.Articles
+                .FirstOrDefault(a => a.Ticker == newsEntry.Ticker && a.ArticleName == newsEntry.ArticleName && a.Date == newsEntry.Date);
+
+            if (existingArticle != null)
+            {
+                // If the article exists, skip this iteration and continue
+                Console.WriteLine($"Article already exists: {existingArticle.ArticleName} (Date: {existingArticle.Date:yyyy-MM-dd})");
+                _context.Entry(existingArticle).State = EntityState.Detached;
+                continue;
             }
-            else
+
+            var trackedArticle = _context.Entry(newsEntry);
+            if (trackedArticle.State == EntityState.Detached)
             {
-                // Other DB update exceptions, log them for further investigation
-                Console.WriteLine($"Error saving changes: {dbEx.Message}");
-                
-                if (dbEx.InnerException != null)
+                _context.Articles.Add(newsEntry);
+                Console.WriteLine($"Added: {newsEntry.ArticleName} (Date: {articleDate:yyyy-MM-dd}, sentiment: {sentimentScore})");
+            }
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Catch the exception if a duplicate key violation occurs
+                var sqlException = dbEx.InnerException as SqlException;
+                if (sqlException != null && sqlException.Number == 2627)
                 {
-                    Console.WriteLine($"Inner Exception: {dbEx.InnerException.Message}");
+                    // Duplicate key error, just log it and continue
+                    Console.WriteLine($"Duplicate key violation: {newsEntry.ArticleName} (Date: {articleDate:yyyy-MM-dd}). Skipping...");
+                }
+                else
+                {
+                    // Other DB update exceptions, log them for further investigation
+                    Console.WriteLine($"Error saving changes: {dbEx.Message}");
+                    
+                    if (dbEx.InnerException != null)
+                    {
+                        Console.WriteLine($"Inner Exception: {dbEx.InnerException.Message}");
+                    }
                 }
             }
         }
-    }
 
-    return true;
-}
+        return true;
+    }
         
         public bool AddStockClosingPricePerSector(string sectorName)
         {
@@ -563,6 +614,7 @@ public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime 
                 return false;
             }
         }
+        
         public bool AddStockClosingPrice(string ticker)
         {
             try

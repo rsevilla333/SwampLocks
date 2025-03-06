@@ -21,6 +21,8 @@ public class FinancialContext : DbContext
     public DbSet<StockBalanceSheet> StockBalanceSheets { get; set; }
     public DbSet<CashFlowStatement> CashFlowStatements { get; set; }
     public DbSet<IncomeStatement> IncomeStatements { get; set; }
+    public DbSet<StockEarningStatement> StockEarnings { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -107,13 +109,22 @@ public class FinancialContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
             
             // Income Statement
-            
             modelBuilder.Entity<IncomeStatement>()
                 .HasKey(s => new { s.Ticker, s.FiscalDateEnding });
 
             modelBuilder.Entity<IncomeStatement>()
                 .HasOne(s => s.Stock)
                 .WithMany(s => s.IncomeStatements)
+                .HasForeignKey(s => s.Ticker)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            // Earning Statement
+            modelBuilder.Entity<StockEarningStatement>()
+                .HasKey(s => new { s.Ticker, s.FiscalDateEnding });
+
+            modelBuilder.Entity<StockEarningStatement>()
+                .HasOne(s => s.Stock)
+                .WithMany(s => s.EarningStatements)
                 .HasForeignKey(s => s.Ticker)
                 .OnDelete(DeleteBehavior.Cascade);
     }

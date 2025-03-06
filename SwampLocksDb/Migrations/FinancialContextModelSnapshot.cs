@@ -443,6 +443,41 @@ namespace SwampLocks.Migrations
                     b.ToTable("StockDataEntries");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.StockEarningStatement", b =>
+                {
+                    b.Property<string>("Ticker")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnOrder(0);
+
+                    b.Property<DateTime>("FiscalDateEnding")
+                        .HasColumnType("datetime2")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("ReportTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReportedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ReportedEPS")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SuprisePercentage")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Surprise")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("estimatedEPS")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Ticker", "FiscalDateEnding");
+
+                    b.ToTable("StockEarnings");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.Article", b =>
                 {
                     b.HasOne("SwampLocksDb.Models.Stock", "Stock")
@@ -520,6 +555,17 @@ namespace SwampLocks.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.StockEarningStatement", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.Stock", "Stock")
+                        .WithMany("EarningStatements")
+                        .HasForeignKey("Ticker")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.Sector", b =>
                 {
                     b.Navigation("Performances");
@@ -536,6 +582,8 @@ namespace SwampLocks.Migrations
                     b.Navigation("CashFlowStatements");
 
                     b.Navigation("DataEntries");
+
+                    b.Navigation("EarningStatements");
 
                     b.Navigation("IncomeStatements");
                 });
