@@ -1,10 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SwampLocksDb.Models;
 
-namespace SwampLocksAPI.Data
+namespace SwampLocksDb.Data
 {
     public class LocalContext : DbContext
     {
+        public DbSet<Sector> Sectors { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<StockData> StockDataEntries { get; set; }
+        public DbSet<SectorPerformance> SectorPerformances { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<ExchangeRate> ExchangeRates { get; set; }
+        public DbSet<InterestRate> InterestRates { get; set; }
 
         public LocalContext(DbContextOptions<LocalContext> options) : base(options)    
         {

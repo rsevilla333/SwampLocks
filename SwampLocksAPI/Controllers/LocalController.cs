@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SwampLocksAPI.Data;
+using SwampLocksDb.Data;
+using SwampLocksDb.Models;
 
 namespace SwampLocksAPI.Controllers
 {
