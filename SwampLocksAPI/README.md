@@ -10,7 +10,7 @@
 2. After installing .NET and adding your IP, cd to SwampLocksAPI folder
 
 2. Create an .env file and add the string
-```CONNECTION_STRING = ""```
+```CONNECTION_STRING = ""```, replace string with our sql server connection string
 
 3. After saving, run
  ```dotnet run```
