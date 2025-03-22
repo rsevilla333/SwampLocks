@@ -50,3 +50,11 @@ jobs:
           app-name: 'swamplocksDbUpdater'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+
+      - name: Restart Azure Function App
+        run: |
+          az functionapp restart --name swamplocksDbUpdater --resource-group <YourResourceGroupName>
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.__clientidsecretname__ }}
+          AZURE_TENANT_ID: ${{ secrets.__tenantidsecretname__ }}
+          AZURE_CLIENT_SECRET: ${{ secrets.__clientsecretname__ }}
