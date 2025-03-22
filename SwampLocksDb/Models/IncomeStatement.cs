@@ -15,7 +15,6 @@ namespace SwampLocksDb.Models
 
         [Required]
         public string ReportedCurrency { get; set; } // Reported Currency
-
         public decimal GrossProfit { get; set; }
         public decimal TotalRevenue { get; set; }
         public decimal CostOfRevenue { get; set; }

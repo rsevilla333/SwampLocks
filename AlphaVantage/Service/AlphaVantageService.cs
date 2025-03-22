@@ -5,11 +5,13 @@ using Newtonsoft.Json.Linq;
 using SwampLocksDb.Data;
 using SwampLocksDb.Models;
 using SwampLocks.AlphaVantage.Client;
+using SwampLocks.AlphaVantage.Email;
 using SwampLocksDb.Models;
 using SwampLocksDb.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Collections.Generic;
 
 
 namespace SwampLocks.AlphaVantage.Service
@@ -18,35 +20,127 @@ namespace SwampLocks.AlphaVantage.Service
     {
         private readonly FinancialContext _context;
         private readonly AlphaVantageClient _client;
+        private readonly EmailNotificationService _emailLogger;
 
-        public AlphaVantageService(FinancialContext context, AlphaVantageClient client)
+		private List<(string Name, string Symbol)> _sectors = new List<(string, string)>
+		{
+    		("Communication Services", "XLC"),
+    		("Consumer Discretionary", "XLY"),
+    		("Consumer Staples", "XLP"),
+    		("Energy", "XLE"),
+    		("Financials", "XLF"),
+    		("Healthcare", "XLV"),
+    		("Industrials", "XLI"),
+    		("Information Technology", "XLK"),
+    		("Materials", "XLB"),
+    		("Real Estate", "XLRE"),
+    		("Utilities", "XLU")
+		};
+		private List<string> _currencies = new List<string> { "EUR", "JPY", "BTC", "CAD" };
+
+        public AlphaVantageService(FinancialContext context, AlphaVantageClient client, EmailNotificationService emailLogger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _client = client ?? throw new ArgumentNullException(nameof(client));
+			_emailLogger = emailLogger ?? throw new ArgumentNullException(nameof(emailLogger));
         }
 
         public void PopulateExchangeRates()
         {
-            getExchangeRatesFor("EUR");
-            getExchangeRatesFor("JPY");
-            getExchangeRatesFor("BTC");
-            getExchangeRatesFor("CAD");
+			foreach (var currency in _currencies)
+			{
+    			getExchangeRatesFor(currency);
+			}
         }
 
         public void PopulateSectors()
         {
-            PopulateSector("Communication Services", "XLC");  // Communication Services Sector
-            PopulateSector("Consumer Discretionary", "XLY");  // Consumer Discretionary Sector  
-            PopulateSector("Consumer Staples", "XLP");  // Consumer Staples Sector  
-            PopulateSector("Energy", "XLE");  // Energy Sector  
-            PopulateSector("Financials", "XLF");  // Financials Sector  
-            PopulateSector("Healthcare", "XLV");  // Healthcare Sector  
-            PopulateSector("Industrials", "XLI");  // Industrials Sector  
-            PopulateSector("Information Technology", "XLK");  // Information Technology Sector  
-            PopulateSector("Materials", "XLB");  // Materials Sector  
-            PopulateSector("Real Estate", "XLRE");  // Real Estate Sector  
-            PopulateSector("Utilities", "XLU");  // Utilities Sector  
+            foreach (var (name, symbol) in _sectors)
+			{
+   			 	PopulateSector(name, symbol);
+			}
         }
+
+		public void FetchAndUpdateEverything()
+		{
+    		string subject;
+    		string updateResult;
+    		var results = new List<string>();
+
+    		try
+    		{
+        		Console.WriteLine("UPDATING ALL DATA IN DB");
+
+        		var lastUpdated = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports")?.LastUpdated;
+        		bool updateReports = lastUpdated.HasValue && (DateTime.UtcNow - lastUpdated.Value).Days >= 90;
+
+        		// Execute and track results
+        		TryExecute(PopulateExchangeRates, "PopulateExchangeRates", results);
+        		TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllEconomicData", results);
+        		TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllCommodityData", results);
+
+        		foreach (var (sectorName, symbol) in _sectors)
+        		{
+            		TryExecute(() => AddStockClosingPricePerSector(sectorName), $"AddStockClosingPricePerSector({sectorName})", results);
+            		TryExecute(() => FetchAndStoreArticlesBySector(sectorName, DateTime.UtcNow), $"FetchAndStoreArticlesBySector({sectorName})", results);
+
+            		if (updateReports)
+            		{
+                		TryExecute(() => FetchAndStoreAllEarningStatementsFromSector(sectorName), $"FetchAndStoreAllEarningStatementsFromSector({sectorName})", results);
+                		TryExecute(() => FetchAndStoreAllBalanceSheetsFromSector(sectorName), $"FetchAndStoreAllBalanceSheetsFromSector({sectorName})", results);
+                		TryExecute(() => FetchAndStoreAllCashFlowStatementsFromSector(sectorName), $"FetchAndStoreAllCashFlowStatementsFromSector({sectorName})", results);
+                		TryExecute(() => FetchAndStoreAllIncomeStatementsFromSector(sectorName), $"FetchAndStoreAllIncomeStatementsFromSector({sectorName})", results);
+            		}
+        		}
+
+        		// Update tracking timestamps
+        		_context.DataUpdateTrackers.First(d => d.DataType == "ExRates").LastUpdated = DateTime.UtcNow;
+        		_context.DataUpdateTrackers.First(d => d.DataType == "EcoIndicators").LastUpdated = DateTime.UtcNow;
+        		_context.DataUpdateTrackers.First(d => d.DataType == "Commodities").LastUpdated = DateTime.UtcNow;
+        		_context.DataUpdateTrackers.First(d => d.DataType == "Articles").LastUpdated = DateTime.UtcNow;
+
+        		if (updateReports)
+        		{
+           		 	_context.DataUpdateTrackers.First(d => d.DataType == "Reports").LastUpdated = DateTime.UtcNow;
+        		}
+
+        		_context.DataUpdateTrackers.First(d => d.DataType == "StockData").LastUpdated = DateTime.UtcNow;
+       		 	_context.SaveChanges();
+
+        		updateResult = $"Most current date for all data is now {DateTime.UtcNow}\n\nFunction Results:\n" + string.Join("\n", results);
+        		subject = $"SwampLocks Database Update as of {DateTime.UtcNow:yyyy-MM-dd} result";
+
+        		Console.WriteLine(updateResult);
+    		}
+    		catch (Exception ex)
+    		{
+        		// Handle errors and send an email with error details
+        		updateResult = $"ERROR: An unexpected error occurred during the database update.\n\n" +
+                       		$"Exception Message: {ex.Message}\n\nStackTrace:\n{ex.StackTrace}";
+
+        		subject = $"SwampLocks Database Update FAILED - {DateTime.UtcNow:yyyy-MM-dd}";
+        		Console.WriteLine(updateResult);
+    		}
+
+    		// Send Email Notification (Success or Error)
+    		_emailLogger.SendEmailNotification("rsevilla@ufl.edu", subject, updateResult);
+		}
+
+
+
+		private void TryExecute(Action action, string functionName, List<string> results)
+		{
+    		try
+    		{
+        		action();  
+        		results.Add($"{functionName}: Success");
+    		}
+    		catch (Exception ex)
+    		{
+        		results.Add($"{functionName}: ERROR - {ex.Message}");
+    		}
+		}
+
 
         public bool PopulateSector(string sectorName, string etf)
         {
@@ -116,11 +210,20 @@ namespace SwampLocks.AlphaVantage.Service
         {
             // get response from client
             List<List<string>> earningStatements = _client.GetEarningStatementsByStock(ticker);
+
+			var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports");
+			DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
             
             // loop through every earning statement in ticker
             foreach (var earningStatementItem in earningStatements)
             {
                 DateTime date = DateTime.TryParse(earningStatementItem[0], out var fde) ? fde : DateTime.MinValue;
+
+				if(date < lastUpdatedDate) 
+				{
+					Console.WriteLine("Data already up to date. Bye!!");
+					break;
+				}
                 
                 try
                 {
@@ -188,11 +291,21 @@ namespace SwampLocks.AlphaVantage.Service
         {
             // get response from client
             List<List<string>> cashFlowStatements = _client.GetCashFlowStatementsByStock(ticker);
+
+			var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports");
+			DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
             
             // loop through every cash flow statement in ticker
             foreach (var cashFlowStatementItem in cashFlowStatements)
             {
                 DateTime date = DateTime.TryParse(cashFlowStatementItem[0], out var fde) ? fde : DateTime.MinValue;
+
+				if(date < lastUpdatedDate) 
+				{
+					Console.WriteLine("Data already up to date. Bye!!");
+					break;
+				}
+
                 try
                 {
                     // create cash flow statement object 
@@ -283,6 +396,9 @@ namespace SwampLocks.AlphaVantage.Service
             // get response from client
             List<List<string>> sheets = _client.GetBalanceSheetsByStock(ticker);
 
+			var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports");
+			DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
+
             // loop through every balance sheet in ticker
             foreach (var sheet in sheets)
             {
@@ -290,6 +406,12 @@ namespace SwampLocks.AlphaVantage.Service
                 try
                 {
                     year = int.Parse(sheet[0].Substring(0, 4));
+
+                	if(year < lastUpdatedDate.Year) 
+					{	
+						Console.WriteLine("Data already up to date. Bye!!");
+						break;
+					}
                     
                     // create balance sheet object 
                     var balanceSheet = new StockBalanceSheet
@@ -373,36 +495,26 @@ namespace SwampLocks.AlphaVantage.Service
 
             return true;
         }
-
-        public bool FetchAndStoreAllArticlesByStock(DateTime from, DateTime to)
-        {
-            // Retrieve all stocks from the database
-            var stocks = _context.Stocks.ToList();
-            
-            if (stocks.Any())
-            {
-                foreach (var stock in stocks)
-                {
-                    FetchAndStoreArticlesByStock(stock.Ticker, from, to);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No stocks found in the database.");
-            }
-            
-            return true;
-        }
-        
+     
         public bool FetchAndStoreAllIncomeStatementsFromStock(string ticker)
         {
             // get response from client
             List<List<string>> incomeStatements = _client.GetIncomeStatementsByStock(ticker);
+
+			var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports");
+			DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
             
             // loop through income statement sheet in ticker
             foreach (var incomeStatementItem in incomeStatements)
             {
                 DateTime date = DateTime.TryParse(incomeStatementItem[0], out var fde) ? fde : DateTime.MinValue;
+
+				if(date < lastUpdatedDate) 
+				{	
+					Console.WriteLine("Data already up to date. Bye!!");
+					break;
+				}
+
                 try
                 {
                     // create income statement object 
@@ -485,7 +597,7 @@ namespace SwampLocks.AlphaVantage.Service
             return true;
         }
         
-        public void FetchAndStoreArticlesBySector(string sectorName, DateTime from, DateTime to)
+        public void FetchAndStoreArticlesBySector(string sectorName, DateTime to)
         {
             try
             {
@@ -494,6 +606,8 @@ namespace SwampLocks.AlphaVantage.Service
                     .Where(s => s.Sector.Name == sectorName)
                     .Select(s => s.Ticker)
                     .ToList();
+				
+				DateTime from = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Articles")?.LastUpdated ?? DateTime.UtcNow;
     
                 foreach (var ticker in stockTickers)
                 {
@@ -504,7 +618,7 @@ namespace SwampLocks.AlphaVantage.Service
                         Console.WriteLine($"✅ Successfully fetched and stored articles for {ticker}");
                     }
                     catch (Exception ex)
-                    {
+                    { 
                         Console.WriteLine($"❌ Error processing stock {ticker}: {ex.Message}");
                        Console.WriteLine("Continuing to the next stock...");
                     }
@@ -516,73 +630,78 @@ namespace SwampLocks.AlphaVantage.Service
             }
         }
         
-    public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime to)
-    {
-        List<Tuple<DateTime, string, Decimal>> articles = _client.GetNewsSentimentByStock(ticker, from, to, 0.05);
+		public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime to)
+  		{
+			var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Articles");
+			DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
+			// lastUpdatedDate, to
+      		List<Tuple<DateTime, string, string, Decimal>> articles = _client.GetNewsSentimentByStock(ticker, from, to, 0.01);
+          
+      		foreach (var article in articles)
+      		{
+          		DateTime articleDate = article.Item1.Date;
+          		string articleTitle = article.Item2;
+				string articleUrl = article.Item3;
+          		decimal sentimentScore = (decimal)Convert.ToDouble(article.Item4, CultureInfo.InvariantCulture);
 
-        foreach (var article in articles)
-        {
+          		var newsEntry = new Article
+          		{
+              		Ticker = ticker,
+              		ArticleName = articleTitle,
+              		Date = articleDate,
+              		SentimentScore = sentimentScore,
+					URL = articleUrl,
+          		};
 
-            DateTime articleDate = article.Item1.Date;
-            string articleTitle = article.Item2;
-            decimal sentimentScore = (decimal)Convert.ToDouble(article.Item3, CultureInfo.InvariantCulture);
+          		// Check if article already exists
+          		var existingArticle = _context.Articles
+              		.FirstOrDefault(a => a.Ticker == newsEntry.Ticker && a.ArticleName == newsEntry.ArticleName && a.Date == newsEntry.Date);
+
+          		if (existingArticle != null)
+          		{
+              		// If the article exists, skip this iteration and continue
+              		Console.WriteLine($"Article already exists: {existingArticle.ArticleName} (Date: {existingArticle.Date:yyyy-MM-dd})");
+              		continue;
+          		}
+
+          		var trackedArticle = _context.Entry(newsEntry);
+          		if (trackedArticle.State == EntityState.Detached)
+          		{
+              		_context.Articles.Add(newsEntry);
+              		Console.WriteLine($"Added: {newsEntry.ArticleName} (Date: {articleDate:yyyy-MM-dd}, sentiment: {sentimentScore})");
+          		}
+
+          		try
+          		{
+              		_context.SaveChanges();
+          		}
+          		catch (DbUpdateException dbEx)
+          		{
+              		// Catch the exception if a duplicate key violation occurs
+              		var sqlException = dbEx.InnerException as SqlException;
+              		if (sqlException != null && sqlException.Number == 2627)
+              		{
+                  		// Duplicate key error, just log it and continue
+                  		Console.WriteLine($"Duplicate key violation: {newsEntry.ArticleName} (Date: {articleDate:yyyy-MM-dd}). Skipping...");
+              		}
+              		else
+              		{
+                  		// Other DB update exceptions, log them for further investigation
+                  		Console.WriteLine($"Error saving changes: {dbEx.Message}");
+                  
+                  		if (dbEx.InnerException != null)
+                  		{
+                      		Console.WriteLine($"Inner Exception: {dbEx.InnerException.Message}");
+                  		}
+              		}
+          		}
+      		}
+      		return true;
+  		}
 
 
-            var newsEntry = new Article
-            {
-                Ticker = ticker,
-                ArticleName = articleTitle,
-                Date = articleDate,
-                SentimentScore = sentimentScore
-            };
 
-            // Check if article already exists
-            var existingArticle = _context.Articles
-                .FirstOrDefault(a => a.Ticker == newsEntry.Ticker && a.ArticleName == newsEntry.ArticleName && a.Date == newsEntry.Date);
 
-            if (existingArticle != null)
-            {
-                // If the article exists, skip this iteration and continue
-                Console.WriteLine($"Article already exists: {existingArticle.ArticleName} (Date: {existingArticle.Date:yyyy-MM-dd})");
-                _context.Entry(existingArticle).State = EntityState.Detached;
-                continue;
-            }
-
-            var trackedArticle = _context.Entry(newsEntry);
-            if (trackedArticle.State == EntityState.Detached)
-            {
-                _context.Articles.Add(newsEntry);
-                Console.WriteLine($"Added: {newsEntry.ArticleName} (Date: {articleDate:yyyy-MM-dd}, sentiment: {sentimentScore})");
-            }
-
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbUpdateException dbEx)
-            {
-                // Catch the exception if a duplicate key violation occurs
-                var sqlException = dbEx.InnerException as SqlException;
-                if (sqlException != null && sqlException.Number == 2627)
-                {
-                    // Duplicate key error, just log it and continue
-                    Console.WriteLine($"Duplicate key violation: {newsEntry.ArticleName} (Date: {articleDate:yyyy-MM-dd}). Skipping...");
-                }
-                else
-                {
-                    // Other DB update exceptions, log them for further investigation
-                    Console.WriteLine($"Error saving changes: {dbEx.Message}");
-                    
-                    if (dbEx.InnerException != null)
-                    {
-                        Console.WriteLine($"Inner Exception: {dbEx.InnerException.Message}");
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
         
         public bool AddStockClosingPricePerSector(string sectorName)
         {
@@ -622,6 +741,9 @@ namespace SwampLocks.AlphaVantage.Service
                 // Fetch the closing stock data for the given ticker using the client
                 List<Tuple<DateTime, Decimal>> stockData = _client.GetClosingStockDataDaily(ticker);
 
+				var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "StockData");
+				DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
+
                 if (stockData == null || !stockData.Any())
                 {
                     Console.WriteLine($"No closing price data found for {ticker}.");
@@ -632,7 +754,13 @@ namespace SwampLocks.AlphaVantage.Service
                 {
                     DateTime dataDate = closingPriceData.Item1.Date;
                     decimal closingPrice = closingPriceData.Item2;
-                    
+
+					if(dataDate < lastUpdatedDate) 
+					{	
+						Console.WriteLine("Data already up to date. Bye!!");
+						break;
+					}
+
                     if (dataDate.Year <= 2010)
                     {
                         Console.WriteLine($"Year {dataDate.Year} reached. Stopping execution.");
@@ -688,8 +816,221 @@ namespace SwampLocks.AlphaVantage.Service
             }
         }
 
+        public void FetchAndStoreAllEconomicData()
+        {
+            try
+            {
+                List<string> economicIndicators = new List<string>
+                {
+                    "GDP",
+                    "GDPPC",
+                    "10Y-TCMR",
+                    "30Y-TCMR",
+                    "7Y-TCMR",
+                    "5Y-TCMR",
+                    "2Y-TCMR",
+                    "3M-TCMR",
+                    "FFR",
+                    "CPI",
+                    "Inflation",
+                    "RetailSales",
+                    "Durables",
+                    "Unemployment",
+                    "TNP"
+                };
 
+                foreach (var indicator in economicIndicators)
+                {
+                    try
+                    {
+                        FetchAndStoreEconomicData(indicator);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to Fetch and Store Data for {indicator}: {ex.Message}");
+                    }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to Fetch and Store Economic Data");
+            }
+            
+            Console.WriteLine("Fetched and Stored Economic Data");
+        }
+
+        public bool FetchAndStoreEconomicData(string indicator)
+        {
+            Console.WriteLine($"indicator: {indicator}");
+            List<Tuple<DateTime, decimal>> ecoData = _client.GetEconomicData(indicator);
+
+			var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "EcoIndicators");
+			DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
+            
+            foreach (var dataPointItem in ecoData)
+            {
+                DateTime date = new DateTime();
+                decimal value;
+                
+                try
+                {
+                    date = dataPointItem.Item1;
+                    value = dataPointItem.Item2;
+
+					if(date < lastUpdatedDate) 
+					{	
+						Console.WriteLine("Data already up to date. Bye!!");
+						break;
+					}
+                    
+                    var ecoDataPoint = new EconomicData
+                    {
+                        IndicatorName = indicator,
+                        Date = date,
+                        Value = value
+                    };
+
+                    // Check if the entry exists in DB
+                    var existingEntry = _context.EconomicDataPoints
+                        .AsNoTracking()
+                        .FirstOrDefault(b => b.IndicatorName == indicator && b.Date == date);
+
+                    if (existingEntry != null)
+                    {
+                        Console.WriteLine($"⏩ Skipping  {indicator} (Date: {date}) - Already Exists in DB");
+                        continue; // Skip adding the duplicate entry
+                    }
+
+                    // Check if EF Core is tracking a duplicate
+                    var duplicateEntry = _context.ChangeTracker.Entries<EconomicData>()
+                        .FirstOrDefault(b => b.Entity.IndicatorName == indicator && b.Entity.Date == date);
+
+                    if (duplicateEntry != null)
+                    {
+                        Console.WriteLine($"🛑 Removing duplicate from indicator: {indicator} ({date})");
+                        _context.Entry(duplicateEntry.Entity).State = EntityState.Detached;
+                    }
+
+                    _context.EconomicDataPoints.Add(ecoDataPoint);
+                    Console.WriteLine($"Added {indicator}, Val: {value}, Date: {date}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to store vals for {indicator} on {date} {ex.Message}");
+                }
+            }
+            try
+            {
+                int savedChanges = _context.SaveChanges();
+                Console.WriteLine($"✅ Successfully saved {savedChanges} for {indicator}.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Database error when saving: {ex.Message}");
+                return false;
+            }
+            return true;
+            
+        }
+
+		public void FetchAndStoreAllCommodityData()
+        {
+            try
+            {
+                List<string> commodities = new List<string>
+                {
+                    "WTI",
+                    "BRENT",
+                    "NATURAL_GAS",
+                    "COPPER",
+                    "ALUMINUM",
+                    "WHEAT",
+                    "CORN",
+                    "COTTON",
+                    "SUGAR",
+                    "COFFEE",
+                    "ALL_COMMODITIES"
+                };
+
+                foreach (var commodity in commodities)
+                {
+                    try
+                    {
+                        FetchAndStoreCommodityData(commodity);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to Fetch and Store Data for {commodity}: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to Fetch and Store Commodity Data");
+            }
+
+            Console.WriteLine("Fetched and Stored Commodity Data");
+        }
+
+        public bool FetchAndStoreCommodityData(string commodity)
+        {
+            Console.WriteLine($"Fetching commodity: {commodity}");
+            List<Tuple<DateTime, decimal>> commodityData = _client.GetCommodityData(commodity);
+
+			var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Commodities");
+			DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
+
+            foreach (var dataPointItem in commodityData)
+            {
+                DateTime date = dataPointItem.Item1;
+                decimal value = dataPointItem.Item2;
+
+				if(date < lastUpdatedDate) 
+				{	
+					Console.WriteLine("Data already up to date. Bye!!");
+					break;
+				}
+
+                var commodityDataPoint = new CommodityData
+                {
+                    CommodityName = commodity,
+                    Date = date,
+                    Price = value
+                };
+
+                var existingEntry = _context.CommodityDataPoints
+                    .AsNoTracking()
+                    .FirstOrDefault(b => b.CommodityName == commodity && b.Date == date);
+
+                if (existingEntry != null)
+                {
+                    Console.WriteLine($"⏩ Skipping {commodity} (Date: {date}) - Already Exists in DB");
+                    continue;
+                }
+
+                _context.CommodityDataPoints.Add(commodityDataPoint);
+                Console.WriteLine($"Added {commodity}, Price: {value}, Date: {date}");
+            }
+
+            try
+            {
+                int savedChanges = _context.SaveChanges();
+                Console.WriteLine($"✅ Successfully saved {savedChanges} for {commodity}.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Database error when saving: {ex.Message}");
+
+				if (ex.InnerException != null)
+    			{
+        			Console.WriteLine($"👉 Inner Exception: {ex.InnerException.Message}");
+    			}
+                return false;
+            }
+            return true;
+        }
+        
         public bool AddStock(string ticker, string sectorName)
         {
             var sector = _context.Sectors.FirstOrDefault(s => s.Name == sectorName);
@@ -714,6 +1055,7 @@ namespace SwampLocks.AlphaVantage.Service
                 _context.Stocks.Add(stock);
             } else return false;
             
+            
             _context.SaveChanges();
             Console.WriteLine($"Successfully added stock, ticker: {ticker}, sector: {sectorName}");
             return true;
@@ -724,23 +1066,35 @@ namespace SwampLocks.AlphaVantage.Service
             List<Tuple<DateTime, Decimal>> exRates = _client.GetExchangeRateDaily("USD", symbol);
             
             var newRates = new List<ExchangeRate>();
+
+			var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "ExRates");
+			DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
             
             foreach (var rate in exRates)
             {
+				DateTime date = rate.Item1.Date;
+				if(date < lastUpdatedDate) 
+				{	
+					Console.WriteLine("Data already up to date. Bye!!");
+					break;
+				}
+
                 // Check if the exchange rate already exists in the database
                 bool exists = _context.ExchangeRates
-                    .Any(r => r.Date == rate.Item1.Date && r.TargetCurrency == symbol);
+                    .Any(r => r.Date == date && r.TargetCurrency == symbol);
 
                 if (!exists)
                 {
                     // Add new exchange rate
                     newRates.Add(new ExchangeRate
                     {
-                        Date = rate.Item1.Date, 
+                        Date = date, 
                         TargetCurrency = symbol,
                         Rate = rate.Item2
                     });
                 }
+
+				Console.WriteLine($"Added Exchange Rate for {symbol} @ {date}");
             }
             
             if (newRates.Any())

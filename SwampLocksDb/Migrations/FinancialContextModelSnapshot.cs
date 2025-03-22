@@ -36,6 +36,10 @@ namespace SwampLocks.Migrations
                     b.Property<decimal>("SentimentScore")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Ticker", "ArticleName", "Date");
 
                     b.ToTable("Articles");
@@ -140,6 +144,91 @@ namespace SwampLocks.Migrations
                     b.HasKey("Ticker", "FiscalDateEnding");
 
                     b.ToTable("CashFlowStatements");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.CommodityData", b =>
+                {
+                    b.Property<string>("CommodityName")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(0);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnOrder(1);
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("CommodityName", "Date");
+
+                    b.ToTable("CommodityDataPoints");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.CommodityIndicator", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Interval")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Commodities");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.DataUpdateTracker", b =>
+                {
+                    b.Property<string>("DataType")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DataType");
+
+                    b.ToTable("DataUpdateTrackers");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.EconomicData", b =>
+                {
+                    b.Property<string>("IndicatorName")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(0);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnOrder(1);
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("IndicatorName", "Date");
+
+                    b.ToTable("EconomicDataPoints");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.EconomicIndicator", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Interval")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("EconomicIndicators");
                 });
 
             modelBuilder.Entity("SwampLocksDb.Models.ExchangeRate", b =>
@@ -500,6 +589,28 @@ namespace SwampLocks.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.CommodityData", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.CommodityIndicator", "Commodity")
+                        .WithMany("DataPoints")
+                        .HasForeignKey("CommodityName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commodity");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.EconomicData", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.EconomicIndicator", "Indicator")
+                        .WithMany("DataPoints")
+                        .HasForeignKey("IndicatorName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Indicator");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.IncomeStatement", b =>
                 {
                     b.HasOne("SwampLocksDb.Models.Stock", "Stock")
@@ -564,6 +675,16 @@ namespace SwampLocks.Migrations
                         .IsRequired();
 
                     b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.CommodityIndicator", b =>
+                {
+                    b.Navigation("DataPoints");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.EconomicIndicator", b =>
+                {
+                    b.Navigation("DataPoints");
                 });
 
             modelBuilder.Entity("SwampLocksDb.Models.Sector", b =>

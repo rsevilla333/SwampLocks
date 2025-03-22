@@ -18,7 +18,6 @@ namespace SwampLocksDb.Models
 
         [Required]
         public string ReportedCurrency { get; set; }
-
         public decimal OperatingCashFlow { get; set; }
         public decimal PaymentsForOperatingActivities { get; set; }
         public decimal ProceedsFromOperatingActivities { get; set; }

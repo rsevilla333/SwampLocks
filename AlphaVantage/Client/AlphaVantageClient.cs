@@ -112,7 +112,7 @@ namespace SwampLocks.AlphaVantage.Client
 		*/
 		
 
-		public List<Tuple<DateTime,string, Decimal>> GetNewsSentimentByStock(string ticker, DateTime DateFrom, DateTime DateTo, double relevanceScore = 0.1) {
+		public List<Tuple<DateTime,string, string, Decimal>> GetNewsSentimentByStock(string ticker, DateTime DateFrom, DateTime DateTo, double relevanceScore = 0.1) {
 			string function = "NEWS_SENTIMENT";
 			string dateFormat = "yyyyMMddTHHmm";
 			int limit = 1000;
@@ -123,7 +123,7 @@ namespace SwampLocks.AlphaVantage.Client
 			//Console.WriteLine(data);
 
 			dynamic apiResponse = JsonConvert.DeserializeObject<dynamic>(data);
-			List<Tuple<DateTime, string, decimal>> result = new List<Tuple<DateTime, string, decimal>>();
+			var result = new List<Tuple<DateTime, string, string, decimal>>();
 
 			if(apiResponse.feed == null)
 			{
@@ -142,9 +142,10 @@ namespace SwampLocks.AlphaVantage.Client
 						decimal sentimentScore = (decimal)double.Parse(tickerSentiment.ticker_sentiment_score.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture);
 						Console.WriteLine(tickerSentiment.relevance_score + " " + sentimentScore);
                         
-                        result.Add(new Tuple<DateTime, string, decimal>(
+                        result.Add(new Tuple<DateTime, string, string, decimal>(
                             articleDate,
                             article.title.ToString(),
+							article.url.ToString(),
                             sentimentScore
                         ));
                     }
@@ -199,7 +200,7 @@ namespace SwampLocks.AlphaVantage.Client
             Console.WriteLine(queryURL);
             string data = client.DownloadString(queryURL);
             
-            Console.WriteLine(data);
+           // Console.WriteLine(data);
             // Parse JSON response
             JObject jsonData = JObject.Parse(data);
 
@@ -322,7 +323,121 @@ namespace SwampLocks.AlphaVantage.Client
 			});
 		}
 
+		public List<Tuple<DateTime, decimal>> GetEconomicData(string indicator)
+		{
+			var ecoIndicatorFunction = new Dictionary<string, string>
+			{
+				{"GDP", "REAL_GDP&interval=quarterly" }, // quarterly
+				{"GDPPC", "REAL_GDP_PER_CAPITA" }, // quarterly
+				{"10Y-TCMR", "TREASURY_YIELD" }, // daily
+				{"30Y-TCMR", "TREASURY_YIELD&interval=daily&maturity=30year" }, //  daily
+				{"7Y-TCMR", "TREASURY_YIELD&interval=daily&maturity=7year" }, //  daily
+				{"5Y-TCMR", "TREASURY_YIELD&interval=daily&maturity=5year" }, //  daily
+				{"2Y-TCMR", "TREASURY_YIELD&interval=daily&maturity=2year" }, //  daily
+				{"3M-TCMR", "TREASURY_YIELD&interval=daily&maturity=3month" }, //  daily
+				{"FFR", "FEDERAL_FUNDS_RATE&interval=daily" }, // daily
+				{"CPI", "CPI" }, // monthly
+				{"Inflation" ,"INFLATION" }, // annual
+				{"RetailSales","RETAIL_SALES"}, // monthly
+				{"Durables","DURABLES"}, // mobthly
+				{"Unemployment", "UNEMPLOYMENT"}, // monthly
+				{"TNP", "NONFARM_PAYROLL" }, // monthly
+			};
+			
+			var results = new List<Tuple<DateTime, decimal>>();
+			
+			if (ecoIndicatorFunction.TryGetValue(indicator, out var function))
+			{
+				string queryURL = $"{BaseUrl}?function={function}&apikey={_apiKey}";
+				Console.WriteLine(queryURL);
+				
+				string data = client.DownloadString(queryURL);
+				//Console.WriteLine(data);
+				JObject jsonData = JObject.Parse(data);
+				var reports = jsonData["data"] as JArray;
+				
+				if (reports != null)
+				{
+					foreach (var report in reports)
+					{
+						//var date = DateTime.TryParse(report["value"]?.ToString(), out var parsedDate) ? parsedDate : (DateTime?)null;
+						//var value = Decimal.TryParse(report["date"]?.ToString(), out var parsedValue) ? parsedValue : (decimal?)null;
 
-        
+						string val = report["value"].ToString();
+						
+						if(val == ".")
+							val = "0";
+						
+						results.Add(new Tuple<DateTime, decimal>(
+							DateTime.Parse(report["date"].ToString()), 
+							Decimal.Parse(val)
+						));
+
+						//Console.WriteLine(results.Count);
+
+					}
+				}
+			}
+			else
+			{
+				Console.WriteLine($"Not a valid indicator");
+			}
+			
+			return results;
+		}
+
+		public List<Tuple<DateTime, decimal>> GetCommodityData(string commodity)
+		{
+   			var commodityFunctionMap = new Dictionary<string, string>
+    		{
+        		{"WTI", "WTI&interval=daily"},
+        		{"BRENT", "BRENT&interval=daily"},
+        		{"NATURAL_GAS", "NATURAL_GAS&interval=daily"},
+        		{"COPPER", "COPPER&interval=monthly"},
+        		{"ALUMINUM", "ALUMINUM&interval=monthly"},
+        		{"WHEAT", "WHEAT&interval=monthly"},
+        		{"CORN", "CORN&interval=monthly"},
+        		{"COTTON", "COTTON&interval=monthly"},
+        		{"SUGAR", "SUGAR&interval=monthly"},
+        		{"COFFEE", "COFFEE&interval=monthly"},
+        		{"ALL_COMMODITIES", "ALL_COMMODITIES&interval=monthly"}
+    		};
+
+    		var results = new List<Tuple<DateTime, decimal>>();
+
+    		if (commodityFunctionMap.TryGetValue(commodity, out var function))
+    		{
+        		string queryURL = $"{BaseUrl}?function={function}&apikey={_apiKey}";
+        		Console.WriteLine(queryURL);
+
+        		using (WebClient client = new WebClient())
+        		{
+            		string data = client.DownloadString(queryURL);
+            		JObject jsonData = JObject.Parse(data);
+            		var reports = jsonData["data"] as JArray;
+
+            		if (reports != null)
+            		{
+            		    foreach (var report in reports)
+                		{
+                    		string val = report["value"]?.ToString() ?? "0";
+                    		if (val == ".") val = "0";
+
+                    		results.Add(new Tuple<DateTime, decimal>(
+                        		DateTime.Parse(report["date"].ToString()),
+                        		Decimal.Parse(val)
+                    		));
+                		}
+            		}
+        		}
+    		}
+    		else
+    		{
+        		Console.WriteLine("Not a valid commodity indicator.");
+    		}
+
+    		return results;
+		}
+
     }
 }

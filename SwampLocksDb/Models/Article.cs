@@ -19,6 +19,8 @@ namespace SwampLocksDb.Models
 
         [Required] public decimal SentimentScore { get; set; } // article sentiment score
 
+        public string URL { get; set; } // article url
+
         [ForeignKey("Ticker")] public virtual Stock Stock { get; set; }
     }
 }
