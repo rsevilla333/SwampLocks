@@ -95,7 +95,7 @@ namespace SwampLocks.AlphaVantage.CLI
             }
         }
 
-	    private void FetchAndUpdateEverything()
+	    public void FetchAndUpdateEverything()
         {
             Console.WriteLine("Fetching All Economic Data");
             _service.FetchAndUpdateEverything();
