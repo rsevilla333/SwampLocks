@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SwampLocksDb\SwampLocksDB.csproj" />
+      <ProjectReference Include="..\SwampLocksDb\SwampLocksDb.csproj" />
     </ItemGroup>
 
 </Project>
