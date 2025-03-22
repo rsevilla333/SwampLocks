@@ -10,15 +10,15 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'AlphaVantage'  # Set the correct path to your function project (AlphaVantage folder)
   DOTNET_VERSION: '9.0.x' # set this to the dotnet version to use
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read # This is required for actions/checkout
 
     steps:
       - name: 'Checkout GitHub Action'
@@ -32,16 +32,16 @@ jobs:
       - name: 'Resolve Project Dependencies Using Dotnet'
         shell: bash
         run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build --configuration Release --output ./output
+          pushd './AlphaVantage'  # Navigate to the AlphaVantage folder where your .csproj file is
+          dotnet build --configuration Release --output ./output  # Builds the project
           popd
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_9640B93FB1304CDB809F50A568C76D0D }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_07799217A194442EA1E289A6CD5AEE67 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F5360EA800844259A040052E716B88D4 }}
+          client-id: ${{ secrets.__clientidsecretname__ }}
+          tenant-id: ${{ secrets.__tenantidsecretname__ }}
+          subscription-id: ${{ secrets.__subscriptionidsecretname__ }}
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
@@ -50,4 +50,3 @@ jobs:
           app-name: 'swamplocksDbUpdater'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          
