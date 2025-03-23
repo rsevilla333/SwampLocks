@@ -38,6 +38,7 @@ jobs:
           mkdir -p /home/runner/.azure
           sudo chown -R $USER /home/runner/.azure
 
+
       - name: Set up Azure CLI
         uses: azure/cli@v2
         with:
