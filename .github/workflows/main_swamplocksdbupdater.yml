@@ -33,12 +33,10 @@ jobs:
           dotnet build --configuration Release --output ./output  # Builds the project
           popd
 
-      - name: Set up Azure CLI
-        uses: azure/setup-azurecli@v2 
-
-      - name: Azure Login (Interactive)
-        run: |
-          az login --use-device-code
+      - name: Azure Login using Managed Identity
+        uses: azure/login@v1
+        with:
+          identity: true  # Use Managed Identity for authentication
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
@@ -50,4 +48,4 @@ jobs:
 
       - name: Restart Azure Function App
         run: |
-          az functionapp restart --name swamplocksDbUpdater --resource-group SeniorProject
+          az functionapp restart --name swamplocksDbUpdater --resource-group YourResourceGroupName
