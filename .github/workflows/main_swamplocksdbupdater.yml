@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy dotnet core project to Azure Function App - swamplocksDbUpdater
 
 on:
@@ -36,12 +33,12 @@ jobs:
           dotnet build --configuration Release --output ./output  # Builds the project
           popd
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.__clientidsecretname__ }}
-          tenant-id: ${{ secrets.__tenantidsecretname__ }}
-          subscription-id: ${{ secrets.__subscriptionidsecretname__ }}
+      - name: Set up Azure CLI
+        uses: azure/setup-azurecli@v1
+
+      - name: Azure Login (Interactive)
+        run: |
+          az login --use-device-code
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
@@ -53,8 +50,4 @@ jobs:
 
       - name: Restart Azure Function App
         run: |
-          az functionapp restart --name swamplocksDbUpdater --resource-group <YourResourceGroupName>
-        env:
-          AZURE_CLIENT_ID: ${{ secrets.__clientidsecretname__ }}
-          AZURE_TENANT_ID: ${{ secrets.__tenantidsecretname__ }}
-          AZURE_CLIENT_SECRET: ${{ secrets.__clientsecretname__ }}
+          az functionapp restart --name swamplocksDbUpdater --resource-group SeniorProject
