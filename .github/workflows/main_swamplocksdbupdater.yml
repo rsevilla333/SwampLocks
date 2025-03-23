@@ -33,6 +33,11 @@ jobs:
           dotnet build --configuration Release --output ./output  # Builds the project
           popd
 
+      - name: Set Azure CLI Config Directory Permissions
+        run: |
+          mkdir -p /home/runner/.azure
+          sudo chown -R $USER /home/runner/.azure
+
       - name: Set up Azure CLI
         uses: azure/cli@v2
         with:
