@@ -34,7 +34,11 @@ jobs:
           popd
 
       - name: Set up Azure CLI
-        uses: azure/setup-azurecli@v2
+        uses: azure/cli@v2
+        with:
+          azcliversion: '2.30.0'  # Specify the desired Azure CLI version
+          inlineScript: |
+            az --version  # Verify the Azure CLI installation
 
       - name: Azure Login (Interactive) with Personal Login
         run: |
