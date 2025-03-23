@@ -34,7 +34,7 @@ jobs:
           popd
 
       - name: Set up Azure CLI
-        uses: azure/setup-azurecli@v1
+        uses: azure/setup-azurecli@v2 
 
       - name: Azure Login (Interactive)
         run: |
