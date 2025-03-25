@@ -10,20 +10,34 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
 
-// Register FinancialContext with SQL Server (no need for a connection string, Azure manages this)
-builder.Services.AddDbContext<FinancialContext>(options =>
+string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+
+if (connectionString is null)
 {
-    options.UseSqlServer("");  
-});
+    // using netra ID
+    builder.Services.AddDbContext<FinancialContext>(options =>
+    {
+        options.UseSqlServer("");  
+    });
+}
+else
+{
+    // using connection string
+    builder.Services.AddDbContext<FinancialContext>((options) =>
+    {
+        options.UseSqlServer(connectionString);
+    });
+}
 
 // Register CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")  // Allow requests from your frontend (adjust port if needed)
-            .AllowAnyMethod()  // Allow all HTTP methods (GET, POST, etc.)
-            .AllowAnyHeader(); // Allow any headers
+        policy.WithOrigins("http://localhost:3000")  // Allow requests from your frontend 
+            .AllowAnyMethod()  
+            .AllowAnyHeader();
     });
 });
 
