@@ -138,10 +138,10 @@ export default function StockSearch({ ticker }: StockSearchProps) {
                             const year = "\'" + String(date.getFullYear()).slice(-2);
                             if (timeframe === "max") {
                                 return year;
-                            } else if (["5y", "1y", "6mo", "ytd"].includes(timeframe)) {
+                            } else if (["5y", "1y"].includes(timeframe)) {
                                 return `${year}-${(date.getMonth() + 1).toString().padStart(2, "0")}`;
                             } else {
-                                return `${year}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+                                return `${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
                             }
                         }}
                     />

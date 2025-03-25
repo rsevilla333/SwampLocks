@@ -6,11 +6,24 @@ import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import SectorAnalysis from "./SectorAnalysis";
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
 interface SectorPageProps {
     sectorName: string;
     imageUrl: string;
 }
+
+// Mock Market Cap Data
+const mockMarketCapData = [
+    { name: "AAPL", value: 2500 },
+    { name: "MSFT", value: 2300 },
+    { name: "GOOGL", value: 1800 },
+    { name: "AMZN", value: 1700 },
+    { name: "TSLA", value: 900 },
+];
+
+
+const COLORS = ["#FF5733", "#33A1FF", "#33FF57", "#FFD700", "#8B4513"];
 
 export default function SectorPage({ sectorName, imageUrl }: SectorPageProps) {
     // Set the default selected date to today's date
@@ -79,6 +92,28 @@ export default function SectorPage({ sectorName, imageUrl }: SectorPageProps) {
                     <h2 className="text-2xl font-semibold text-gray-700 mb-4">Top Market Cap Stocks</h2>
                     <p>(Data will be fetched for {selectedDate ? selectedDate.getFullYear() : "the current year"})</p>
                 </div>
+            </div>
+            {/* Pie Chart for Market Cap */}
+            <div className="w-full flex justify-center mt-6">
+                <ResponsiveContainer width={800} height={600}>
+                    <PieChart>
+                        <Pie
+                            data={mockMarketCapData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            outerRadius={180}
+                            fill="#8884d8"
+                            dataKey="value"
+                        >
+                            {mockMarketCapData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend />
+                    </PieChart>
+                </ResponsiveContainer>
             </div>
             <div className="w-max">
                 <SectorAnalysis sectorName={sectorName} />

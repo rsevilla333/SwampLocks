@@ -151,7 +151,36 @@ namespace SwampLocksAPI.Controllers
                 return Ok(new { message = $"Successfully updated market cap for stock {id}" });
             }
         }
+        
+        [HttpGet("commodities/{commodityName}")]
+        public async Task<ActionResult<List<CommodityData>>> GetCommodityData(string commodityName)
+        {
+            List<CommodityData> commodityData = await _context
+                .CommodityDataPoints
+                .Where(commodity => commodity.CommodityName == commodityName)
+                .ToListAsync();
 
+            if (commodityData.Count == 0)
+            {
+                return NotFound();
+            }
 
+            return Ok(commodityData);
+        }
+        
+        [HttpGet("commodities/indicators")]
+        public async Task<ActionResult<List<CommodityIndicator>>> GetCommodityIndicators()
+        {
+            List<CommodityIndicator> indicators = await _context
+                .Commodities
+                .ToListAsync();
+
+            if (indicators.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(indicators);
+        }
     }
 }
