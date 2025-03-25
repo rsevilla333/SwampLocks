@@ -11,9 +11,9 @@ namespace SwampLocksAPI.Controllers
     [ApiController]
     public class FinancialsController : ControllerBase
     {
-        private readonly FinancialsContext _context;
+        private readonly FinancialContext _context;
 
-        public FinancialsController(FinancialsContext context) 
+        public FinancialsController(FinancialContext context) 
         {
             _context = context;
         }
@@ -55,6 +55,46 @@ namespace SwampLocksAPI.Controllers
             if (stockData.Count == 0)
             {
                 return NotFound();
+            }
+
+            return Ok(stockData);
+        }
+
+        [HttpGet("stocks/{ticker}/data/{timeframe}")]
+        public async Task<ActionResult<List<StockData>>> GetStockData(string ticker, string timeframe)
+        {
+            DateTime endDate = DateTime.UtcNow; 
+            DateTime startDate;
+
+            switch (timeframe.ToLower())
+            {
+                case "1w":
+                    startDate = endDate.AddDays(-7);
+                    break;
+                case "6m":
+                    startDate = endDate.AddMonths(-6);
+                    break;
+                case "1y":
+                    startDate = endDate.AddYears(-1);
+                    break;
+                case "5y":
+                    startDate = endDate.AddYears(-5);
+                    break;
+                case "ytd":
+                    startDate = new DateTime(endDate.Year, 1, 1); // Start of the current year
+                    break;
+                default:
+                    return BadRequest(new { message = "Invalid timeframe. Use '1w', '6m', '1y', '5y', or 'ytd'." });
+            }
+
+            var stockData = await _context.StockDataEntries
+                .Where(data => data.Ticker == ticker && data.Date >= startDate && data.Date <= endDate)
+                .OrderBy(data => data.Date)
+                .ToListAsync();
+
+            if (!stockData.Any())
+            {
+                return NotFound(new { message = $"No stock data found for {ticker} in the {timeframe} timeframe." });
             }
 
             return Ok(stockData);

@@ -31,6 +31,14 @@ public class FinancialContext : DbContext
     public DbSet<CommodityData> CommodityDataPoints { get; set; }
 	public DbSet<DataUpdateTracker> DataUpdateTrackers { get; set; }  
     
+    public FinancialContext(DbContextOptions<FinancialContext> options) : base(options)
+    {
+    }
+    
+    public FinancialContext()
+    {
+    }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         Env.Load();

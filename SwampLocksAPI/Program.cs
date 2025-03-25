@@ -2,54 +2,48 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using SwampLocksDb.Data;
 
-void CreateBuilder(WebApplicationBuilder builder)
-{
-    // Replace with your Azure SQL Database connection string
-    string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-
-    // Add services to the container
-    builder.Services.AddControllers()
-        .AddNewtonsoftJson();
-
-    // Register dependencies
-    builder.Services.AddDbContext<FinancialsContext>((options) =>
-    {
-        options.UseSqlServer(connectionString);
-    });
-
-    builder.Services.AddDbContext<LocalContext>(opt =>
-        opt.UseInMemoryDatabase("LocalFinancials"));
-
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-}
-
-void SetupApp(WebApplication app)
-{
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
-    app.UseHttpsRedirection();
-
-    app.UseAuthorization();
-
-    app.MapControllers();
-
-}
-
-Env.Load();
+Env.Load();  // Load environment variables (e.g., DB_NAME, SERVER_NAME, etc.)
 
 var builder = WebApplication.CreateBuilder(args);
 
-CreateBuilder(builder);
+// Add services to the container
+builder.Services.AddControllers()
+    .AddNewtonsoftJson();
+
+// Register FinancialContext with SQL Server (no need for a connection string, Azure manages this)
+builder.Services.AddDbContext<FinancialContext>(options =>
+{
+    options.UseSqlServer("");  
+});
+
+// Register CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")  // Allow requests from your frontend (adjust port if needed)
+            .AllowAnyMethod()  // Allow all HTTP methods (GET, POST, etc.)
+            .AllowAnyHeader(); // Allow any headers
+    });
+});
+
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-SetupApp(app);
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+app.UseCors("AllowLocalhost"); 
+app.UseRouting(); 
+app.UseAuthorization();
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
