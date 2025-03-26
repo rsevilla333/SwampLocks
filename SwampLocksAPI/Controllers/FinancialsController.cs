@@ -22,11 +22,9 @@ namespace SwampLocksAPI.Controllers
 
         public async Task<ActionResult<string>> PingTest()
         {
-            string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-
             Stock stock = new();
             stock.Ticker = "AAPL";
-            return Ok(connectionString);
+            return Ok("test");
         }
 
         [HttpGet("stocks")]
