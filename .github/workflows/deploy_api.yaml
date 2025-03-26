@@ -40,7 +40,7 @@ jobs:
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
-          name: net-app
+          name: .net-app
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
   deploy:
@@ -52,7 +52,8 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: net-app
+          name: .net-app
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
       - name: Deploy to Azure App Service
         id: deploy-to-webapp
