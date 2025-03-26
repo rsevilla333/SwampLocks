@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, Line, Legend } from "recharts";
+import Footer from "./Footer";
 
 type CommodityData = {
     date: string;
@@ -28,11 +29,12 @@ export default function CommodityPage() {
     const [indicators, setIndicators] = useState<Record<string, Indicator>>({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     useEffect(() => {
         async function fetchCommodityData() {
             try {
-                const response = await fetch(`http://localhost:5196/api/financials/commodities/indicators`);
+                const response = await fetch(`${API_BASE_URL}api/financials/commodities/indicators`);
                 const indicatorList: Indicator[] = await response.json();
 
                 // Assign colors dynamically
@@ -41,7 +43,7 @@ export default function CommodityPage() {
                 });
 
                 const dataPromises = indicatorList.map(async (indicator) => {
-                    const res = await fetch(`http://localhost:5196/api/financials/commodities/${indicator.name}`);
+                    const res = await fetch(`${API_BASE_URL}api/financials/commodities/${indicator.name}`);
                     if (!res.ok) return null;
 
                     const rawData: CommodityData[] = await res.json();
@@ -113,6 +115,7 @@ export default function CommodityPage() {
                     );
                 })}
             </div>
+            <Footer />
         </div>
     );
 }

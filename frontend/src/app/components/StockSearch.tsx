@@ -30,14 +30,16 @@ export default function StockSearch({ ticker }: StockSearchProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [timeframe, setTimeframe] = useState("max");
-
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+    
     // Fetch stock data from the API
     const fetchStockData = async () => {
         setLoading(true);
         setError("");
         try {
+            console.log(` Trying ${API_BASE_URL}/api/financials/stocks/${symbol}/data`);
             const response = await axios.get(
-                `http://localhost:5196/api/financials/stocks/${symbol}/data`
+                `${API_BASE_URL}/api/financials/stocks/${symbol}/data`
             );
             const processedData = response.data.map((item: any) => ({
                 date: new Date(item.date).toLocaleDateString(),

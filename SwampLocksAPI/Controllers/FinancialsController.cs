@@ -182,5 +182,36 @@ namespace SwampLocksAPI.Controllers
 
             return Ok(indicators);
         }
+        
+        [HttpGet("economic_data/{indicatorName}")]
+        public async Task<ActionResult<List<EconomicData>>> GetEconomicData(string indicatorName)
+        {
+            List<EconomicData> ecoData = await _context
+                .EconomicDataPoints
+                .Where(ecoPoint => ecoPoint.IndicatorName == indicatorName)
+                .ToListAsync();
+
+            if (ecoData.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(ecoData);
+        }
+        
+        [HttpGet("economic_data/indicators")]
+        public async Task<ActionResult<List<EconomicIndicator>>> GetEconomicIndicators()
+        {
+            List<EconomicIndicator> indicators = await _context
+                .EconomicIndicators
+                .ToListAsync();
+
+            if (indicators.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(indicators);
+        }
     }
 }

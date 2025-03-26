@@ -19,6 +19,7 @@ export default function SidebarMenu() {
                 <Link href="/dashboard#news" className="hover:underline hover:text-accent">News</Link>
                 <Link href="/dashboard#watchlist" className="hover:underline hover:text-accent">Watchlist</Link>
                 <Link href="/commodities" className="hover:underline hover:text-accent">Commodities</Link>
+                <Link href="/economic_indicators_dashboard" className="hover:underline hover:text-accent">Economic Indicators</Link>
             </nav>
         </aside>
     );
