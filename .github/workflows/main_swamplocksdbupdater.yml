@@ -1,48 +1,44 @@
-#name: Build and Deploy .NET Core Project to Azure Function App - swamplocksDbUpdater
-#
-#on:
-#  push:
-#    branches:
-#      - main
-#  workflow_dispatch:
-#
-#env:
-#  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'AlphaVantage'  # Path to your function project
-#  DOTNET_VERSION: '9.0.x'  # .NET version to use
-#
-#jobs:
-#  build-and-deploy:
-#    runs-on: ubuntu-latest
-#    permissions:
-#      id-token: write
-#      contents: read  # Required for actions/checkout
-#
-#    steps:
-#      - name: 'Checkout GitHub Action'
-#        uses: actions/checkout@v4
-#
-#      - name: Setup .NET ${{ env.DOTNET_VERSION }} Environment
-#        uses: actions/setup-dotnet@v1
-#        with:
-#          dotnet-version: ${{ env.DOTNET_VERSION }}
-#
-#      - name: 'Resolve Project Dependencies Using Dotnet'
-#        run: |
-#          pushd './AlphaVantage'  # Navigate to the project folder
-#          dotnet build --configuration Release --output ./output  # Build the project
-#          popd
-#
-#      - name: 'Azure Login'
-#        uses: azure/login@v1
-#        with:
-#          creds: ${{ secrets.AZURE_CREDENTIALS }}
-#
-#      - name: 'Deploy Azure Functions'
-#        uses: Azure/functions-action@v1
-#        with:
-#          app-name: 'swamplocksDbUpdater'
-#          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-#
-#      - name: 'Restart Azure Function App'
-#        run: |
-#          az functionapp restart --name swamplocksDbUpdater --resource-group SeniorProject
+name: Build and deploy dotnet core project to Azure Function App - swamplocksDbUpdater
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'AlphaVantage'  # Adjust the path if needed
+  DOTNET_VERSION: '9.0.x' # Use your correct .NET version
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read  
+
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: bash
+        run: |
+          pushd './AlphaVantage'  
+          dotnet build --configuration Release --output ./output
+          popd
+
+      - name: 'Deploy to Azure Functions'
+        uses: azure/functions-action@v1
+        with:
+          app-name: 'swamplocksDbUpdater'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          publish-profile: ${{ secrets.AZURE_FUNCTION_PUBLISH_PROFILE }}
+
+      - name: Restart Azure Function App
+        run: |
+          az functionapp restart --name swamplocksDbUpdater --resource-group SeniorProject
