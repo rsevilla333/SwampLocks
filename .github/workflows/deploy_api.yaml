@@ -7,7 +7,7 @@ on:
       - Deployment
 
 env:
-  AZURE_WEBAPP_NAME: SpawmpLocksAPI
+  AZURE_WEBAPP_NAME: SwampLocksAPI
   AZURE_WEBAPP_PACKAGE_PATH: './SwampLocksAPI'
   DOTNET_VERSION: "8.x"
 
