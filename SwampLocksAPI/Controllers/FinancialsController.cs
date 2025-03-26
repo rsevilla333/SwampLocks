@@ -24,7 +24,7 @@ namespace SwampLocksAPI.Controllers
         {
             Stock stock = new();
             stock.Ticker = "AAPL";
-            return Ok("test");
+            return Ok("test with auto");
         }
 
         [HttpGet("stocks")]
