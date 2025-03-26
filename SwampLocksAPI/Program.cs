@@ -12,7 +12,7 @@ builder.Services.AddControllers()
 
 string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
-
+Console.WriteLine(connectionString);
 if (connectionString is null)
 {
     // using netra ID
