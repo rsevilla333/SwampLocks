@@ -2,54 +2,62 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using SwampLocksDb.Data;
 
-void CreateBuilder(WebApplicationBuilder builder)
-{
-    // Replace with your Azure SQL Database connection string
-    string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-    Console.WriteLine(connectionString);
-    // Add services to the container
-    builder.Services.AddControllers()
-        .AddNewtonsoftJson();
+Env.Load();  // Load environment variables (e.g., DB_NAME, SERVER_NAME, etc.)
 
-    // Register dependencies
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
+builder.Services.AddControllers()
+    .AddNewtonsoftJson();
+
+string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+
+if (connectionString is null)
+{
+    // using netra ID
+    builder.Services.AddDbContext<FinancialContext>(options =>
+    {
+        options.UseSqlServer("");  
+    });
+}
+else
+{
+    // using connection string
     builder.Services.AddDbContext<FinancialContext>((options) =>
     {
         options.UseSqlServer(connectionString);
     });
-
-    builder.Services.AddDbContext<LocalContext>(opt =>
-        opt.UseInMemoryDatabase("LocalFinancials"));
-
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
 }
 
-void SetupApp(WebApplication app)
+// Register CORS policy
+builder.Services.AddCors(options =>
 {
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+    options.AddPolicy("AllowLocalhost", policy =>
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+        policy.WithOrigins("http://localhost:3000")  // Allow requests from your frontend 
+            .AllowAnyMethod()  
+            .AllowAnyHeader();
+    });
+});
 
-    app.UseHttpsRedirection();
 
-    app.UseAuthorization();
-
-    app.MapControllers();
-
-}
-
-Env.Load();
-
-var builder = WebApplication.CreateBuilder(args);
-
-CreateBuilder(builder);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-SetupApp(app);
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+app.UseCors("AllowLocalhost"); 
+app.UseRouting(); 
+app.UseAuthorization();
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();

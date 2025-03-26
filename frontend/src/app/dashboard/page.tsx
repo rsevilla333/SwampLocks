@@ -2,10 +2,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Footer from "../components/Footer"
 
 export default function Dashboard() {
     const [searchOpen, setSearchOpen] = useState(false);
 
+    
     return (
         <div className="min-h-screen flex flex-col items-center p-6 bg-white text-black">
             {/* 🔹 Expanding Search Bar */}
@@ -46,6 +48,7 @@ export default function Dashboard() {
                     <p>Your saved stocks and market updates.</p>
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 }
