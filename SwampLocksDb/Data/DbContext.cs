@@ -39,8 +39,11 @@ public class FinancialContext : DbContext
     {
     }
     
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        if (optionsBuilder.IsConfigured)
+            return;
         Env.Load();
 
 		string databaseName = Environment.GetEnvironmentVariable("DB_NAME") ?? "";
