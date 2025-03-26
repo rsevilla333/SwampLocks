@@ -53,6 +53,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+          path: ${{ env.DOTNET_ROOT }}/myapp
 
       - name: Deploy to Azure App Service
         id: deploy-to-webapp
