@@ -18,6 +18,15 @@ namespace SwampLocksAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("ping")]
+
+        public async Task<ActionResult<string>> PingTest()
+        {
+            Stock stock = new();
+            stock.Ticker = "AAPL";
+            return Ok("test with auto");
+        }
+
         [HttpGet("stocks")]
         public async Task<ActionResult<List<Stock>>> GetAllStocks()
         {
