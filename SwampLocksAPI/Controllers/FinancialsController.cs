@@ -222,5 +222,85 @@ namespace SwampLocksAPI.Controllers
 
             return Ok(indicators);
         }
+
+        [HttpGet("balancesheets/{ticker}")]
+        public async Task<ActionResult<List<StockBalanceSheet>>> GetBalanceSheets(string ticker)
+        {
+            List<StockBalanceSheet> balanceSheets = await _context
+                .StockBalanceSheets
+                .Where(balanceSheet => balanceSheet.Ticker == ticker)
+                .ToListAsync();
+
+            if (balanceSheets.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(balanceSheets);
+        }
+
+        [HttpGet("cashflowstatements/{ticker}")]
+        public async Task<ActionResult<List<CashFlowStatement>>> GetCashFlowStatements(string ticker)
+        {
+            List<CashFlowStatement> cashFlowStatements = await _context
+                .CashFlowStatements
+                .Where(statement => statement.Ticker == ticker)
+                .ToListAsync();
+
+            if (cashFlowStatements.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(cashFlowStatements);
+        }
+
+        [HttpGet("earnings/{ticker}")]
+        public async Task<ActionResult<List<StockEarningStatement>>> GetEarnings(string ticker)
+        {
+            List<StockEarningStatement> earnings = await _context
+                .StockEarnings
+                .Where(earnings => earnings.Ticker == ticker)
+                .ToListAsync();
+
+            if (earnings.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(earnings);
+        }
+
+        [HttpGet("incomestatements/{ticker}")]
+        public async Task<ActionResult<List<IncomeStatement>>> GetIncomeStatements(string ticker)
+        {
+            List<IncomeStatement> incomeStatements = await _context
+                .IncomeStatements
+                .Where(incomeStatement => incomeStatement.Ticker == ticker)
+                .ToListAsync();
+
+            if (incomeStatements.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(incomeStatements);
+        }
+
+        [HttpGet("sectorperformance/{sector}")]
+        public async Task<ActionResult<List<SectorPerformance>>> GetSectorPerformance(string sector)
+        {
+            List<SectorPerformance> sectorPerformances = await _context
+                .SectorPerformances
+                .Where(sectorPerformance => sectorPerformance.SectorName == sector)
+                .ToListAsync();
+
+            if (sectorPerformances.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(sectorPerformances);
+        }
     }
 }
