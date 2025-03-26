@@ -11,11 +11,22 @@ namespace SwampLocksAPI.Controllers
     [ApiController]
     public class FinancialsController : ControllerBase
     {
-        private readonly FinancialsContext _context;
+        private readonly FinancialContext _context;
 
-        public FinancialsController(FinancialsContext context) 
+        public FinancialsController(FinancialContext context) 
         {
             _context = context;
+        }
+
+        [HttpGet("ping")]
+
+        public async Task<ActionResult<string>> PingTest()
+        {
+            string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+            Stock stock = new();
+            stock.Ticker = "AAPL";
+            return Ok(connectionString);
         }
 
         [HttpGet("stocks")]

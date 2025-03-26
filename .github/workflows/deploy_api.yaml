@@ -1,0 +1,64 @@
+name: API Deployment
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_WEBAPP_NAME: SpawmpLocksAPI
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  DOTNET_VERSION: "8.x"
+
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Build with dotnet
+        run: |
+          pushd './SwampLocksAPI'
+          dotnet build --configuration Release
+          popd
+          
+      - name: Publish with dotnet
+        run: |
+          pushd './SwampLocksAPI'
+          dotnet publish -c Release -o ${{ env.DOTNET_ROOT }}/myapp
+          popd
+
+      - name: Upload artifact for deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{ env.DOTNET_ROOT }}/myapp
+  
+  deploy:
+    name: Deploy To Azure
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure App Service
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@85270a1854658d167ab239bce43949edb336fa7c
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    

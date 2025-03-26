@@ -6,13 +6,13 @@ void CreateBuilder(WebApplicationBuilder builder)
 {
     // Replace with your Azure SQL Database connection string
     string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-
+    Console.WriteLine(connectionString);
     // Add services to the container
     builder.Services.AddControllers()
         .AddNewtonsoftJson();
 
     // Register dependencies
-    builder.Services.AddDbContext<FinancialsContext>((options) =>
+    builder.Services.AddDbContext<FinancialContext>((options) =>
     {
         options.UseSqlServer(connectionString);
     });
