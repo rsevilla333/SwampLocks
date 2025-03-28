@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
 export default function SidebarMenu() {
     
@@ -20,6 +19,7 @@ export default function SidebarMenu() {
                 <Link href="/dashboard#watchlist" className="hover:underline hover:text-accent">Watchlist</Link>
                 <Link href="/commodities" className="hover:underline hover:text-accent">Commodities</Link>
                 <Link href="/economic_indicators_dashboard" className="hover:underline hover:text-accent">Economic Indicators</Link>
+                <Link href="/ex_rates" className="hover:underline hover:text-accent">Ex Rates</Link>
             </nav>
         </aside>
     );

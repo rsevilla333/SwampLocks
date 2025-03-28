@@ -36,7 +36,26 @@ namespace SwampLocks.AlphaVantage.Service
     		("Real Estate", "XLRE"),
     		("Utilities", "XLU")
 		};
-		private List<string> _currencies = new List<string> { "EUR", "JPY", "BTC", "CAD" };
+        private List<string> _currencies = new List<string> 
+        { 
+            "EUR", "JPY", "BTC", "CAD", "AED", "AFN", "ALL", "AMD", "ANG", "AOA", 
+            "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", 
+            "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BZD", "CAD", "CDF", 
+            "CHF", "CLF", "CLP", "CNH", "CNY", "COP", "CUP", "CVE", "CZK", "DJF", 
+            "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "GBP", 
+            "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", 
+            "HTG", "HUF", "ICP", "IDR", "ILS", "INR", "IQD", "IRR", "ISK", "JEP", 
+            "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD", 
+            "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", 
+            "MGA", "MKD", "MMK", "MNT", "MOP", "MRO", "MRU", "MUR", "MVR", "MWK", 
+            "MXN", "MYR", "MZN", "NAD", "NGN", "NOK", "NPR", "NZD", "OMR", "PAB", 
+            "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", 
+            "RUR", "RWF", "SAR", "SBDf", "SCR", "SDG", "SDR", "SEK", "SGD", "SHP", 
+            "SLL", "SOS", "SRD", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", 
+            "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "UYU", "UZS", "VND", 
+            "VUV", "WST", "XAF", "XCD", "XDR", "XOF", "XPF", "YER", "ZAR", "ZMW", 
+            "ZWL"
+        };
 
         public AlphaVantageService(FinancialContext context, AlphaVantageClient client, EmailNotificationService emailLogger)
         {
@@ -73,7 +92,7 @@ namespace SwampLocks.AlphaVantage.Service
 
         		var lastUpdated = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports")?.LastUpdated;
         		bool updateReports = lastUpdated.HasValue && (DateTime.UtcNow - lastUpdated.Value).Days >= 90;
-
+		        
         		// Execute and track results
         		TryExecute(PopulateExchangeRates, "PopulateExchangeRates", results);
         		TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllEconomicData", results);
@@ -83,7 +102,7 @@ namespace SwampLocks.AlphaVantage.Service
         		{
             		TryExecute(() => AddStockClosingPricePerSector(sectorName), $"AddStockClosingPricePerSector({sectorName})", results);
             		TryExecute(() => FetchAndStoreArticlesBySector(sectorName, DateTime.UtcNow), $"FetchAndStoreArticlesBySector({sectorName})", results);
-
+		            
             		if (updateReports)
             		{
                 		TryExecute(() => FetchAndStoreAllEarningStatementsFromSector(sectorName), $"FetchAndStoreAllEarningStatementsFromSector({sectorName})", results);
@@ -91,40 +110,43 @@ namespace SwampLocks.AlphaVantage.Service
                 		TryExecute(() => FetchAndStoreAllCashFlowStatementsFromSector(sectorName), $"FetchAndStoreAllCashFlowStatementsFromSector({sectorName})", results);
                 		TryExecute(() => FetchAndStoreAllIncomeStatementsFromSector(sectorName), $"FetchAndStoreAllIncomeStatementsFromSector({sectorName})", results);
             		}
-        		}
+                    AddStockSplitsPricePerSector( sectorName);
+                }
 
-        		// Update tracking timestamps
-        		_context.DataUpdateTrackers.First(d => d.DataType == "ExRates").LastUpdated = DateTime.UtcNow;
-        		_context.DataUpdateTrackers.First(d => d.DataType == "EcoIndicators").LastUpdated = DateTime.UtcNow;
-        		_context.DataUpdateTrackers.First(d => d.DataType == "Commodities").LastUpdated = DateTime.UtcNow;
-        		_context.DataUpdateTrackers.First(d => d.DataType == "Articles").LastUpdated = DateTime.UtcNow;
-
-        		if (updateReports)
-        		{
-           		 	_context.DataUpdateTrackers.First(d => d.DataType == "Reports").LastUpdated = DateTime.UtcNow;
-        		}
-
-        		_context.DataUpdateTrackers.First(d => d.DataType == "StockData").LastUpdated = DateTime.UtcNow;
-       		 	_context.SaveChanges();
-
-        		updateResult = $"Most current date for all data is now {DateTime.UtcNow}\n\nFunction Results:\n" + string.Join("\n", results);
-        		subject = $"SwampLocks Database Update as of {DateTime.UtcNow:yyyy-MM-dd} result";
+        		 // Update tracking timestamps
+        		 _context.DataUpdateTrackers.First(d => d.DataType == "ExRates").LastUpdated = DateTime.UtcNow;
+        		 _context.DataUpdateTrackers.First(d => d.DataType == "EcoIndicators").LastUpdated = DateTime.UtcNow;
+        		 _context.DataUpdateTrackers.First(d => d.DataType == "Commodities").LastUpdated = DateTime.UtcNow;
+        		 _context.DataUpdateTrackers.First(d => d.DataType == "Articles").LastUpdated = DateTime.UtcNow;
+		        
+        		 if (updateReports)
+        		 {
+            		 	_context.DataUpdateTrackers.First(d => d.DataType == "Reports").LastUpdated = DateTime.UtcNow;
+        		 }
+		        
+        		 _context.DataUpdateTrackers.First(d => d.DataType == "StockData").LastUpdated = DateTime.UtcNow;
+       		  	_context.SaveChanges();
+		        
+        		 updateResult = $"Most current date for all data is now {DateTime.UtcNow}\n\nFunction Results:\n" + string.Join("\n", results);
+        		 subject = $"SwampLocks Database Update as of {DateTime.UtcNow:yyyy-MM-dd} result";
 
         		Console.WriteLine(updateResult);
     		}
     		catch (Exception ex)
     		{
-        		// Handle errors and send an email with error details
+        		Handle errors and send an email with error details
         		updateResult = $"ERROR: An unexpected error occurred during the database update.\n\n" +
                        		$"Exception Message: {ex.Message}\n\nStackTrace:\n{ex.StackTrace}";
-
+		        
         		subject = $"SwampLocks Database Update FAILED - {DateTime.UtcNow:yyyy-MM-dd}";
         		Console.WriteLine(updateResult);
     		}
-
-    		// Send Email Notification (Success or Error)
+      
+    		Send Email Notification (Success or Error)
     		_emailLogger.SendEmailNotification("rsevilla@ufl.edu", subject, updateResult);
 		}
+        
+        
 
 
 
@@ -297,15 +319,16 @@ namespace SwampLocks.AlphaVantage.Service
             
             // loop through every cash flow statement in ticker
             foreach (var cashFlowStatementItem in cashFlowStatements)
-            {
-                DateTime date = DateTime.TryParse(cashFlowStatementItem[0], out var fde) ? fde : DateTime.MinValue;
+            { 
+                Console.WriteLine(cashFlowStatementItem[24]);
+               DateTime date = DateTime.TryParse(cashFlowStatementItem[0], out var fde) ? fde : DateTime.MinValue;
 
 				if(date < lastUpdatedDate) 
 				{
 					Console.WriteLine("Data already up to date. Bye!!");
 					break;
 				}
-
+               
                 try
                 {
                     // create cash flow statement object 
@@ -659,9 +682,25 @@ namespace SwampLocks.AlphaVantage.Service
 
           		if (existingArticle != null)
           		{
-              		// If the article exists, skip this iteration and continue
-              		Console.WriteLine($"Article already exists: {existingArticle.ArticleName} (Date: {existingArticle.Date:yyyy-MM-dd})");
-              		continue;
+                    if (string.IsNullOrEmpty(existingArticle.URL))
+                    {
+                        // Update the URL if it's empty or null
+                        existingArticle.URL = articleUrl;
+        
+                        // Log the update
+                        Console.WriteLine($"Updateding ULR of {existingArticle.ArticleName} (Date: {existingArticle.Date:yyyy-MM-dd}");
+
+                        // Mark the article as updated in the DbContext
+                        _context.Articles.Update(existingArticle);
+                        _context.SaveChanges(); // Save changes to the database
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Article already exists: {existingArticle.ArticleName} (Date: {existingArticle.Date:yyyy-MM-dd})");
+                    }
+                    
+                    
+                    continue;
           		}
 
           		var trackedArticle = _context.Entry(newsEntry);
@@ -698,9 +737,6 @@ namespace SwampLocks.AlphaVantage.Service
       		}
       		return true;
   		}
-
-
-
 
         
         public bool AddStockClosingPricePerSector(string sectorName)
@@ -1060,6 +1096,7 @@ namespace SwampLocks.AlphaVantage.Service
             Console.WriteLine($"Successfully added stock, ticker: {ticker}, sector: {sectorName}");
             return true;
         }
+        
 
         private bool getExchangeRatesFor(string symbol)
         {
@@ -1107,6 +1144,80 @@ namespace SwampLocks.AlphaVantage.Service
             
             Console.WriteLine($"No new exchange rates for {symbol}, all data already exists.");
             return false; // No new data added
+        }
+        
+        public void FetchAndStoreStockSplits(string ticker)
+        {
+            try
+            {
+                var stockSplits = _client.GetStockSplits(ticker);
+                if (stockSplits.Count == 0)
+                {
+                    Console.WriteLine($"No stock splits found for {ticker}");
+                    return;
+                }
+
+                foreach (var (date, splitRatioString) in stockSplits)
+                {
+                    
+                    if (!decimal.TryParse(splitRatioString, out decimal splitRatio))
+                    {
+                        Console.WriteLine($"❌ Invalid split ratio '{splitRatioString}' for {ticker} on {date}");
+                        continue;
+                    }
+                    
+                    var existingSplit = _context.StockSplits
+                        .FirstOrDefault(s => s.Ticker == ticker && s.EffectiveDate == date);
+
+                    if (existingSplit == null)
+                    {
+                        _context.StockSplits.Add(new StockSplit
+                        {
+                            Ticker = ticker,
+                            EffectiveDate = date,
+                            SplitFactor = splitRatio
+                        });
+                    }
+                }
+
+                _context.SaveChanges();
+                Console.WriteLine($"✅ Stock splits stored for {ticker}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error fetching stock splits for {ticker}: {ex.Message}");
+            }
+        }
+        
+        public bool AddStockSplitsPricePerSector(string sectorName)
+        {
+            try
+            {
+                // Fetch all stocks from the specified sector
+                List<string> stockTickers = _context.Stocks
+                    .Where(s => s.Sector.Name == sectorName)
+                    .Select(s => s.Ticker)
+                    .ToList();
+
+                foreach (var ticker in stockTickers)
+                {
+                    try
+                    {
+                        // For each ticker, fetch and store the stock split
+                        FetchAndStoreStockSplits(ticker);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error adding stock splits {ticker}: {ex.Message}");
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding stock splits {sectorName}: {ex.Message}");
+                return false;
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ Env.Load();  // Load environment variables (e.g., DB_NAME, SERVER_NAME, etc.)
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient();
+
 // Add services to the container
 builder.Services.AddControllers()
     .AddNewtonsoftJson();

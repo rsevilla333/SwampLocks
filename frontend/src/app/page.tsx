@@ -1,8 +1,12 @@
 "use client";
+
 import Link from "next/link";
-import StockSearch from "./components/StockSearch";
+import StockSearch from "./components/StockChart";
 import Treemap from "./components/TreeMap";
 import Footer from "./components/Footer";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import SearchBar from "./components/SearchBar";
 
 
 export default function Home() {
@@ -108,16 +112,33 @@ export default function Home() {
         { symbol: "WDAY3", marketCap: 32500, change: -1.5 },
     ];
 
-  
-    return (
-        <div className="w-full flex justify-between h-full flex-col items-center p-6 ">
-            {/* Header */}
+    const router = useRouter();
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const handleSearch = async (ticker: string) => {
+        if (!ticker) return;
+
+        try {
+            // Check stock exists
+            const response = await axios.get(`${API_BASE_URL}/api/financials/stocks/${ticker}/exists`);
+            if (response.status === 200) {
+                router.push(`/stock/${ticker}`);
+            }
+        } catch (error) {
+            alert("Stock not found. Please try a different symbol.");
+        }
+    }
+
+        return (
+        <div className="w-full flex justify-between h-full flex-col items-center">
+            <div className="p-6 w-full mx-auto">
+                <SearchBar onSearch={handleSearch} />
+            </div>
             <header className="w-full flex flex-col items-center ">
                 <p className="text-center text-lg text-gray-500 max-w-4xl mb-8 font-medium">
                     Your personalized portfolio optimization tool powered by machine learning, sentiment analysis, and sector performance insights. Strategically allocate investments based on data-driven recommendations.
                 </p>
             </header>
-
             {/* Main Content */}
             <div className="flex flex-row w-full max-w-7xl gap-6  ">
                 {/* Sectors Sidebar */}
@@ -141,9 +162,6 @@ export default function Home() {
                     <div className="mx-auto">
                         <Treemap stocks={stocks} height={500} width={650}></Treemap>
                     </div>
-                    {/*<div className="w-full max-w-xl">*/}
-                        <StockSearch ticker="" />
-                    {/*</div>*/}
                 </div>
             </div>
 
@@ -151,4 +169,4 @@ export default function Home() {
             <Footer/>
         </div>
     );
-}
+    }

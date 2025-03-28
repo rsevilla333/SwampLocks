@@ -12,10 +12,12 @@ namespace SwampLocksAPI.Controllers
     public class FinancialsController : ControllerBase
     {
         private readonly FinancialContext _context;
+        private readonly HttpClient _httpClient;
 
-        public FinancialsController(FinancialContext context) 
+        public FinancialsController(FinancialContext context, HttpClient httpClient) 
         {
             _context = context;
+            _httpClient = httpClient;
         }
 
         [HttpGet("ping")]
@@ -68,6 +70,89 @@ namespace SwampLocksAPI.Controllers
 
             return Ok(stockData);
         }
+        
+        [HttpGet("stocks/{ticker}/filtered_data")]
+        public async Task<ActionResult<List<StockData>>> GetFilteredStockData(string ticker)
+        {
+            List<StockData> stockData = await _context
+                .StockDataEntries
+                .Where(data => data.Ticker == ticker)
+                .OrderByDescending(data => data.Date) 
+                .ToListAsync();
+            
+            if (stockData.Count == 0)
+            {
+                return NotFound();
+            }
+
+            
+            List<StockSplit> stockSplits = await _context
+                .StockSplits
+                .Where(split => split.Ticker == ticker)
+                .OrderByDescending(split => split.EffectiveDate) 
+                .ToListAsync();
+            
+            if (stockSplits.Count == 0)
+            {
+                Console.WriteLine($"No stock splits found for ticker: {ticker}");
+                return Ok(stockData);
+            }
+
+            decimal cumulativeSplitFactor = 1;
+            var stockDataList = stockData;
+            foreach (var data in stockData)
+            {
+                var splitsToApply = stockSplits;
+                bool skipSlpit = false;
+                foreach (var split in splitsToApply)
+                {
+                     
+                    if (data.Date <= split.EffectiveDate)
+                    {
+                        if(data.Date == split.EffectiveDate)
+                        {
+                            data.ClosingPrice /= cumulativeSplitFactor;
+                            skipSlpit = true;
+                        }
+                        
+                        cumulativeSplitFactor *= split.SplitFactor;
+                        stockSplits.Remove(split);
+                        
+                        break;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                
+                if(!skipSlpit)
+                {
+                    data.ClosingPrice /= cumulativeSplitFactor;
+                }
+            }
+
+            stockData.Reverse();
+            return Ok(stockData);
+        }
+
+        
+        [HttpGet("stocks/{ticker}/exists")]
+        public async Task<ActionResult<bool>> CheckIfStockExists(string ticker)
+        {
+            // Query your database to check if a stock with this ticker exists
+            var stock = await _context.Stocks
+                .FirstOrDefaultAsync(s => s.Ticker == ticker);
+
+            if (stock == null)
+            {
+                // If stock doesn't exist
+                return NotFound(new { message = $"Stock with ticker {ticker} not found." });
+            }
+
+            // If stock exists
+            return Ok(true);
+        }
 
         [HttpGet("stocks/{ticker}/data/{timeframe}")]
         public async Task<ActionResult<List<StockData>>> GetStockData(string ticker, string timeframe)
@@ -116,12 +201,7 @@ namespace SwampLocksAPI.Controllers
                 .Articles
                 .Where(data => data.Ticker == ticker)
                 .ToListAsync();
-
-            if (articles.Count == 0)
-            {
-                return NotFound();
-            }
-
+            
             return Ok(articles);
         }
 
@@ -301,6 +381,38 @@ namespace SwampLocksAPI.Controllers
             }
 
             return Ok(sectorPerformances);
+        }
+        
+        [HttpGet("ex_rates")]
+        public async Task<ActionResult<List<ExchangeRate>>> GetExRates()
+        {
+            List<ExchangeRate> exRates = await _context
+                .ExchangeRates
+                .ToListAsync();
+
+            if (exRates.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(exRates);
+        }
+        
+        
+        [HttpGet("article_preview/{url}")]
+        public async Task<IActionResult> GetPreview([FromQuery] string url)
+        {
+            if (string.IsNullOrEmpty(url)) return BadRequest("URL is required");
+
+            try
+            {
+                var response = await _httpClient.GetStringAsync($"https://api.linkpreview.net/?key=YOUR_API_KEY&q={url}");
+                return Ok(response);
+            }
+            catch
+            {
+                return BadRequest("Failed to fetch link preview");
+            }
         }
     }
 }
