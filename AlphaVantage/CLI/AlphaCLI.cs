@@ -37,12 +37,13 @@ namespace SwampLocks.AlphaVantage.CLI
                 Console.WriteLine("8. Fetch and Store Economic Data");
 			    Console.WriteLine("9. Fetch and Store Commodity Data");
 			    Console.WriteLine("10. Update Everything");
-                Console.WriteLine("11. Exit");
-                Console.Write("Enter choice (1-11): ");
+                Console.WriteLine("11. Stock Splits");
+                Console.WriteLine("12. Exit");
+                Console.Write("Enter choice (1-12): ");
 
                 string? choice = Console.ReadLine()?.Trim();
 
-                if (choice == "11")
+                if (choice == "12")
                 {
                     Console.WriteLine("Exiting program. Goodbye! 👋");
                     break;
@@ -88,6 +89,10 @@ namespace SwampLocks.AlphaVantage.CLI
                 {
                     FetchAndUpdateEverything();
                 }
+                else if (choice == "11")
+                {
+                    AddStockSplitsData();
+                }
                 else
                 {
                     Console.WriteLine("❌ Invalid input. Please enter a valid option.");
@@ -114,7 +119,6 @@ namespace SwampLocks.AlphaVantage.CLI
             _service.FetchAndStoreAllCommodityData();
         }
         
-
         private void FetchFinancialData(string dataType,
             Func<string, bool> fetchByStock, Func<string, bool> fetchBySector)
         {
@@ -207,7 +211,7 @@ namespace SwampLocks.AlphaVantage.CLI
             string? year = Console.ReadLine()?.Trim();    
             
             DateTime startDate = DateTime.Parse($"{year}-01-01");
-            DateTime endDate = new DateTime(2022,01,01);//DateTime.Parse($"{year}-12-31");
+            DateTime endDate = DateTime.Parse($"{year}-12-31");//DateTime.Parse($"{year}-12-31");
 
             if (fetchChoice == "1")
             {
@@ -267,5 +271,58 @@ namespace SwampLocks.AlphaVantage.CLI
                 _service.AddStockClosingPricePerSector(sectorName);
             }
         }
+        
+        private void AddStockSplitsData()
+        {
+            Console.WriteLine("1. Add Stock Splits for a specific stock");
+            Console.WriteLine("2. Add Stock Splits for all stocks in a sector");
+            Console.Write("Enter choice (1/2): ");
+            string? choice = Console.ReadLine()?.Trim();
+
+            if (choice == "1")
+            {
+                Console.Write("Enter Stock Ticker: ");
+                string? ticker = Console.ReadLine()?.Trim();
+                try
+                {
+                    // Call method to fetch and store stock splits for a specific ticker
+                    _service.FetchAndStoreStockSplits(ticker);
+                    Console.WriteLine($"✅ Successfully added stock splits for stock: {ticker}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error adding stock splits for stock {ticker}: {ex.Message}");
+                }
+            }
+            else if (choice == "2")
+            {
+                Console.Write("Enter Sector Name: ");
+                string? sectorName = Console.ReadLine()?.Trim();
+                try
+                {
+                    // Call method to add stock splits for all stocks in the sector
+                    bool success = _service.AddStockSplitsPricePerSector(sectorName);
+
+                    if (success)
+                    {
+                        Console.WriteLine($"✅ Successfully added stock splits for sector: {sectorName}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"❌ Failed to add stock splits for sector: {sectorName}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error processing stock splits for sector {sectorName}: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
+            }
+        }
+
+
     }
 }

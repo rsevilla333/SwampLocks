@@ -438,6 +438,31 @@ namespace SwampLocks.AlphaVantage.Client
 
     		return results;
 		}
+		
+		public List<Tuple<DateTime, string>> GetStockSplits(string ticker)
+		{
+			string function = "SPLITS";
+			string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
+			Console.WriteLine(queryURL);
+
+			string data = client.DownloadString(queryURL);
+			JObject jsonData = JObject.Parse(data);
+
+			List<Tuple<DateTime, string>> splits = new List<Tuple<DateTime, string>>();
+    
+			if (jsonData["data"] != null)
+			{
+				foreach (var entry in jsonData["data"])
+				{
+					DateTime date = DateTime.Parse(entry["effective_date"].ToString());
+					string splitRatio = entry["split_factor"].ToString();
+					splits.Add(new Tuple<DateTime, string>(date, splitRatio));
+				}
+			}
+
+			return splits;
+		}
+
 
     }
 }

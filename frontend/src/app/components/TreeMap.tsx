@@ -83,21 +83,18 @@ interface TreemapProps {
 }
 
 const Treemap: React.FC<TreemapProps> = ({ stocks, width = 600, height = 480 }) => {
-    // Sort stocks by market cap
-    const sortedStocks = [...stocks].sort((a, b) => b.marketCap - a.marketCap);
 
-    // Compute layout
+    const sortedStocks = [...stocks].sort((a, b) => b.marketCap - a.marketCap);
+    
     const layout = computeTreemap(sortedStocks, 0, 0, width, height, width >= height);
 
-    // Function to get gradient color based on percentage change
+
     const getGradientColor = (change: number) => {
         // Cap the percentage change at 5% to ensure we are within the range of 5 colors
         const cappedChange = Math.min(5, Math.max(-5, change));
-
-        // Set a default color variable
+        
         let color: string;
-
-        // Handle positive (green) change values
+        
         if (cappedChange >= 0) {
             // Assign color based on the percentage change (brighter green shades)
             if (cappedChange >= 2.5) color = "#008000"; // Bright green (strong positive)

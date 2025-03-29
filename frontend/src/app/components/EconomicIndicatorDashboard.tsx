@@ -19,6 +19,7 @@ export default function EconomicIndicatorDashboard() {
     const [selectedIndicator, setSelectedIndicator] = useState<Indicator | null>(null);
     const [data, setData] = useState<DataPoint[]>([]);
     const [loading, setLoading] = useState(false);
+
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     
     useEffect(() => {

@@ -17,7 +17,7 @@ namespace SwampLocks.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -567,6 +567,22 @@ namespace SwampLocks.Migrations
                     b.ToTable("StockEarnings");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.StockSplit", b =>
+                {
+                    b.Property<string>("Ticker")
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("SplitFactor")
+                        .HasColumnType("decimal(10,4)");
+
+                    b.HasKey("Ticker", "EffectiveDate");
+
+                    b.ToTable("StockSplits");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.Article", b =>
                 {
                     b.HasOne("SwampLocksDb.Models.Stock", "Stock")
@@ -677,6 +693,17 @@ namespace SwampLocks.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.StockSplit", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.Stock", "Stock")
+                        .WithMany("StockSplits")
+                        .HasForeignKey("Ticker")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.CommodityIndicator", b =>
                 {
                     b.Navigation("DataPoints");
@@ -707,6 +734,8 @@ namespace SwampLocks.Migrations
                     b.Navigation("EarningStatements");
 
                     b.Navigation("IncomeStatements");
+
+                    b.Navigation("StockSplits");
                 });
 #pragma warning restore 612, 618
         }

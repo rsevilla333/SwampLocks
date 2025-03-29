@@ -30,6 +30,7 @@ namespace SwampLocksDb.Data
 	    public DbSet<CommodityIndicator> Commodities { get; set; }
         public DbSet<CommodityData> CommodityDataPoints { get; set; }
 	    public DbSet<DataUpdateTracker> DataUpdateTrackers { get; set; }
+        public DbSet<StockSplit> StockSplits { get; set; }
         
         public FinancialContext()
         {
@@ -203,6 +204,16 @@ namespace SwampLocksDb.Data
 			    // Data Update Tracker
 			    modelBuilder.Entity<DataUpdateTracker>()
                     .HasKey(d => d.DataType);
+                
+                // StockSplit
+                modelBuilder.Entity<StockSplit>()
+                    .HasKey(ss => new { ss.Ticker, ss.EffectiveDate });
+
+                modelBuilder.Entity<StockSplit>()
+                    .HasOne(ss => ss.Stock)
+                    .WithMany(s => s.StockSplits)
+                    .HasForeignKey(ss => ss.Ticker)
+                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
