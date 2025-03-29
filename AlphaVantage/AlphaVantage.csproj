@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>AlphaVantageClient</RootNamespace>
+        <AzureFunctionsVersion>v4</AzureFunctionsVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,12 +15,21 @@
       <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="5.0.0" />
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.6" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-      <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.6.0" />
+      <FrameworkReference Include="Microsoft.AspNetCore.App" />
+      <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.21.0" />
+      <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.2" />
+      <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.1" />
+      <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
+      <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\SwampLocksDb\SwampLocksDb.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext"/>
     </ItemGroup>
 
 </Project>
