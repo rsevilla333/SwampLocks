@@ -36,3 +36,10 @@ jobs:
           dotnet publish --configuration Release --output ../${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           popd
 
+      - name: Deploy To Azure
+        uses: azure/functions-action@v1
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
