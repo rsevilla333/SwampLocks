@@ -53,6 +53,6 @@ public class DailyUpdate
     {
         log.LogInformation($"Manual trigger executed at: {DateTime.Now}");
         //_alphaVantageService.FetchAndUpdateEverything();
-        return new Ok("Function executed manually.");
+        return new OkObjectResult("Function executed manually.");
     }
 }
