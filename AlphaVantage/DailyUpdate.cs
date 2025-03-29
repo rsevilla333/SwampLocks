@@ -7,6 +7,10 @@ using SwampLocks.AlphaVantage.Email;
 using System;
 using System.Threading.Tasks;
 using DotNetEnv;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc;
 
 public class DailyUpdate
 {
