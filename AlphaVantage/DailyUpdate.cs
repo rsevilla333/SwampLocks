@@ -52,7 +52,7 @@ public class DailyUpdate
     public async Task<IActionResult> RunManually([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req, ILogger log)
     {
         log.LogInformation($"Manual trigger executed at: {DateTime.Now}");
-        _alphaVantageService.FetchAndUpdateEverything();
-        return new OkObjectResult("Function executed manually.");
+        //_alphaVantageService.FetchAndUpdateEverything();
+        return new Ok("Function executed manually.");
     }
 }
