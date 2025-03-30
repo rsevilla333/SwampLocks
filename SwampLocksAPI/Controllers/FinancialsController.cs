@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
 using SwampLocksDb.Data;
 using SwampLocksDb.Models;
+using System.Text.Json;
 
 namespace SwampLocksAPI.Controllers
 {
@@ -14,10 +16,16 @@ namespace SwampLocksAPI.Controllers
         private readonly FinancialContext _context;
         private readonly HttpClient _httpClient;
 
-        public FinancialsController(FinancialContext context, HttpClient httpClient) 
+        private readonly string _alphaKey;
+
+        public FinancialsController(FinancialContext context, HttpClient httpClient)
         {
+             Env.Load();
+             
             _context = context;
             _httpClient = httpClient;
+            _alphaKey = Environment.GetEnvironmentVariable("ALPHA_VANTAGE");
+            
         }
 
         [HttpGet("ping")]
@@ -69,6 +77,52 @@ namespace SwampLocksAPI.Controllers
             }
 
             return Ok(stockData);
+        }
+        
+        [HttpGet("stocks/{ticker}/todays_data")]
+        public async Task<ActionResult<List<StockData>>> GetTodyasStockData(string ticker)
+        {
+            if (string.IsNullOrEmpty(_alphaKey))
+            {
+                return StatusCode(500, "Cant communicate with ALPHA API");
+            }
+
+            string interval = "1min";
+            string url = $"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={interval}&apikey={_alphaKey}";
+            
+            try
+            {
+                var response = await _httpClient.GetStringAsync(url);
+                var jsonResponse = JsonDocument.Parse(response);
+
+                // Parse the Time Series data
+                var timeSeries = jsonResponse.RootElement.GetProperty($"Time Series ({interval})");
+
+                var stockData = new List<StockData>();
+
+                foreach (var item in timeSeries.EnumerateObject())
+                {
+                    var date = DateTime.Parse(item.Name); // Parsing date from the response
+                    var data = item.Value;
+
+                    var stock = new StockData
+                    {
+                        Ticker = ticker,
+                        Date = date,
+                        ClosingPrice = decimal.Parse(data.GetProperty("4. close").GetString()),
+                        MarketCap = 0, 
+                        PublicSentiment = 0, 
+                    };
+
+                    stockData.Add(stock);
+                }
+
+                return Ok(stockData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching data: {ex.Message}");
+            }
         }
         
         [HttpGet("stocks/{ticker}/filtered_data")]
@@ -153,6 +207,31 @@ namespace SwampLocksAPI.Controllers
             // If stock exists
             return Ok(true);
         }
+        
+        [HttpGet("stocks/autocomplete")]
+        public async Task<ActionResult<IEnumerable<string>>> GetMatchingStockTickers(string query)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                return BadRequest(new { message = "Query is required." });
+            }
+            
+            var matchingStocks = await _context.Stocks
+                .Where(s => s.Ticker.StartsWith(query.ToUpper())) // case-insensitivity
+                .Select(s => s.Ticker)
+                .Take(10) // # of suggestions
+                .ToListAsync();
+
+            // If no matching stocks are found
+            if (matchingStocks.Count == 0)
+            {
+                return NotFound(new { message = "No matching stock tickers found." });
+            }
+
+            // Return the list of matching stock tickers
+            return Ok(matchingStocks);
+        }
+
 
         [HttpGet("stocks/{ticker}/data/{timeframe}")]
         public async Task<ActionResult<List<StockData>>> GetStockData(string ticker, string timeframe)
@@ -200,6 +279,17 @@ namespace SwampLocksAPI.Controllers
             List<Article> articles = await _context
                 .Articles
                 .Where(data => data.Ticker == ticker)
+                .ToListAsync();
+            
+            return Ok(articles);
+        }
+        
+        [HttpGet("stocks/articles/all")]
+        public async Task<ActionResult<List<Article>>> GetAllStockArticles()
+        {
+            List<Article> articles = await _context
+                .Articles
+                .Where(data => data.Date >= DateTime.Now.AddDays(-30))
                 .ToListAsync();
             
             return Ok(articles);
@@ -396,6 +486,40 @@ namespace SwampLocksAPI.Controllers
             }
 
             return Ok(exRates);
+        }
+        
+        [HttpGet("top_movers")]
+        public async Task<ActionResult<List<MarketMovers>>> GetTopMovers()
+        {
+            if (string.IsNullOrEmpty(_alphaKey))
+            {
+                return StatusCode(500, "Cant communicate with ALPHA API");
+            }
+            
+            string url = $"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={_alphaKey}";
+            
+            try
+            {
+                var response = await _httpClient.GetStringAsync(url);
+                var jsonResponse = JsonDocument.Parse(response);
+
+                var movers = jsonResponse.RootElement.GetProperty("top_gainers").EnumerateArray()
+                    .Concat(jsonResponse.RootElement.GetProperty("top_losers").EnumerateArray())
+                    .Select(m => new MarketMovers
+                    {
+                        Ticker = m.GetProperty("ticker").GetString(),
+                        Price = decimal.Parse(m.GetProperty("price").GetString()),
+                        Change = decimal.Parse(m.GetProperty("change_amount").GetString()),
+                        ChangePercent = decimal.Parse(m.GetProperty("change_percentage").GetString().TrimEnd('%')),
+                        Volume = long.Parse(m.GetProperty("volume").GetString())
+                    }).ToList();
+
+                return Ok(movers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching data: {ex.Message}");
+            }
         }
         
         

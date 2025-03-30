@@ -134,7 +134,7 @@ namespace SwampLocks.AlphaVantage.Service
     		}
     		catch (Exception ex)
     		{
-        		//Handle errors and send an email with error details
+        		// Handle errors and send an email with error details
         		updateResult = $"ERROR: An unexpected error occurred during the database update.\n\n" +
                        		$"Exception Message: {ex.Message}\n\nStackTrace:\n{ex.StackTrace}";
 		        
@@ -142,7 +142,7 @@ namespace SwampLocks.AlphaVantage.Service
         		Console.WriteLine(updateResult);
     		}
       
-    		//Send Email Notification (Success or Error)
+    		// Send Email Notification (Success or Error)
     		_emailLogger.SendEmailNotification("rsevilla@ufl.edu", subject, updateResult);
 		}
         

@@ -4,7 +4,9 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 
+
 const timeframes = [
+    { label: "Today", value: "1d" },
     { label: "1W", value: "1w" },
     { label: "1M", value: "1mo" },
     { label: "YTD", value: "ytd" },
@@ -39,6 +41,7 @@ export default function StockChart({ ticker }: StockChartProps) {
     const lastPrice = filteredData.length > 0 ? filteredData[filteredData.length - 1].price : null;
 
     const percentageChange = firstPrice && lastPrice ? ((lastPrice - firstPrice) / firstPrice) * 100 : null;
+    
 
     useEffect(() => {
         const fetchStockData = async () => {
@@ -48,12 +51,24 @@ export default function StockChart({ ticker }: StockChartProps) {
                 console.log(`Fetching data from ${API_BASE_URL}/api/financials/stocks/${ticker}/filtered_data`);
                 
                 const response = await axios.get(`${API_BASE_URL}/api/financials/stocks/${ticker}/filtered_data`);
+                const dailyResponse = await axios.get(`${API_BASE_URL}/api/financials/stocks/${ticker}/todays_data`);
+                
+                console.log(dailyResponse.data);
+                
                 const processedData = response.data.map((item: any) => ({
                     date: new Date(item.date).toLocaleDateString(),
                     price: item.closingPrice
                 }));
-                setData(processedData);
-                setFilteredData(processedData);
+
+                const processedDailyData = dailyResponse.data.map((item: any) => ({
+                    date: new Date(item.date),
+                    price: item.closingPrice
+                }));
+                
+                const combinedData = [...processedData, ...processedDailyData];
+                
+                setData(combinedData);
+                setFilteredData(combinedData);
             } catch (err) {
                 setError("Stock data not found.");
                 console.error("Error fetching stock data:", err);
@@ -71,7 +86,18 @@ export default function StockChart({ ticker }: StockChartProps) {
         const now = new Date();
         let filtered = [...data];
 
-        if (timeframe === "1w") {
+        if (timeframe === "1d") {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (today.getDay() === 6) { // Saturday
+                today.setDate(today.getDate() - 1);
+            } else if (today.getDay() === 0) { // Sunday
+                today.setDate(today.getDate() - 2);
+            }
+            filtered = filtered.filter((item) => new Date(item.date) > today);
+            console.log("Filtered data:", filtered);
+        } else if (timeframe === "1w") {
             const oneWeekAgo = new Date();
             oneWeekAgo.setDate(now.getDate() - 7);
             filtered = filtered.filter((item) => new Date(item.date) > oneWeekAgo);
@@ -147,12 +173,28 @@ export default function StockChart({ ticker }: StockChartProps) {
                                 return year;
                             } else if (["5y", "1y"].includes(timeframe)) {
                                 return `${year}-${(date.getMonth() + 1).toString().padStart(2, "0")}`;
+                            } else if (timeframe === '1d') {
+                                return `${date.getHours()}`;
                             } else {
                                 return `${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
                             }
                         }}
                     />
-                    <YAxis domain={["auto", "auto"]} />
+                    <YAxis
+                        domain={(() => {
+                            if (timeframe === "1d") {
+                                const min = Math.min(...filteredData.map(item => item.price));
+                                const max = Math.max(...filteredData.map(item => item.price));
+                                return [min, max]; 
+                            } else if (["1m", "1w", "1d", "6m"].includes(timeframe)) {
+                                const min = Math.min(...filteredData.map(item => item.price));
+                                const max = Math.max(...filteredData.map(item => item.price));
+                                return [min - 5, max + 5];
+                            } else {
+                                return [0, "auto"]; 
+                            }
+                        })()}
+                    />
                     <Tooltip />
                     <Line
                         type="linear"

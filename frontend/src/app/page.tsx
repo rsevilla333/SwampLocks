@@ -1,15 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import StockSearch from "./components/StockChart";
 import Treemap from "./components/TreeMap";
 import Footer from "./components/Footer";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import SearchBar from "./components/SearchBar";
+import StockSearchBar from "./components/StockSearchBar";
+import Articles from "./components/Articles";
+import TopMoverDashBoard from "./components/TopMoversDashboard";
+import CompactStockChart from "./components/CompactStockChart";
+import { Switch } from "@headlessui/react";
+import MountainMap from "./components/MountainMap";
+import {useState} from "react";
 
 
 export default function Home() {
+
+    const [selectedMap, setSelectedMap] = useState<'mountain' | 'treemap'>('mountain');
+    
     const sectors = [
         { name: "Technology", path: "technology" },
         { name: "Energy", path: "energy" },
@@ -111,62 +118,83 @@ export default function Home() {
         { symbol: "DOCU3", marketCap: 33500, change: 1.6 },
         { symbol: "WDAY3", marketCap: 32500, change: -1.5 },
     ];
-
-    const router = useRouter();
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-    const handleSearch = async (ticker: string) => {
-        if (!ticker) return;
-
-        try {
-            // Check stock exists
-            const response = await axios.get(`${API_BASE_URL}/api/financials/stocks/${ticker}/exists`);
-            if (response.status === 200) {
-                router.push(`/stock/${ticker}`);
-            }
-        } catch (error) {
-            alert("Stock not found. Please try a different symbol.");
-        }
-    }
-
+    
         return (
-        <div className="w-full flex justify-between h-full flex-col items-center">
-            <div className="p-6 w-full mx-auto">
-                <SearchBar onSearch={handleSearch} />
-            </div>
-            <header className="w-full flex flex-col items-center ">
-                <p className="text-center text-lg text-gray-500 max-w-4xl mb-8 font-medium">
-                    Your personalized portfolio optimization tool powered by machine learning, sentiment analysis, and sector performance insights. Strategically allocate investments based on data-driven recommendations.
-                </p>
-            </header>
-            {/* Main Content */}
-            <div className="flex flex-row w-full max-w-7xl gap-6  ">
-                {/* Sectors Sidebar */}
-                <div className="w-1/3 p-8 bg-transparent border-2 border-accent ">
-                    <h2 className="text-3xl font-extrabold mb-10 text-black tracking-wide">Sectors</h2>
-                    <ol className="list-decimal pl-8 space-y-6 text-2xl font-medium">
-                        {sectors.map((sector, index) => (
-                            <li key={index} className="hover:bg-secondary hover:scale-110 px-4 py-3 rounded-lg transition-all duration-200">
-                                <Link href={`/sector/${sector.path}`} className="text-black font-semibold">
-                                    {sector.name}
-                                </Link>
-                            </li>
-                        ))}
-                    </ol>
+            <div className="w-full h-full flex flex-col items-center gap-y-10">
+                {/* Stock Search Bar */}
+                <div className="p-6 w-full mx-auto">
+                    <StockSearchBar />
+                </div>
+
+                {/* Header Text */}
+                <header className="w-full flex flex-col items-center">
+                    <p className="text-center text-lg text-gray-500 max-w-4xl mb-8 font-medium">
+                        Your personalized portfolio optimization tool powered by machine learning, sentiment analysis, and sector performance insights. Strategically allocate investments based on data-driven recommendations.
+                    </p>
+                </header>
+
+                {/* Mountain Map */}
+                {/*<div className="mx-auto p-4 flex flex-col items-center">*/}
+                {/*    <h1 className="text-black text-4xl">The Market</h1>*/}
+                {/*    <MountainMap stocks={stocks} />*/}
+                {/*    <Treemap stocks={stocks} />*/}
+                {/*</div>*/}
+                <div className="mb-4 flex flex-row items-center gap-2">
+                    <h1 className="text-black text-4xl">The Market</h1>
+                    <Switch
+                        checked={selectedMap === 'treemap'}
+                        onChange={() => setSelectedMap(selectedMap === 'mountain' ? 'treemap' : 'mountain')}
+                        className={`${
+                            selectedMap === 'treemap' ? 'bg-green-500' : 'bg-gray-300'
+                        } relative inline-flex items-center h-6 rounded-full w-12 transition-colors duration-200 ease-in-out`}
+                    >
+                    <span
+                        className={`${
+                            selectedMap === 'treemap' ? 'translate-x-6' : 'translate-x-1'
+                        } inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out`}
+                    />
+                    </Switch>
                 </div>
 
 
-                {/* Heatmap and Stock Search */}
-                <div className="flex-1 p-6 flex flex-col w-full items-center justify-center bg-transparent border-2 border-accent">
-                    <p className="text-xl font-semibold text-black mb-6">Today's Market</p>
-                    <div className="mx-auto">
-                        <Treemap stocks={stocks} height={500} width={650}></Treemap>
+                {/* Conditionally render the selected map */}
+                {selectedMap === 'mountain' ? (
+                    <MountainMap stocks={stocks} />
+                ) : (
+                    <Treemap stocks={stocks} />
+                )}
+
+                
+                {/* Main Content Grid */}
+                <div className="flex w-full max-w-7xl gap-8 max-h-full">
+                    {/* Left Sidebar */}
+                    <div className="w-3/4 flex flex-col gap-8">
+                        {/* Sectors Section */}
+                        <div className="bg-transparent border-2 border-accent p-8">
+                            <h2 className="text-3xl font-extrabold mb-6 text-black">Sectors</h2>
+                            <ol className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full list-decimal pl-8 text-2xl font-medium">
+                                {sectors.map((sector, index) => (
+                                    <li key={index} className="hover:bg-secondary hover:scale-110 px-4 py-3 rounded-lg transition-all duration-200">
+                                        <Link href={`/sector/${sector.path}`} className="text-black font-semibold">
+                                            {sector.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                        {/* Top Movers */}
+                        <div className="min-w-full max-h-[550px] bg-transparent">
+                            <h2 className="text-black text-4xl items-center">Top Movers</h2>
+                            <TopMoverDashBoard />
+                        </div>
+                    </div>
+
+                    {/* Right Sidebar for Articles */}
+                    <div className="w-1/4 bg-transparent h-full">
+                        <Articles /> {/* Your Articles component */}
                     </div>
                 </div>
+                <Footer></Footer>
             </div>
-
-            {/* Footer */}
-            <Footer/>
-        </div>
     );
     }
