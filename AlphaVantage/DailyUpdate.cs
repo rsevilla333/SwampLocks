@@ -49,7 +49,7 @@ public class DailyUpdate
 
     // HTTP Trigger (Manual execution)
     [FunctionName("ManualDailyUpdate")]
-    public async Task<IActionResult> RunManually([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
     {
         log.LogInformation($"Manual trigger executed at: {DateTime.Now}");
         //_alphaVantageService.FetchAndUpdateEverything();
