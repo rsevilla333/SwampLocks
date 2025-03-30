@@ -19,7 +19,7 @@ public class DailyUpdate
     // Constructor for Dependency Injection (if you're handling DI in another way)
     public DailyUpdate()
     {
-        // Load environment variables
+/*        // Load environment variables
         Env.Load();
 
         // Read the environment variables
@@ -34,7 +34,7 @@ public class DailyUpdate
         var emailService = new EmailNotificationService(smtpServer, smtpUsername, smtpPassword);
 
         // Initialize the AlphaVantageService
-        _alphaVantageService = new AlphaVantageService(dbContext, client, emailService);
+        _alphaVantageService = new AlphaVantageService(dbContext, client, emailService);*/
     }
 
     // The TimerTrigger runs the function once a day at midnight
@@ -49,7 +49,7 @@ public class DailyUpdate
 
     // HTTP Trigger (Manual execution)
     [FunctionName("ManualDailyUpdate")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+    public async Task<IActionResult> RunManually([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
     {
         log.LogInformation($"Manual trigger executed at: {DateTime.Now}");
         //_alphaVantageService.FetchAndUpdateEverything();
