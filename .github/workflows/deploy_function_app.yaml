@@ -9,7 +9,7 @@ on:
 env:
   AZURE_FUNCTIONAPP_NAME: "SwampLocksDailyUpdate"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './functionapp'
-  DOTNET_VERSION: "9.x"
+  DOTNET_VERSION: "8.x"
 
 jobs:
   deploy:
@@ -26,13 +26,13 @@ jobs:
       
       - name: Build .NET Project
         run: |
-          pushd './AlphaVantage'
+          pushd './AlphaVantageUpdater'
           dotnet build --configuration Release
           popd
 
       - name: Publish .NET Project
         run: |
-          pushd './AlphaVantage'
+          pushd './AlphaVantageUpdater'
           dotnet publish --configuration Release --output ../${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           popd
 
