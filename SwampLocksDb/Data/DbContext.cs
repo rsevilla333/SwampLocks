@@ -32,10 +32,11 @@ namespace SwampLocksDb.Data
 	    public DbSet<DataUpdateTracker> DataUpdateTrackers { get; set; }
         public DbSet<StockSplit> StockSplits { get; set; }
 
-        private bool useConnectionString;
-        public FinancialContext(bool useConnectionString = false)
+        public bool useConnectionString;
+
+        public FinancialContext()
         {
-            this.useConnectionString = useConnectionString;
+
         }
 
         public FinancialContext(DbContextOptions<FinancialContext> options) : base(options)
@@ -55,7 +56,6 @@ namespace SwampLocksDb.Data
             string databaseName = Environment.GetEnvironmentVariable("DB_NAME") ?? "";
             string serverName = Environment.GetEnvironmentVariable("SERVER_NAME") ?? "";
             string serverConnectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? "";
-
 
             if (!useConnectionString)
             {

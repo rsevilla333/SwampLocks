@@ -46,7 +46,8 @@ namespace AlphaVantageUpdater
             string smtpPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? "none";
 
             // Initialize the necessary services
-            var dbContext = new FinancialContext(true); // Your DB context, assuming it's set up.
+            var dbContext = new FinancialContext(); // Your DB context, assuming it's set up.
+            dbContext.useConnectionString = true;
             var client = new AlphaVantageClient(apiKey);
             var emailService = new EmailNotificationService(smtpServer, smtpUsername, smtpPassword);
 
