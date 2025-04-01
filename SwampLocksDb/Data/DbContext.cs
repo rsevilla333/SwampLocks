@@ -31,7 +31,9 @@ namespace SwampLocksDb.Data
         public DbSet<CommodityData> CommodityDataPoints { get; set; }
 	    public DbSet<DataUpdateTracker> DataUpdateTrackers { get; set; }
         public DbSet<StockSplit> StockSplits { get; set; }
-        
+
+        public bool useConnectionString;
+
         public FinancialContext()
         {
 
@@ -53,34 +55,40 @@ namespace SwampLocksDb.Data
 
             string databaseName = Environment.GetEnvironmentVariable("DB_NAME") ?? "";
             string serverName = Environment.GetEnvironmentVariable("SERVER_NAME") ?? "";
+            string serverConnectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? "";
 
-
-            // Use Entra-ID for Sql DB
-            var credential = new AzureCliCredential();
-            var accessToken = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" })).Token;
-
-            // Build the connection string 
-            var connectionString = new SqlConnectionStringBuilder
+            if (!useConnectionString)
             {
-                DataSource = serverName,
-                InitialCatalog = databaseName,
-                Encrypt = true,
-            }.ToString();
+                // Use Entra-ID for Sql DB
+                var credential = new AzureCliCredential();
+                var accessToken = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" })).Token;
+
+                // Build the connection string 
+                var connectionString = new SqlConnectionStringBuilder
+                {
+                    DataSource = serverName,
+                    InitialCatalog = databaseName,
+                    Encrypt = true,
+                }.ToString();
 
 
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new InvalidOperationException("Database connection string is missing.");
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    throw new InvalidOperationException("Database connection string is missing.");
+                }
+
+                // create connection
+                var sqlConnection = new SqlConnection(connectionString)
+                {
+                    AccessToken = accessToken
+                };
+
+                optionsBuilder.UseSqlServer(connectionString);
             }
-
-            // create connection
-            var sqlConnection = new SqlConnection(connectionString)
+            else
             {
-                AccessToken = accessToken
-            };
-
-            optionsBuilder.UseSqlServer(sqlConnection);
-
+                optionsBuilder.UseSqlServer(serverConnectionString);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
