@@ -6,6 +6,7 @@ using DotNetEnv;
 using SwampLocksDb.Data;
 using SwampLocksDb.Models;
 using System.Text.Json;
+using SwampLocks.Email; 
 
 namespace SwampLocksAPI.Controllers
 {
@@ -15,16 +16,18 @@ namespace SwampLocksAPI.Controllers
     {
         private readonly FinancialContext _context;
         private readonly HttpClient _httpClient;
+        private readonly EmailNotificationService _emailService;
 
         private readonly string _alphaKey;
 
-        public FinancialsController(FinancialContext context, HttpClient httpClient)
+        public FinancialsController(FinancialContext context, HttpClient httpClient, EmailNotificationService emailService)
         {
              Env.Load();
              
             _context = context;
             _httpClient = httpClient;
             _alphaKey = Environment.GetEnvironmentVariable("ALPHA_VANTAGE");
+            _emailService = emailService;
             
         }
 
@@ -35,6 +38,58 @@ namespace SwampLocksAPI.Controllers
             Stock stock = new();
             stock.Ticker = "AAPL";
             return Ok("test with auto");
+        }
+        
+        [HttpGet("login/{userEmail}/{name}")]
+        public async Task<ActionResult> Login(string userEmail, string name)
+        {
+            // Check if the user exists in the database/context
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+            if (existingUser != null)
+            {
+                // If the user exists, don't send the email and return a success message
+                return Ok(new { message = "User already exists, no email sent." });
+            }
+
+            // If the user does not exist, create the new user in the database
+            var newUser = new User
+            {
+                Email = userEmail,
+                FullName = name,
+                DateCreated = DateTime.UtcNow
+            };
+
+            await _context.Users.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+
+            // Compose the welcome email subject and body
+            var subject = "Welcome to SwampLocks!";
+            
+            var body = @"
+            Hello, 
+
+            Welcome to SwampLocks!
+
+            We are excited to have you join our community of financial enthusiasts and professionals. SwampLocks is designed to help you optimize and predict your investment portfolio with the power of machine learning. With our tool, you can:
+
+            - Optimize your investment strategies
+            - Leverage cutting-edge machine learning algorithms for financial predictions
+            - Get insights from real-time financial data
+            - And much more!
+
+            We are committed to providing you with the best tools to help you make informed financial decisions. Your account has been successfully created, and you can now start exploring SwampLocks to take your financial planning to the next level.
+
+            If you have any questions or need assistance, feel free to reach out to us at support@swamplocks.com. 
+
+            Best regards, 
+            The SwampLocks Team -> (Rafael, Chandler, Deep, Mathew, Andres) ";
+
+            // Send the welcome email
+            await _emailService.SendEmailNotification(userEmail, subject, body);
+
+            return Ok(new { message = "Welcome email sent successfully and user created." });
         }
 
         [HttpGet("stocks")]

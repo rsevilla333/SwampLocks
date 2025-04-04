@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
 
 
 const timeframes = [
@@ -31,17 +31,32 @@ export default function StockChart({ ticker }: StockChartProps) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [timeframe, setTimeframe] = useState("max");
+    const [percentageChange, setPercentageChange] = useState<number | null>(null);
 
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     const firstDate = filteredData.length > 0 ? filteredData[0].date : null;
     const lastDate = filteredData.length > 0 ? filteredData[filteredData.length - 1].date : null;
-
-    const firstPrice = filteredData.length > 0 ? filteredData[0].price : null;
-    const lastPrice = filteredData.length > 0 ? filteredData[filteredData.length - 1].price : null;
-
-    const percentageChange = firstPrice && lastPrice ? ((lastPrice - firstPrice) / firstPrice) * 100 : null;
     
+    const lastPrice = filteredData.length > 0 ? filteredData[filteredData.length - 1].price : null;
+    const firstPrice = filteredData.length > 0 ? filteredData[0].price : null;
+
+    // const percentageChange = firstPrice && lastPrice ? ((lastPrice - firstPrice) / firstPrice) * 100 : null;
+
+    let now = null;
+
+    useEffect(() => {
+        if (filteredData.length > 0) {
+            const currFirstPrice = filteredData[0]?.price;
+            const currLastPrice = filteredData[filteredData.length - 1]?.price;
+
+            if (currFirstPrice && currLastPrice) {
+                setPercentageChange(((currLastPrice - currFirstPrice) / currFirstPrice) * 100);
+            } else {
+                setPercentageChange(null);
+            }
+        }
+    }, [filteredData]);
 
     useEffect(() => {
         const fetchStockData = async () => {
@@ -64,6 +79,8 @@ export default function StockChart({ ticker }: StockChartProps) {
                     date: new Date(item.date),
                     price: item.closingPrice
                 }));
+                
+                now = processedDailyData[0].date;
                 
                 const combinedData = [...processedData, ...processedDailyData];
                 
@@ -122,6 +139,17 @@ export default function StockChart({ ticker }: StockChartProps) {
             filtered = filtered.filter((item) => new Date(item.date) > startOfYear);
         }
 
+        if (now != null && timeframe !== "1d") {
+            const lastDailyDataPoint = filtered[filtered.length - 1];
+
+            filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.date);
+                return itemDate.toDateString() !== now.toDateString();
+            });
+
+            filtered.push(lastDailyDataPoint);
+        }
+
         setFilteredData(filtered);
     };
 
@@ -165,6 +193,7 @@ export default function StockChart({ ticker }: StockChartProps) {
             <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={filteredData}>
                     <XAxis
+                        hide={true}
                         dataKey="date"
                         tickFormatter={(tick) => {
                             const date = new Date(tick);
@@ -181,6 +210,7 @@ export default function StockChart({ ticker }: StockChartProps) {
                         }}
                     />
                     <YAxis
+                        hide={true}
                         domain={(() => {
                             if (timeframe === "1d") {
                                 const min = Math.min(...filteredData.map(item => item.price));
@@ -191,11 +221,14 @@ export default function StockChart({ ticker }: StockChartProps) {
                                 const max = Math.max(...filteredData.map(item => item.price));
                                 return [min - 5, max + 5];
                             } else {
-                                return [0, "auto"]; 
+                                return ["auto", "auto"]; 
                             }
                         })()}
                     />
-                    <Tooltip />
+                    <Tooltip/>
+                    {firstPrice !== null && (
+                        <ReferenceLine y={firstPrice} stroke="gray" strokeDasharray="5 5" />
+                    )}
                     <Line
                         type="linear"
                         dataKey="price"

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis } from "recharts";
+import {ResponsiveContainer, LineChart, Line, XAxis, YAxis, ReferenceLine} from "recharts";
 
 interface StockData {
     date: string;
@@ -17,6 +17,7 @@ export default function CompactStockChart({ ticker }: StockChartProps) {
     const [data, setData] = useState<StockData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const firstPrice = data.length > 0 ? data[0].price : null;
 
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -67,6 +68,9 @@ export default function CompactStockChart({ ticker }: StockChartProps) {
                                 return [min,max];
                     })()} />
                     <Line type="linear" dataKey="price" stroke={lineColor} strokeWidth={2} dot={false} />
+                    {firstPrice !== null && (
+                        <ReferenceLine y={firstPrice} stroke="gray" strokeDasharray="5 5" />
+                    )}
                 </LineChart>
             </ResponsiveContainer>
         </div>

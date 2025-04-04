@@ -199,57 +199,69 @@ namespace SwampLocks.AlphaVantage.CLI
         }
         
         private void FetchNewsArticles()
+{
+    Console.WriteLine("\nWould you like to fetch news by:");
+    Console.WriteLine("1. Stock Ticker");
+    Console.WriteLine("2. Sector Name");
+    
+    Console.Write("Enter choice (1/2): ");
+    string? fetchChoice = Console.ReadLine()?.Trim();
+    
+    Console.Write("Give me a year: ");
+    string? year = Console.ReadLine()?.Trim();    
+    
+    if (!int.TryParse(year, out int parsedYear))
+    {
+        Console.WriteLine("❌ Invalid year format. Please enter a valid year.");
+        return;
+    }
+    
+    DateTime startDate = new DateTime(parsedYear, 1, 1);
+    DateTime endDate = new DateTime(parsedYear, 12, 31);
+
+    if (fetchChoice == "1")
+    {
+        Console.Write("Enter Stock Tickers (comma-separated, e.g., AAPL,MSFT,GOOGL): ");
+        string input = Console.ReadLine()?.Trim().ToUpper() ?? "";
+        
+        var tickers = input.Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList();
+        
+        if (tickers.Any())
         {
-            Console.WriteLine("\nWould you like to fetch news by:");
-            Console.WriteLine("1. Stock Ticker");
-            Console.WriteLine("2. Sector Name");
-            
-            Console.Write("Enter choice (1/2): ");
-            string? fetchChoice = Console.ReadLine()?.Trim();
-            
-            Console.Write("Give me a year: ");
-            string? year = Console.ReadLine()?.Trim();    
-            
-            DateTime startDate = DateTime.Parse($"{year}-01-01");
-            DateTime endDate = DateTime.Parse($"{year}-12-31");//DateTime.Parse($"{year}-12-31");
-
-            if (fetchChoice == "1")
+            foreach (var ticker in tickers)
             {
-                Console.Write("Enter Stock Ticker (e.g., AAPL): ");
-                string ticker = Console.ReadLine()?.Trim().ToUpper() ?? "";
-
-                if (!string.IsNullOrEmpty(ticker))
-                {
-                    Console.WriteLine($"📥 Fetching and storing news articles for stock: {ticker}...");
-                    _service.FetchAndStoreArticlesByStock(ticker, startDate, endDate);
-                    Console.WriteLine("✅ Articles fetched and stored successfully!");
-                }
-                else
-                {
-                    Console.WriteLine("❌ Invalid input. Stock ticker cannot be empty.");
-                }
+                Console.WriteLine($"📥 Fetching and storing news articles for stock: {ticker}...");
+                _service.FetchAndStoreArticlesByStock(ticker, startDate, endDate);
             }
-            else if (fetchChoice == "2")
-            {
-                Console.Write("Enter Sector Name (e.g., Financials): ");
-                string sector = Console.ReadLine()?.Trim() ?? "";
-
-                if (!string.IsNullOrEmpty(sector))
-                {
-                    Console.WriteLine($"📥 Fetching and storing news articles for sector: {sector}...");
-                    _service.FetchAndStoreArticlesBySector(sector, endDate);
-                    Console.WriteLine("✅ Articles fetched and stored successfully!");
-                }
-                else
-                {
-                    Console.WriteLine("❌ Invalid input. Sector name cannot be empty.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
-            }
+            Console.WriteLine("✅ Articles fetched and stored successfully!");
         }
+        else
+        {
+            Console.WriteLine("❌ Invalid input. Stock tickers cannot be empty.");
+        }
+    }
+    else if (fetchChoice == "2")
+    {
+        Console.Write("Enter Sector Name (e.g., Financials): ");
+        string sector = Console.ReadLine()?.Trim() ?? "";
+        
+        if (!string.IsNullOrEmpty(sector))
+        {
+            Console.WriteLine($"📥 Fetching and storing news articles for sector: {sector}...");
+            _service.FetchAndStoreArticlesBySector(sector, endDate);
+            Console.WriteLine("✅ Articles fetched and stored successfully!");
+        }
+        else
+        {
+            Console.WriteLine("❌ Invalid input. Sector name cannot be empty.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
+    }
+}
+
         
         private void FetchStockData()
         {

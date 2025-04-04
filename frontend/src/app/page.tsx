@@ -11,11 +11,13 @@ import CompactStockChart from "./components/CompactStockChart";
 import { Switch } from "@headlessui/react";
 import MountainMap from "./components/MountainMap";
 import {useState} from "react";
+import Login from "./components/Login";
+import { SessionProvider } from "next-auth/react";
 
 
 export default function Home() {
 
-    const [selectedMap, setSelectedMap] = useState<'mountain' | 'treemap'>('mountain');
+    const [selectedMap, setSelectedMap] = useState<'mountain' | 'treemap'>('treemap');
     
     const sectors = [
         { name: "Technology", path: "technology" },
