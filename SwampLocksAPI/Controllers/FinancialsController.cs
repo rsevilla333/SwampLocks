@@ -205,41 +205,7 @@ namespace SwampLocksAPI.Controllers
             return Ok(articles);
         }
 
-        [HttpPatch("stocks/data/{id}")]
-        public async Task<IActionResult> UpdateMarketCap(string id, [FromBody] JsonPatchDocument<StockData> stockDataPatch)
-        {
-            if (stockDataPatch == null)
-            {
-                return BadRequest(new {message = "Patch data not found"});
-            }
-            else
-            {
-                string ticker = id.Split("_")[0];
-                string dateString = id.Split("_")[1];
 
-                DateTime date = DateTime.ParseExact(dateString, "yyyyMMdd", null);
-
-                StockData? dataEntry = await _context
-                    .StockDataEntries
-                    .SingleOrDefaultAsync(data => data.Ticker == ticker && data.Date == date);
-
-                if (dataEntry == null)
-                {
-                    return NotFound();
-                }
-
-                stockDataPatch.ApplyTo(dataEntry, ModelState);
-
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = $"Successfully updated market cap for stock {id}" });
-            }
-        }
         
         [HttpGet("commodities/{commodityName}")]
         public async Task<ActionResult<List<CommodityData>>> GetCommodityData(string commodityName)
@@ -413,6 +379,89 @@ namespace SwampLocksAPI.Controllers
             {
                 return BadRequest("Failed to fetch link preview");
             }
+        }
+
+        [HttpPatch("stocks/data/{id}")]
+        public async Task<IActionResult> UpdateMarketCap(string id, [FromBody] JsonPatchDocument<StockData> stockDataPatch)
+        {
+            if (stockDataPatch == null)
+            {
+                return BadRequest(new { message = "Patch data not found" });
+            }
+            else
+            {
+                string ticker = id.Split("_")[0];
+                string dateString = id.Split("_")[1];
+
+                DateTime date = DateTime.ParseExact(dateString, "yyyyMMdd", null);
+
+                StockData? dataEntry = await _context
+                    .StockDataEntries
+                    .SingleOrDefaultAsync(data => data.Ticker == ticker && data.Date == date);
+
+                if (dataEntry == null)
+                {
+                    return NotFound();
+                }
+
+                stockDataPatch.ApplyTo(dataEntry, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = $"Successfully updated market cap for stock {id}" });
+            }
+        }
+
+        [HttpPatch("stocks/data/update/{ticker}/publicsentiment")]
+        public async Task<IActionResult> UpdatePublicSentiment(string ticker, [FromBody] List<KeyValuePair<string, JsonPatchDocument<StockData>>> stockDataPatches)
+        {
+            Console.WriteLine(ticker);
+
+            if (stockDataPatches == null)
+            {
+                Console.WriteLine("a");
+                return BadRequest(new { message = "Patch data not found" });
+            }
+
+            List<StockData> stockData = await _context
+                .StockDataEntries
+                .Where(data => data.Ticker == ticker)
+                .ToListAsync();
+
+            foreach (KeyValuePair<string, JsonPatchDocument<StockData>> kvp in stockDataPatches)
+            {
+                string id = kvp.Key;
+                JsonPatchDocument<StockData> patch = kvp.Value;
+
+                string dateString = id.Split("_")[1];
+                DateTime date = DateTime.ParseExact(dateString, "yyyyMMdd", null);
+                
+
+                StockData? data = stockData.FirstOrDefault(data => data.Ticker == ticker && data.Date == date);
+
+                if (data != null)
+                {
+                    patch.ApplyTo(data, ModelState);
+                }
+
+                Console.WriteLine("apply");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _context.SaveChangesAsync();
+
+            Console.WriteLine("save");
+
+            return Ok();
         }
     }
 }
