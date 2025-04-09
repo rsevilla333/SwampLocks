@@ -31,24 +31,23 @@ namespace SwampLocksDb.Data
         public DbSet<CommodityData> CommodityDataPoints { get; set; }
 	    public DbSet<DataUpdateTracker> DataUpdateTrackers { get; set; }
         public DbSet<StockSplit> StockSplits { get; set; }
-        
-        public FinancialContext()
-        {
-
-        }
+        public DbSet<User> Users { get; set; } 
 
         public FinancialContext(DbContextOptions<FinancialContext> options) : base(options)
         {
-
         }
-
+    
+        public FinancialContext()
+        {
+        }
+    
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (optionsBuilder.IsConfigured)
             {
                 return;
             }
-
+            
             Env.Load();
 
             string databaseName = Environment.GetEnvironmentVariable("DB_NAME") ?? "";
@@ -62,11 +61,11 @@ namespace SwampLocksDb.Data
             // Build the connection string 
             var connectionString = new SqlConnectionStringBuilder
             {
-                DataSource = serverName,
-                InitialCatalog = databaseName,
+                DataSource = serverName, 
+                InitialCatalog = databaseName, 
                 Encrypt = true,
             }.ToString();
-
+		
 
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -76,13 +75,13 @@ namespace SwampLocksDb.Data
             // create connection
             var sqlConnection = new SqlConnection(connectionString)
             {
-                AccessToken = accessToken
+                AccessToken = accessToken 
             };
 
             optionsBuilder.UseSqlServer(sqlConnection);
 
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure primary key for Stock using Ticker

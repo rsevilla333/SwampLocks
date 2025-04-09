@@ -8,12 +8,14 @@ import IncomeStatement from "../../components/IncomeStatement";
 import FinancialStatements from "../../components/FinancialStatements";
 import Articles from "../../components/Articles";
 import axios from "axios";
+import StockSearchBar from "../../components/StockSearchBar";
 
 const StockPage = () => {
     const { ticker } = useParams(); 
     
     return (
         <div className="w-full flex flex-col items-center gap-11">
+            <StockSearchBar/>
             <StockChart ticker={ticker?.toString() || ""} />
 
             {/*/!* Articles Section *!/*/}

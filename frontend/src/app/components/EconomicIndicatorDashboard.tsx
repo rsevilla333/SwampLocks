@@ -56,7 +56,8 @@ export default function EconomicIndicatorDashboard() {
                     `http://localhost:5196/api/financials/economic_data/${selectedIndicator.name}`
                 );
                 const indicatorData = await response.json();
-                setData(indicatorData);
+                const filteredData = indicatorData.filter((dataPoint: DataPoint) => dataPoint.value !== 0);
+                setData(filteredData);
             } catch (error) {
                 console.error("Error fetching indicator data:", error);
             } finally {
@@ -83,12 +84,10 @@ export default function EconomicIndicatorDashboard() {
 
     return (
         <div className="w-full max-w-5xl mx-auto p-6">
-            <h1 className="text-3xl font-bold text-center mb-6">Economic Indicators</h1>
-
             {/* Dropdown Selector */}
             <div className="mb-6 flex justify-center">
                 <select
-                    className="border border-gray-300 p-2 rounded-lg text-lg"
+                    className="border border-gray-300 p-2 rounded-lg text-lg text-black"
                     value={selectedIndicator?.name || ""}
                     onChange={(e) => {
                         const indicator = indicators.find(ind => ind.name === e.target.value);
@@ -126,11 +125,11 @@ const LineChartComponent = ({ data, indicator }: { data: DataPoint[], indicator:
     <div className="w-full">
         <h2 className="text-xl font-semibold text-center mb-4">{indicator} Trend</h2>
         <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={data}>
+            <LineChart data={data} >
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#3182CE" strokeWidth={2} />
+                <Line type="monotone" dataKey="value" stroke="#3182CE" strokeWidth={2} dot={{ r: 0.3 }}/>
             </LineChart>
         </ResponsiveContainer>
     </div>

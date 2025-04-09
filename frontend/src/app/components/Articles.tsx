@@ -7,20 +7,26 @@ interface Article {
     url: string;
     sentimentScore: number;
     date: string;
+    ticker: string;
 }
 
-export default function Articles({ ticker }: { ticker: string }) {
+export default function Articles({ ticker }: { ticker?: string }) {
     const [articles, setArticles] = useState<Article[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);;
 
    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-
+   
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/financials/stocks/${ticker}/articles`);
+                let url;
+                if(ticker) {
+                    url = `${API_BASE_URL}/api/financials/stocks/${ticker}/articles`;
+                } else{
+                    url = `${API_BASE_URL}/api/financials/stocks/articles/all`;
+                }
+                const response = await axios.get(url);
                 console.log("Articles: ", response);
                 setArticles(response.data);
             } catch (err) {
@@ -48,18 +54,19 @@ export default function Articles({ ticker }: { ticker: string }) {
 
 
     return (
-        <section className="w-full">
-            <h2 className="text-xl font-bold mb-4 text-black">Latest News</h2>
+        <section className="min-w-full min-h-max">
             <div
-                className="overflow-y-scroll max-h-80 border p-4 rounded-lg shadow-md"
-                style={{ height: '300px' }} // Adjust height as per your design needs
+                className="overflow-y-scroll h-fullbg-background border-2 border-accent"
+                style={{ height: '1000px' }} // Adjust height as per your design needs
             >
                 {sortedArticles.length > 0 ? (
                     articles.map((article) => (
                         <div key={article.id} className="p-4 border-b last:border-0">
                             <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-blue-500">
                                 <h3 className="text-lg font-bold">{article.articleName}</h3>
+                                <h4 className="text-gray-800">{ticker ? "" : article.ticker}</h4>
                             </a>
+                            
                             <p className="mt-1 text-black">
                             <span
                                 className={`font-semibold ${

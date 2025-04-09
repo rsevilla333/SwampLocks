@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
 using SwampLocksDb.Data;
 using SwampLocksDb.Models;
+using System.Text.Json;
+using SwampLocks.Email; 
 
 namespace SwampLocksAPI.Controllers
 {
@@ -13,11 +16,19 @@ namespace SwampLocksAPI.Controllers
     {
         private readonly FinancialContext _context;
         private readonly HttpClient _httpClient;
+        private readonly EmailNotificationService _emailService;
 
-        public FinancialsController(FinancialContext context, HttpClient httpClient) 
+        private readonly string _alphaKey;
+
+        public FinancialsController(FinancialContext context, HttpClient httpClient, EmailNotificationService emailService)
         {
+             Env.Load();
+             
             _context = context;
             _httpClient = httpClient;
+            _alphaKey = Environment.GetEnvironmentVariable("ALPHA_VANTAGE");
+            _emailService = emailService;
+            
         }
 
         [HttpGet("ping")]
@@ -27,6 +38,58 @@ namespace SwampLocksAPI.Controllers
             Stock stock = new();
             stock.Ticker = "AAPL";
             return Ok("test with auto");
+        }
+        
+        [HttpGet("login/{userEmail}/{name}")]
+        public async Task<ActionResult> Login(string userEmail, string name)
+        {
+            // Check if the user exists in the database/context
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+            if (existingUser != null)
+            {
+                // If the user exists, don't send the email and return a success message
+                return Ok(new { message = "User already exists, no email sent." });
+            }
+
+            // If the user does not exist, create the new user in the database
+            var newUser = new User
+            {
+                Email = userEmail,
+                FullName = name,
+                DateCreated = DateTime.UtcNow
+            };
+
+            await _context.Users.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+
+            // Compose the welcome email subject and body
+            var subject = "Welcome to SwampLocks!";
+            
+            var body = @"
+            Hello, 
+
+            Welcome to SwampLocks!
+
+            We are excited to have you join our community of financial enthusiasts and professionals. SwampLocks is designed to help you optimize and predict your investment portfolio with the power of machine learning. With our tool, you can:
+
+            - Optimize your investment strategies
+            - Leverage cutting-edge machine learning algorithms for financial predictions
+            - Get insights from real-time financial data
+            - And much more!
+
+            We are committed to providing you with the best tools to help you make informed financial decisions. Your account has been successfully created, and you can now start exploring SwampLocks to take your financial planning to the next level.
+
+            If you have any questions or need assistance, feel free to reach out to us at support@swamplocks.com. 
+
+            Best regards, 
+            The SwampLocks Team -> (Rafael, Chandler, Deep, Mathew, Andres) ";
+
+            // Send the welcome email
+            await _emailService.SendEmailNotification(userEmail, subject, body);
+
+            return Ok(new { message = "Welcome email sent successfully and user created." });
         }
 
         [HttpGet("stocks")]
@@ -69,6 +132,52 @@ namespace SwampLocksAPI.Controllers
             }
 
             return Ok(stockData);
+        }
+        
+        [HttpGet("stocks/{ticker}/todays_data")]
+        public async Task<ActionResult<List<StockData>>> GetTodyasStockData(string ticker)
+        {
+            if (string.IsNullOrEmpty(_alphaKey))
+            {
+                return StatusCode(500, "Cant communicate with ALPHA API");
+            }
+
+            string interval = "1min";
+            string url = $"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={interval}&apikey={_alphaKey}";
+            
+            try
+            {
+                var response = await _httpClient.GetStringAsync(url);
+                var jsonResponse = JsonDocument.Parse(response);
+
+                // Parse the Time Series data
+                var timeSeries = jsonResponse.RootElement.GetProperty($"Time Series ({interval})");
+
+                var stockData = new List<StockData>();
+
+                foreach (var item in timeSeries.EnumerateObject())
+                {
+                    var date = DateTime.Parse(item.Name); // Parsing date from the response
+                    var data = item.Value;
+
+                    var stock = new StockData
+                    {
+                        Ticker = ticker,
+                        Date = date,
+                        ClosingPrice = decimal.Parse(data.GetProperty("4. close").GetString()),
+                        MarketCap = 0, 
+                        PublicSentiment = 0, 
+                    };
+
+                    stockData.Add(stock);
+                }
+
+                return Ok(stockData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching data: {ex.Message}");
+            }
         }
         
         [HttpGet("stocks/{ticker}/filtered_data")]
@@ -153,6 +262,31 @@ namespace SwampLocksAPI.Controllers
             // If stock exists
             return Ok(true);
         }
+        
+        [HttpGet("stocks/autocomplete")]
+        public async Task<ActionResult<IEnumerable<string>>> GetMatchingStockTickers(string query)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                return BadRequest(new { message = "Query is required." });
+            }
+            
+            var matchingStocks = await _context.Stocks
+                .Where(s => s.Ticker.StartsWith(query.ToUpper())) // case-insensitivity
+                .Select(s => s.Ticker)
+                .Take(10) // # of suggestions
+                .ToListAsync();
+
+            // If no matching stocks are found
+            if (matchingStocks.Count == 0)
+            {
+                return NotFound(new { message = "No matching stock tickers found." });
+            }
+
+            // Return the list of matching stock tickers
+            return Ok(matchingStocks);
+        }
+
 
         [HttpGet("stocks/{ticker}/data/{timeframe}")]
         public async Task<ActionResult<List<StockData>>> GetStockData(string ticker, string timeframe)
@@ -204,42 +338,19 @@ namespace SwampLocksAPI.Controllers
             
             return Ok(articles);
         }
-
-        [HttpPatch("stocks/data/{id}")]
-        public async Task<IActionResult> UpdateMarketCap(string id, [FromBody] JsonPatchDocument<StockData> stockDataPatch)
+        
+        [HttpGet("stocks/articles/all")]
+        public async Task<ActionResult<List<Article>>> GetAllStockArticles()
         {
-            if (stockDataPatch == null)
-            {
-                return BadRequest(new {message = "Patch data not found"});
-            }
-            else
-            {
-                string ticker = id.Split("_")[0];
-                string dateString = id.Split("_")[1];
-
-                DateTime date = DateTime.ParseExact(dateString, "yyyyMMdd", null);
-
-                StockData? dataEntry = await _context
-                    .StockDataEntries
-                    .SingleOrDefaultAsync(data => data.Ticker == ticker && data.Date == date);
-
-                if (dataEntry == null)
-                {
-                    return NotFound();
-                }
-
-                stockDataPatch.ApplyTo(dataEntry, ModelState);
-
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = $"Successfully updated market cap for stock {id}" });
-            }
+            List<Article> articles = await _context
+                .Articles
+                .Where(data => data.Date >= DateTime.Now.AddDays(-30))
+                .ToListAsync();
+            
+            return Ok(articles);
         }
+
+
         
         [HttpGet("commodities/{commodityName}")]
         public async Task<ActionResult<List<CommodityData>>> GetCommodityData(string commodityName)
@@ -398,6 +509,40 @@ namespace SwampLocksAPI.Controllers
             return Ok(exRates);
         }
         
+        [HttpGet("top_movers")]
+        public async Task<ActionResult<List<MarketMovers>>> GetTopMovers()
+        {
+            if (string.IsNullOrEmpty(_alphaKey))
+            {
+                return StatusCode(500, "Cant communicate with ALPHA API");
+            }
+            
+            string url = $"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={_alphaKey}";
+            
+            try
+            {
+                var response = await _httpClient.GetStringAsync(url);
+                var jsonResponse = JsonDocument.Parse(response);
+
+                var movers = jsonResponse.RootElement.GetProperty("top_gainers").EnumerateArray()
+                    .Concat(jsonResponse.RootElement.GetProperty("top_losers").EnumerateArray())
+                    .Select(m => new MarketMovers
+                    {
+                        Ticker = m.GetProperty("ticker").GetString(),
+                        Price = decimal.Parse(m.GetProperty("price").GetString()),
+                        Change = decimal.Parse(m.GetProperty("change_amount").GetString()),
+                        ChangePercent = decimal.Parse(m.GetProperty("change_percentage").GetString().TrimEnd('%')),
+                        Volume = long.Parse(m.GetProperty("volume").GetString())
+                    }).ToList();
+
+                return Ok(movers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching data: {ex.Message}");
+            }
+        }
+        
         
         [HttpGet("article_preview/{url}")]
         public async Task<IActionResult> GetPreview([FromQuery] string url)
@@ -413,6 +558,89 @@ namespace SwampLocksAPI.Controllers
             {
                 return BadRequest("Failed to fetch link preview");
             }
+        }
+
+        [HttpPatch("stocks/data/{id}")]
+        public async Task<IActionResult> UpdateMarketCap(string id, [FromBody] JsonPatchDocument<StockData> stockDataPatch)
+        {
+            if (stockDataPatch == null)
+            {
+                return BadRequest(new { message = "Patch data not found" });
+            }
+            else
+            {
+                string ticker = id.Split("_")[0];
+                string dateString = id.Split("_")[1];
+
+                DateTime date = DateTime.ParseExact(dateString, "yyyyMMdd", null);
+
+                StockData? dataEntry = await _context
+                    .StockDataEntries
+                    .SingleOrDefaultAsync(data => data.Ticker == ticker && data.Date == date);
+
+                if (dataEntry == null)
+                {
+                    return NotFound();
+                }
+
+                stockDataPatch.ApplyTo(dataEntry, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = $"Successfully updated market cap for stock {id}" });
+            }
+        }
+
+        [HttpPatch("stocks/data/update/{ticker}/publicsentiment")]
+        public async Task<IActionResult> UpdatePublicSentiment(string ticker, [FromBody] List<KeyValuePair<string, JsonPatchDocument<StockData>>> stockDataPatches)
+        {
+            Console.WriteLine(ticker);
+
+            if (stockDataPatches == null)
+            {
+                Console.WriteLine("a");
+                return BadRequest(new { message = "Patch data not found" });
+            }
+
+            List<StockData> stockData = await _context
+                .StockDataEntries
+                .Where(data => data.Ticker == ticker)
+                .ToListAsync();
+
+            foreach (KeyValuePair<string, JsonPatchDocument<StockData>> kvp in stockDataPatches)
+            {
+                string id = kvp.Key;
+                JsonPatchDocument<StockData> patch = kvp.Value;
+
+                string dateString = id.Split("_")[1];
+                DateTime date = DateTime.ParseExact(dateString, "yyyyMMdd", null);
+                
+
+                StockData? data = stockData.FirstOrDefault(data => data.Ticker == ticker && data.Date == date);
+
+                if (data != null)
+                {
+                    patch.ApplyTo(data, ModelState);
+                }
+
+                Console.WriteLine("apply");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _context.SaveChangesAsync();
+
+            Console.WriteLine("save");
+
+            return Ok();
         }
     }
 }
