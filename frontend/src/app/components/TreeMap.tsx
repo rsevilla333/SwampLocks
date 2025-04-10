@@ -116,7 +116,7 @@ const Treemap: React.FC<TreemapProps> = ({ stocks, width = 600, height = 480 }) 
 
     return (
         <div
-            className="relative bg-gray-700 rounded-lg mx-auto h-80"
+            className="relative bg-transparent rounded-lg mx-auto h-full w-full"
             style={{ width: `${width}px`, height: `${height}px` }}
         >
             {layout.map((item, index) => {
@@ -127,7 +127,7 @@ const Treemap: React.FC<TreemapProps> = ({ stocks, width = 600, height = 480 }) 
                 return (
                     <div
                         key={index}
-                        className="absolute flex flex-col items-center justify-center text-black font-mono border border-gray-600 p-1 text-gray-800"
+                        className="absolute flex flex-col items-center justify-center text-black font-mono border border-gray-600 p-1 text-gray-800 "
                         style={{
                             width: `${item.width}px`,
                             height: `${item.height}px`,

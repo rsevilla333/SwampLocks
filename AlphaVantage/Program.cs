@@ -31,10 +31,10 @@ class Program
 		var emailLogger = new EmailNotificationService(smtpServer,smtpUsername, smtpPassword);
 		//await emailLogger.SendEmailNotification("rsevilla@ufl.edu", "TEST" , "please work");
         
-       AlphaVantageService service = new AlphaVantageService(context, client, emailLogger); // get service
+        AlphaVantageService service = new AlphaVantageService(context, client, emailLogger); // get service
 
-       var cli = new AlphaCLI(service);
-	   cli.Run();
+        var cli = new AlphaCLI(service);
+        cli.Run();
 
     }
 

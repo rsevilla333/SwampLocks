@@ -33,6 +33,9 @@ namespace SwampLocks.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("RelevanceScore")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("SentimentScore")
                         .HasColumnType("decimal(18,2)");
 

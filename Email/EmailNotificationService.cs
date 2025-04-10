@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Net.Mail;
 
-
 namespace SwampLocks.Email
 {
     public class EmailNotificationService

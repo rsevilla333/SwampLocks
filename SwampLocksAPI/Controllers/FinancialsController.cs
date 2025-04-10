@@ -117,6 +117,212 @@ namespace SwampLocksAPI.Controllers
 
             return Ok(sectors);
         }
+        
+        [HttpGet("top-marketcap")]
+        public ActionResult<List<StockData>> GetTopMarketCapStocks(
+            [FromQuery] DateTime? date,
+            [FromQuery] int count = 20,
+            [FromQuery] string sectorName = null)
+        {
+            
+            DateTime targetDate;
+
+            if (date.HasValue)
+            {
+                targetDate = date.Value.Date;
+            }
+            else
+            {
+                var latestEntry = _context.StockDataEntries
+                    .OrderByDescending(sd => sd.Date)
+                    .FirstOrDefault();
+
+                if (latestEntry == null)
+                {
+                    return NotFound("No stock data available in the database.");
+                }
+
+                targetDate = latestEntry.Date.Date;
+            }
+            
+            var query = _context.StockDataEntries
+                .Where(sd => sd.Date.Date == targetDate && sd.MarketCap > 0)
+                .Include(sd => sd.Stock)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(sectorName))
+            {
+                query = query.Where(sd => sd.Stock.SectorName == sectorName);
+            }
+
+            var topStocks = query
+                .OrderByDescending(sd => sd.MarketCap)
+                .Take(count)
+                .ToList();
+
+            if (topStocks.Count == 0)
+            {
+                return NotFound("No stock data found for the given parameters.");
+            }
+
+            return Ok(topStocks);
+        }
+        
+        [HttpGet("top-marketcap-with-change")]
+        public ActionResult<List<StockWithChangeDto>> GetTopMarketCapWithChange(
+            [FromQuery] DateTime? date,
+            [FromQuery] int count = 10,
+            [FromQuery] string sectorName = null)
+        {
+            DateTime latestDate;
+
+            if (date.HasValue)
+            {
+                latestDate = date.Value.Date;
+            }
+            else
+            { 
+                latestDate = _context.StockDataEntries
+                    .OrderByDescending(sd => sd.Date)
+                    .Select(sd => sd.Date)
+                    .FirstOrDefault();
+            }
+            
+            if (latestDate == default)
+                return NotFound("No stock data available.");
+
+            var previousDate = _context.StockDataEntries
+                .Where(sd => sd.Date < latestDate)
+                .OrderByDescending(sd => sd.Date)
+                .Select(sd => sd.Date)
+                .FirstOrDefault();
+
+            if (previousDate == default)
+            {
+                return NotFound("No previous trading day data found.");
+            }
+
+            var latestData = _context.StockDataEntries
+                .Where(sd => sd.Date.Date == latestDate.Date && sd.MarketCap > 0)
+                .Include(sd => sd.Stock)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(sectorName))
+                latestData = latestData.Where(sd => sd.Stock.SectorName == sectorName);
+
+            var topStocks = latestData
+                .OrderByDescending(sd => sd.MarketCap)
+                .Take(count)
+                .ToList();
+
+            var tickers = topStocks.Select(sd => sd.Ticker).ToList();
+
+            var previousData = _context.StockDataEntries
+                .Where(sd => tickers.Contains(sd.Ticker) && sd.Date.Date == previousDate.Date)
+                .ToList()
+                .ToDictionary(sd => sd.Ticker, sd => sd.ClosingPrice);
+
+            var result = topStocks.Select(sd =>
+            {
+                decimal change = 0;
+                if (previousData.TryGetValue(sd.Ticker, out var prevPrice) && prevPrice > 0)
+                {
+                    change = ((sd.ClosingPrice - prevPrice) / prevPrice) * 100;
+                }
+
+                return new StockWithChangeDto
+                {
+                    Symbol = sd.Ticker,
+                    MarketCap = sd.MarketCap,
+                    Change = Math.Round(change, 2)
+                };
+            }).ToList();
+
+            return Ok(result);
+        }
+        
+        [HttpGet("top-movers")]
+        public ActionResult<List<StockWithChangeDto>> GetTopMovers(
+            [FromQuery] DateTime? date,
+            [FromQuery] int count = 10,
+            [FromQuery] string sectorName = null)
+        {
+            DateTime latestDate;
+
+            if (date.HasValue)
+            {
+                latestDate = date.Value.Date;
+            }
+            else
+            {
+                latestDate = _context.StockDataEntries
+                    .OrderByDescending(sd => sd.Date)
+                    .Select(sd => sd.Date)
+                    .FirstOrDefault();
+            }
+
+            if (latestDate == default)
+                return NotFound("No stock data available.");
+
+            var previousDate = _context.StockDataEntries
+                .Where(sd => sd.Date < latestDate)
+                .OrderByDescending(sd => sd.Date)
+                .Select(sd => sd.Date)
+                .FirstOrDefault();
+
+            if (previousDate == default)
+                return NotFound("No previous trading day data found.");
+
+            var latestDataQuery = _context.StockDataEntries
+                .Where(sd => sd.Date == latestDate && sd.MarketCap > 0)
+                .Include(sd => sd.Stock)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(sectorName))
+                latestDataQuery = latestDataQuery.Where(sd => sd.Stock.SectorName == sectorName);
+
+            var latestData = latestDataQuery.ToList();
+
+            var tickers = latestData.Select(sd => sd.Ticker).ToList();
+
+            var previousDataDict = _context.StockDataEntries
+                .Where(sd => tickers.Contains(sd.Ticker) && sd.Date == previousDate)
+                .ToList()
+                .ToDictionary(sd => sd.Ticker, sd => sd.ClosingPrice);
+
+            var result = latestData.Select(sd =>
+            {
+                decimal change = 0;
+                if (previousDataDict.TryGetValue(sd.Ticker, out var prevPrice) && prevPrice > 0)
+                {
+                    change = ((sd.ClosingPrice - prevPrice) / prevPrice) * 100;
+                }
+
+                return new StockWithChangeDto
+                {
+                    Symbol = sd.Ticker,
+                    MarketCap = sd.MarketCap,
+                    Change = Math.Round(change, 2)
+                };
+            })
+            .OrderByDescending(sd => Math.Abs(sd.Change)) 
+            .Take(count)
+            .ToList();
+
+            return Ok(result);
+        }
+        
+        // MOCK DATA FOR ML MODEL
+        [HttpGet("sector/{name}/performance_ml")]
+        public ActionResult<decimal> GetSectorPerformanceML(string name)
+        {
+            // model logic would go here 
+            var random = new Random();
+            decimal mockScore = (decimal)random.NextDouble(); 
+
+            return Ok(Math.Round(mockScore, 4)); 
+        }
+        
 
         [HttpGet("stocks/{ticker}/data")]
         public async Task<ActionResult<List<StockData>>> GetStockData(string ticker)
@@ -135,7 +341,7 @@ namespace SwampLocksAPI.Controllers
         }
         
         [HttpGet("stocks/{ticker}/todays_data")]
-        public async Task<ActionResult<List<StockData>>> GetTodyasStockData(string ticker)
+        public async Task<ActionResult<List<StockData>>> GetTodaysStockData(string ticker)
         {
             if (string.IsNullOrEmpty(_alphaKey))
             {
@@ -493,6 +699,21 @@ namespace SwampLocksAPI.Controllers
 
             return Ok(sectorPerformances);
         }
+
+		[HttpGet("sectorstocks/{sectorName}")]
+		public async Task<ActionResult<List<Stock>>> GetStocksFromSector(string sectorName)
+		{
+    		var stocks = await _context.Stocks
+        		.Where(s => s.SectorName == sectorName)
+        		.ToListAsync();
+
+    		if (stocks.Count == 0)
+    		{
+        		return NotFound();
+    		}
+
+    		return Ok(stocks);
+		}  
         
         [HttpGet("ex_rates")]
         public async Task<ActionResult<List<ExchangeRate>>> GetExRates()

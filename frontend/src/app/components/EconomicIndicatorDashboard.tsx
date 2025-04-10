@@ -50,10 +50,10 @@ export default function EconomicIndicatorDashboard() {
         if (!selectedIndicator) return;
 
         const fetchIndicatorData = async () => {
-            setLoading(true);
+            setLoading(true); 
             try {
                 const response = await fetch(
-                    `http://localhost:5196/api/financials/economic_data/${selectedIndicator.name}`
+                    `${API_BASE_URL}/api/financials/economic_data/${selectedIndicator.name}`
                 );
                 const indicatorData = await response.json();
                 const filteredData = indicatorData.filter((dataPoint: DataPoint) => dataPoint.value !== 0);
