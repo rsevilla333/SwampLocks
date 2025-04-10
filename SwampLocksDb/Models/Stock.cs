@@ -29,6 +29,7 @@ namespace SwampLocksDb.Models
 		public virtual List<IncomeStatement> IncomeStatements { get; set; } = new List<IncomeStatement>();
 		
 		public virtual List<StockEarningStatement> EarningStatements { get; set; } = new List<StockEarningStatement>();
+		public virtual ICollection<StockSplit> StockSplits { get; set; } = new List<StockSplit>(); // Added this line
 
 	}
 }

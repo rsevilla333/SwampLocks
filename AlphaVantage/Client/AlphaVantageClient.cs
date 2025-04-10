@@ -112,7 +112,7 @@ namespace SwampLocks.AlphaVantage.Client
 		*/
 		
 
-		public List<Tuple<DateTime,string, string, Decimal>> GetNewsSentimentByStock(string ticker, DateTime DateFrom, DateTime DateTo, double relevanceScore = 0.1) {
+		public List<Tuple<DateTime,string, string, Decimal, Decimal>> GetNewsSentimentByStock(string ticker, DateTime DateFrom, DateTime DateTo, double relevanceScore = 0.05) {
 			string function = "NEWS_SENTIMENT";
 			string dateFormat = "yyyyMMddTHHmm";
 			int limit = 1000;
@@ -123,7 +123,7 @@ namespace SwampLocks.AlphaVantage.Client
 			//Console.WriteLine(data);
 
 			dynamic apiResponse = JsonConvert.DeserializeObject<dynamic>(data);
-			var result = new List<Tuple<DateTime, string, string, decimal>>();
+			var result = new List<Tuple<DateTime, string, string, decimal, decimal>>();
 
 			if(apiResponse.feed == null)
 			{
@@ -140,13 +140,15 @@ namespace SwampLocks.AlphaVantage.Client
                     { 
                        	DateTime articleDate = DateTime.ParseExact((string)article.time_published, "yyyyMMddTHHmmss", null);
 						decimal sentimentScore = (decimal)double.Parse(tickerSentiment.ticker_sentiment_score.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture);
+						decimal tickerRelevanceScore = (decimal)double.Parse(tickerSentiment.relevance_score.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture);
 						Console.WriteLine(tickerSentiment.relevance_score + " " + sentimentScore);
                         
-                        result.Add(new Tuple<DateTime, string, string, decimal>(
+                        result.Add(new Tuple<DateTime, string, string, decimal, decimal>(
                             articleDate,
                             article.title.ToString(),
 							article.url.ToString(),
-                            sentimentScore
+                            sentimentScore,
+                            tickerRelevanceScore
                         ));
                     }
                 }
@@ -438,6 +440,31 @@ namespace SwampLocks.AlphaVantage.Client
 
     		return results;
 		}
+		
+		public List<Tuple<DateTime, string>> GetStockSplits(string ticker)
+		{
+			string function = "SPLITS";
+			string queryURL = $"{BaseUrl}?function={function}&symbol={ticker}&apikey={_apiKey}";
+			Console.WriteLine(queryURL);
+
+			string data = client.DownloadString(queryURL);
+			JObject jsonData = JObject.Parse(data);
+
+			List<Tuple<DateTime, string>> splits = new List<Tuple<DateTime, string>>();
+    
+			if (jsonData["data"] != null)
+			{
+				foreach (var entry in jsonData["data"])
+				{
+					DateTime date = DateTime.Parse(entry["effective_date"].ToString());
+					string splitRatio = entry["split_factor"].ToString();
+					splits.Add(new Tuple<DateTime, string>(date, splitRatio));
+				}
+			}
+
+			return splits;
+		}
+
 
     }
 }

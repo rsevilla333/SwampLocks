@@ -11,7 +11,7 @@ namespace SwampLocksDb.Models
 
             [Required] public string SectorName { get; set; } // Stock Identifier
 
-            public decimal Performance { get; set; } // Perfromance Metric
+            public decimal Performance { get; set; } // Performance Metric
 
             [Required] public DateTime Date { get; set; }
 
