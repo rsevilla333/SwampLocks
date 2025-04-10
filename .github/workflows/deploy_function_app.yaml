@@ -1,0 +1,45 @@
+name: Deploy Daily Update Function App
+
+on:
+  push:
+    branches:
+      - AppTest
+  workflow_dispatch:
+
+env:
+  AZURE_FUNCTIONAPP_NAME: "SwampLocksDailyUpdate"
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './functionapp'
+  DOTNET_VERSION: "8.x"
+
+jobs:
+  deploy:
+    name: Build and Deploy to Azure Functions
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Build .NET Project
+        run: |
+          pushd './AlphaVantageUpdater'
+          dotnet build --configuration Release
+          popd
+
+      - name: Publish .NET Project
+        run: |
+          pushd './AlphaVantageUpdater'
+          dotnet publish --configuration Release --output ../${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          popd
+
+      - name: Deploy To Azure
+        uses: azure/functions-action@v1
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+

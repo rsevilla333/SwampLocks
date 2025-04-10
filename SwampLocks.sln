@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaVantage", "AlphaVantage\AlphaVantage.csproj", "{68D9BE4F-879D-490B-B882-5A58B2006F62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaVantage", "AlphaVantage\AlphaVantage.csproj", "{68D9BE4F-879D-490B-B882-5A58B2006F62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwampLocksDb", "SwampLocksDb\SwampLocksDb.csproj", "{B43EE25D-8A56-4478-8A2E-0ED45F47F15E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwampLocksDb", "SwampLocksDb\SwampLocksDb.csproj", "{B43EE25D-8A56-4478-8A2E-0ED45F47F15E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,16 +1,22 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using SwampLocksDb.Data;
+using SwampLocks.Email;
 
 Env.Load();  // Load environment variables (e.g., DB_NAME, SERVER_NAME, etc.)
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpClient();
 
 // Add services to the container
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
 
 string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+string? emailUsername = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
+string? emailServer = Environment.GetEnvironmentVariable("EMAIL_SERVER");
+string? emailPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
 
 Console.WriteLine(connectionString);
 if (connectionString is null)
@@ -41,6 +47,12 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddScoped<EmailNotificationService>(provider =>
+    new EmailNotificationService(
+        emailServer,  
+        emailUsername,  
+        emailPassword
+    ));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -59,5 +71,6 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
 
 app.Run();
