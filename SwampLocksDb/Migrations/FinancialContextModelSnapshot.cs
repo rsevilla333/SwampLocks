@@ -17,7 +17,7 @@ namespace SwampLocks.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -32,6 +32,9 @@ namespace SwampLocks.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("RelevanceScore")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("SentimentScore")
                         .HasColumnType("decimal(18,2)");
@@ -567,6 +570,49 @@ namespace SwampLocks.Migrations
                     b.ToTable("StockEarnings");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.StockSplit", b =>
+                {
+                    b.Property<string>("Ticker")
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("SplitFactor")
+                        .HasColumnType("decimal(10,4)");
+
+                    b.HasKey("Ticker", "EffectiveDate");
+
+                    b.ToTable("StockSplits");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.Article", b =>
                 {
                     b.HasOne("SwampLocksDb.Models.Stock", "Stock")
@@ -677,6 +723,17 @@ namespace SwampLocks.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.StockSplit", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.Stock", "Stock")
+                        .WithMany("StockSplits")
+                        .HasForeignKey("Ticker")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.CommodityIndicator", b =>
                 {
                     b.Navigation("DataPoints");
@@ -707,6 +764,8 @@ namespace SwampLocks.Migrations
                     b.Navigation("EarningStatements");
 
                     b.Navigation("IncomeStatements");
+
+                    b.Navigation("StockSplits");
                 });
 #pragma warning restore 612, 618
         }

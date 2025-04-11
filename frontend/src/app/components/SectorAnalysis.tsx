@@ -42,16 +42,14 @@ export default function SectorAnalysis({ sectorName }: SectorAnalysisProps) {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        // Check for client-side render
         setIsClient(true);
-
-        // Set the sector data based on the passed sectorName prop
+        
         const sector = sectorName.toLowerCase() as Sector;
         setSectorData(mockedPerformanceData[sector]);
         setSectorRecommendations(mockedPortfolioRecommendations[sector]);
     }, [sectorName]);
 
-    // Prevent rendering the component until it is client-side to avoid hydration issues
+
     if (!isClient) {
         return null;
     }
@@ -66,12 +64,10 @@ export default function SectorAnalysis({ sectorName }: SectorAnalysisProps) {
 
             {/* Main Content */}
                 <div className="w-full p-8 bg-white border-2 border-accent rounded-lg shadow-lg">
-
-                    {/* Display Sector Performance */}
+                    
                     <p className="text-xl font-semibold text-black mb-6">Sector Performance</p>
                     <p className="mb-6">{sectorData?.performance}</p>
-
-                    {/* Display Portfolio Recommendations */}
+                    
                     <p className="text-xl font-semibold text-black mb-6">Portfolio Recommendations</p>
                     <ul>
                         {sectorRecommendations?.map((rec, index) => (
@@ -81,12 +77,6 @@ export default function SectorAnalysis({ sectorName }: SectorAnalysisProps) {
                 </div>
 
             {/* Footer */}
-            <footer className="mt-12 text-center text-secondary">
-                <p>Powered by Rafael, Andres, Deep, Chandler, and Mathew</p>
-                <p className="mt-2 text-sm">
-                    © {new Date().getFullYear()} SwampLocks. All rights reserved.
-                </p>
-            </footer>
         </div>
     );
 }

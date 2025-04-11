@@ -18,6 +18,8 @@ namespace SwampLocksDb.Models
         [Required] public DateTime Date { get; set; } // Article publication date
 
         [Required] public decimal SentimentScore { get; set; } // article sentiment score
+        
+        public decimal RelevanceScore { get; set; } // article relevance score (0-1)
 
         public string URL { get; set; } // article url
 

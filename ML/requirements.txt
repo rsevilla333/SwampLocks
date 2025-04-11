@@ -1,3 +1,9 @@
+pandas>=1.5.0
+numpy>=1.23.0
+scikit-learn>=1.2.0
+requests>=2.28.0
+papermill>=2.4.0
+
 # DO NOT include azure-functions-worker in this file
 # The Python Worker is managed by Azure Functions platform
 # Manually managing azure-functions-worker may cause unexpected issues
