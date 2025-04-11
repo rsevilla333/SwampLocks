@@ -33,6 +33,12 @@ jobs:
           zip -r functionapp.zip .
           popd
 
+      - name: Upload Function App Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: functionapp-zip
+          path: './ML/functionapp.zip'
+
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
