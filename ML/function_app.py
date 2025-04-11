@@ -79,5 +79,3 @@ def predict_next_quarter_price(ticker: str):
         print(f"[ERROR] Something went wrong with prediction for '{ticker}': {e}")
 
     return -1
-
-print(predict_next_quarter_price(""))
