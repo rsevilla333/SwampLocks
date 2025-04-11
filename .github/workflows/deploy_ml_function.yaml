@@ -37,5 +37,5 @@ jobs:
         uses: Azure/functions-action@v1
         with:
           app-name: SwampLocksMLModel
-          package: ./ML/functionapp.zip
+          package: './ML/functionapp.zip'
           publish-profile: ${{ secrets.AZURE_ML_FUNCTIONAPP_PUBLISH_PROFILE }}
