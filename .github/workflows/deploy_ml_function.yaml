@@ -49,7 +49,7 @@ name: Build and deploy Python project to Azure Function App
 on:
   push:
     branches:
-      - main
+      - MLAzureApp
   workflow_dispatch:
 
 env:
