@@ -1,55 +1,12 @@
-# name: ML Function Deployment
-
-# on:
-#   workflow_dispatch:
-#   push:
-#     branches:
-#       - MLAzureApp
-
-# jobs:
-#   build-and-deploy:
-#     name: Build and Deploy 
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-
-#       - name: Set up Python
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: '3.11'
-      
-#       - name: Install dependencies
-#         run: |
-#           pushd './ML'
-#           python -m pip install --upgrade pip
-#           pip install -r requirements.txt
-#           popd
-      
-#       - name: Archive Function App
-#         run: |
-#           pushd './ML'
-#           zip -r functionapp.zip .
-#           popd
-          
-#       - name: Deploy to Azure Functions
-#         uses: Azure/functions-action@v1
-#         with:
-#           app-name: SwampLocksMLModel
-#           package: './ML/functionapp.zip'
-#           publish-profile: ${{ secrets.AZURE_ML_FUNCTIONAPP_PUBLISH_PROFILE }}
-
-
-# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Python project to Azure Function App
 
 on:
   push:
     branches:
+      - main
       - MLAzureApp
+    paths:
+      - 'ML/**'
   workflow_dispatch:
 
 env:

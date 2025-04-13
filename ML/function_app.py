@@ -29,7 +29,7 @@ def PingTest(req: func.HttpRequest) -> func.HttpResponse:
         )
     
 @app.route(route="MLModel")
-def MLFunction(req: func.HttpRequest) -> func.HttpResponse:
+def MLModel(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     ticker = req.params.get('ticker')
