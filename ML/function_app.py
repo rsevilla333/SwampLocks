@@ -7,7 +7,7 @@ import json
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-@app.route(route="MLFunction")
+@app.route(route="PingTest")
 def MLFunction(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
@@ -28,7 +28,7 @@ def MLFunction(req: func.HttpRequest) -> func.HttpResponse:
              status_code=200
         )
     
-@app.route(route="MLFunctionTest")
+@app.route(route="MLModel")
 def MLFunctionTest(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
