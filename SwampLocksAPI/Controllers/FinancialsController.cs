@@ -6,7 +6,7 @@ using DotNetEnv;
 using SwampLocksDb.Data;
 using SwampLocksDb.Models;
 using System.Text.Json;
-using SwampLocks.Email; 
+using SwampLocks.EmailSevice; 
 
 namespace SwampLocksAPI.Controllers
 {

@@ -1,7 +1,7 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using SwampLocksDb.Data;
-using SwampLocks.Email;
+using SwampLocks.EmailSevice;
 
 Env.Load();  // Load environment variables (e.g., DB_NAME, SERVER_NAME, etc.)
 

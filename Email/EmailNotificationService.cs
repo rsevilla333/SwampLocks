@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Mail;
 
-namespace SwampLocks.Email
+namespace SwampLocks.EmailSevice
 {
     public class EmailNotificationService
     {
@@ -28,9 +28,9 @@ namespace SwampLocks.Email
                 EnableSsl = true,
                 Credentials = new NetworkCredential(_smtpUsername, _smtpPassword),
             };
-            
+
             Console.WriteLine($"Sending email to {recipient}");
-             
+
             return client.SendMailAsync(
                 new MailMessage(from: _smtpUsername,
                     to: recipient,

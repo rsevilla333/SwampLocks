@@ -12,7 +12,7 @@ using System;
 using System.Threading.Tasks;
 using DotNetEnv;
 using SwampLocks.AlphaVantage.CLI;
-using SwampLocks.Email;
+using SwampLocks.EmailSevice;
 
 class Program
 {
