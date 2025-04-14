@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using SwampLocksDb.Data;
 using SwampLocksDb.Models;
 using SwampLocks.AlphaVantage.Client;
-using SwampLocks.Email;
+using SwampLocks.EmailSevice;
 using SwampLocksDb.Models;
 using SwampLocksDb.Data;
 using Microsoft.EntityFrameworkCore;

@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AlphaVantage\AlphaVantage.csproj" />
+    <ProjectReference Include="..\Email\EmailSevice.csproj" />
     <ProjectReference Include="..\SwampLocksDb\SwampLocksDb.csproj" />
   </ItemGroup>
 

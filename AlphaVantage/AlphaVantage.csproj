@@ -19,8 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Email\EmailSevice.csproj" />
       <ProjectReference Include="..\SwampLocksDb\SwampLocksDb.csproj" />
-        <ProjectReference Include="..\Email\Email.csproj" />
     </ItemGroup>
 
 </Project>
