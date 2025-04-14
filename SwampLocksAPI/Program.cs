@@ -18,7 +18,7 @@ string? emailUsername = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
 string? emailServer = Environment.GetEnvironmentVariable("EMAIL_SERVER");
 string? emailPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
 
-
+Console.WriteLine(connectionString);
 if (connectionString is null)
 {
     // using netra ID
