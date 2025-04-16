@@ -7,6 +7,7 @@ import Articles from "../../components/Articles";
 import axios from "axios";
 import StockSearchBar from "../../components/StockSearchBar";
 import Footer from "../../components/Footer";
+import StockPrediction from "../../components/StockPrediction";
 
 const StockPage = () => {
     const { ticker } = useParams();
@@ -16,7 +17,8 @@ const StockPage = () => {
             <div className="flex flex-col items-center gap-11 w-3/4">
                 <StockSearchBar/>
                 <StockChart ticker={ticker?.toString() || ""} />
-                {/* Cash Flow Statement Section */}
+                <StockPrediction ticker={ticker?.toString() || ""} />
+                    {/* Cash Flow Statement Section */}
                 <div className=" w-full p-4">
                     <FinancialStatements ticker={ticker?.toString() || ""} />
                 </div>

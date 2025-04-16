@@ -224,7 +224,7 @@ export default function MultiStockSearchChart() {
         if (typeof rawVal === "number" && baselines[t]) {
           out[t] = (rawVal / baselines[t]) * 100;
         } else {
-          out[t] = null;
+          out[t] = 0;
         }
       });
       return out;
@@ -234,7 +234,7 @@ export default function MultiStockSearchChart() {
 
   const returnsData = useMemo(() => {
     if (filteredData.length < 2 || selectedTickers.length < 1) return [];
-    const result: Array<{ date: string; [t: string]: number }> = [];
+    const result: Array<Record<string, number | string>> = [];
     for (let i = 1; i < filteredData.length; i++) {
       const prev = filteredData[i - 1];
       const curr = filteredData[i];
@@ -275,7 +275,7 @@ export default function MultiStockSearchChart() {
     selectedTickers.forEach((t) => { returnsMap[t] = []; });
     returnsData.forEach((row) => {
       selectedTickers.forEach((t) => {
-        returnsMap[t].push(row[t]);
+          returnsMap[t].push(Number(row[t]));
       });
     });
 
@@ -465,7 +465,7 @@ export default function MultiStockSearchChart() {
                   </li>
                 );
               })}
-            </ul>
+            </ul>-
           </div>
 
           {/* Pairwise correlations */}

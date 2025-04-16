@@ -81,7 +81,37 @@ namespace SwampLocks.AlphaVantage.Service
                 PopulateSector(name, symbol);
             }
         }
+        
+        public void AddEverythingOnStock(string symbol, string sectorName)
+        {
+            var results = new List<string>();
+            try
+            { 
+                   AddStock(symbol, sectorName);
+                    TryExecute(() => AddStockClosingPrice(symbol),
+                   $"AddStockClosingPrice({symbol})", results);
+                    TryExecute(() => FetchAndStoreArticlesByStock(symbol,DateTime.UtcNow, DateTime.UtcNow, false),
+                        $"FetchAndStoreArticlesBySector({symbol})", results);
+                    
+                   TryExecute(() => FetchAndStoreAllEarningStatementsFromStock(symbol),
+                       $"FetchAndStoreAllEarningStatements({symbol})", results);
+                   TryExecute(() => FetchAndStoreAllBalanceSheetsFromStock(symbol),
+                       $"FetchAndStoreAllBalanceSheets({symbol})", results);
+                   TryExecute(() => FetchAndStoreAllCashFlowStatementsFromStock(symbol),
+                       $"FetchAndStoreAllCashFlowStatements({symbol})", results);
+                   TryExecute(() => FetchAndStoreAllIncomeStatementsFromStock(symbol),
+                       $"FetchAndStoreAllIncomeStatements({symbol})", results);
+                //  AddStockSplitsPrice(symbol);
 
+               BackfillMarketCap();
+           }
+           catch (Exception ex)
+           {
+
+           }
+
+        }
+        
         public void FetchAndUpdateEverything()
         {
             string subject;
@@ -96,9 +126,9 @@ namespace SwampLocks.AlphaVantage.Service
                bool updateReports = lastUpdated.HasValue && (DateTime.UtcNow - lastUpdated.Value).Days >= 90;
 
                // Execute and track results
-               TryExecute(PopulateExchangeRates, "PopulateExchangeRates", results);
-               TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllEconomicData", results);
-               TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllCommodityData", results);
+                TryExecute(PopulateExchangeRates, "PopulateExchangeRates", results);
+                TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllEconomicData", results);
+                TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllCommodityData", results);
 
                 foreach (var (sectorName, symbol) in _sectors)
                 {
@@ -119,7 +149,7 @@ namespace SwampLocks.AlphaVantage.Service
                        $"FetchAndStoreAllIncomeStatementsFromSector({sectorName})", results);
                }
 
-                    AddStockSplitsPricePerSector(sectorName);
+                  AddStockSplitsPricePerSector(sectorName);
                 }
 
 			       BackfillMarketCap();
@@ -696,7 +726,7 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
             }
         }
 		
- public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime to, bool trackDate = true)
+        public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime to, bool trackDate = true)
         {
             try
             {
@@ -710,9 +740,25 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
                     .AsNoTracking()
                     .ToHashSet();
 
-                List<Article> articlesToInsert = new List<Article>(); // Store new articles for batch insert
+                List<Article> articlesToInsert = new List<Article>(); 
+                List<Tuple<DateTime, string, string, decimal, decimal>> articles = new();
 
-                List<Tuple<DateTime, string, string, Decimal, Decimal>> articles = _client.GetNewsSentimentByStock(ticker, lastUpdatedDate, DateTime.UtcNow, 0.05);
+                if (trackDate)
+                {
+                    // Single API call using provided date range
+                    articles = _client.GetNewsSentimentByStock(ticker, lastUpdatedDate, DateTime.Now, 0.05);
+                }
+                else
+                {
+                    // Four API calls for each full year from 2022 to 2025
+                    for (int year = 2022; year <= 2025; year++)
+                    {
+                        DateTime yearStart = new DateTime(year, 1, 1);
+                        DateTime yearEnd = new DateTime(year, 12, 31);
+                        var yearlyArticles = _client.GetNewsSentimentByStock(ticker, yearStart, yearEnd, 0.05);
+                        articles.AddRange(yearlyArticles);
+                    }
+                }
 
                 foreach (var article in articles)
                 {
@@ -1267,7 +1313,7 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
         		int year = yearlyGroup.Key;
         		int updatedThisYear = 0;
 
-               if(year < 2012 && year > 2023) continue;
+               if(year < 2025) continue;
 
         		Console.WriteLine($"🔄 Processing year: {year}");
 

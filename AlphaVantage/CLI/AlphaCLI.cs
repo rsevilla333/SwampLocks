@@ -38,12 +38,13 @@ namespace SwampLocks.AlphaVantage.CLI
 			    Console.WriteLine("9. Fetch and Store Commodity Data");
 			    Console.WriteLine("10. Update Everything");
                 Console.WriteLine("11. Stock Splits");
-                Console.WriteLine("12. Exit");
-                Console.Write("Enter choice (1-12): ");
+                Console.WriteLine("12. Add all data from stock");
+                Console.WriteLine("13. Exit");
+                Console.Write("Enter choice (1-13): ");
 
                 string? choice = Console.ReadLine()?.Trim();
 
-                if (choice == "12")
+                if (choice == "13")
                 {
                     Console.WriteLine("Exiting program. Goodbye! 👋");
                     break;
@@ -93,9 +94,13 @@ namespace SwampLocks.AlphaVantage.CLI
                 {
                     AddStockSplitsData();
                 }
+                else if (choice == "12")
+                {
+                    AddStock();
+                }
                 else
                 {
-                    Console.WriteLine("❌ Invalid input. Please enter a valid option.");
+                    Console.WriteLine(" Invalid input. Please enter a valid option.");
                 }
             }
         }
@@ -199,69 +204,79 @@ namespace SwampLocks.AlphaVantage.CLI
         }
         
         private void FetchNewsArticles()
-{
-    Console.WriteLine("\nWould you like to fetch news by:");
-    Console.WriteLine("1. Stock Ticker");
-    Console.WriteLine("2. Sector Name");
-    
-    Console.Write("Enter choice (1/2): ");
-    string? fetchChoice = Console.ReadLine()?.Trim();
-    
-    Console.Write("Give me a year: ");
-    string? year = Console.ReadLine()?.Trim();    
-    
-    if (!int.TryParse(year, out int parsedYear))
-    {
-        Console.WriteLine("❌ Invalid year format. Please enter a valid year.");
-        return;
-    }
-    
-    DateTime startDate = new DateTime(parsedYear, 1, 1);
-    DateTime endDate = new DateTime(parsedYear, 12, 31);
-
-    if (fetchChoice == "1")
-    {
-        Console.Write("Enter Stock Tickers (comma-separated, e.g., AAPL,MSFT,GOOGL): ");
-        string input = Console.ReadLine()?.Trim().ToUpper() ?? "";
-        
-        var tickers = input.Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList();
-        
-        if (tickers.Any())
         {
-            foreach (var ticker in tickers)
+            Console.WriteLine("\nWould you like to fetch news by:");
+            Console.WriteLine("1. Stock Ticker");
+            Console.WriteLine("2. Sector Name");
+            
+            Console.Write("Enter choice (1/2): ");
+            string? fetchChoice = Console.ReadLine()?.Trim();
+            
+            Console.Write("Give me a year: ");
+            string? year = Console.ReadLine()?.Trim();    
+            
+            if (!int.TryParse(year, out int parsedYear))
             {
-                Console.WriteLine($"📥 Fetching and storing news articles for stock: {ticker}...");
-                _service.FetchAndStoreArticlesByStock(ticker, startDate, endDate);
+                Console.WriteLine("❌ Invalid year format. Please enter a valid year.");
+                return;
             }
-            Console.WriteLine("✅ Articles fetched and stored successfully!");
-        }
-        else
-        {
-            Console.WriteLine("❌ Invalid input. Stock tickers cannot be empty.");
-        }
-    }
-    else if (fetchChoice == "2")
-    {
-        Console.Write("Enter Sector Name (e.g., Financials): ");
-        string sector = Console.ReadLine()?.Trim() ?? "";
-        
-        if (!string.IsNullOrEmpty(sector))
-        {
-            Console.WriteLine($"📥 Fetching and storing news articles for sector: {sector}...");
-            _service.FetchAndStoreArticlesBySector(sector, endDate);
-            Console.WriteLine("✅ Articles fetched and stored successfully!");
-        }
-        else
-        {
-            Console.WriteLine("❌ Invalid input. Sector name cannot be empty.");
-        }
-    }
-    else
-    {
-        Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
-    }
-}
+            
+            DateTime startDate = new DateTime(parsedYear, 1, 1);
+            DateTime endDate = new DateTime(parsedYear, 12, 31);
 
+            if (fetchChoice == "1")
+            {
+                Console.Write("Enter Stock Tickers (comma-separated, e.g., AAPL,MSFT,GOOGL): ");
+                string input = Console.ReadLine()?.Trim().ToUpper() ?? "";
+                
+                var tickers = input.Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList();
+                
+                if (tickers.Any())
+                {
+                    foreach (var ticker in tickers)
+                    {
+                        Console.WriteLine($"📥 Fetching and storing news articles for stock: {ticker}...");
+                        _service.FetchAndStoreArticlesByStock(ticker, startDate, endDate);
+                    }
+                    Console.WriteLine("✅ Articles fetched and stored successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("❌ Invalid input. Stock tickers cannot be empty.");
+                }
+            }
+            else if (fetchChoice == "2")
+            {
+                Console.Write("Enter Sector Name (e.g., Financials): ");
+                string sector = Console.ReadLine()?.Trim() ?? "";
+                
+                if (!string.IsNullOrEmpty(sector))
+                {
+                    Console.WriteLine($"📥 Fetching and storing news articles for sector: {sector}...");
+                    _service.FetchAndStoreArticlesBySector(sector, endDate);
+                    Console.WriteLine("✅ Articles fetched and stored successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("❌ Invalid input. Sector name cannot be empty.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("❌ Invalid choice. Please enter 1 or 2.");
+            }
+        }
+
+        private void AddStock()
+        {
+            Console.Write("Enter Stock Ticker: ");
+            string symbol = Console.ReadLine();
+
+            Console.Write("Enter Sector Name: ");
+            string sectorName = Console.ReadLine();
+
+            _service.AddEverythingOnStock(symbol, sectorName); 
+        }
         
         private void FetchStockData()
         {

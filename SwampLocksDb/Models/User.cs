@@ -19,6 +19,9 @@ namespace SwampLocksDb.Models
 
         public string? ProfilePicture { get; set; }  
         public DateTime DateCreated { get; set; } 
+        
+        public virtual ICollection<Holding> Holdings { get; set; } = new List<Holding>();
+
 
     }
 }

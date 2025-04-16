@@ -42,6 +42,7 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [sectorGrowth, setSectorGrowth] = useState<number | null>(null);
     const [stocks, setStocks] = useState<StockWithChange[]>([]);
     const maxVisible = 20;
     const sortedStocks = [...stocks].sort((a, b) => b.marketCap - a.marketCap);
@@ -58,6 +59,19 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
         .slice(0, maxVisible); 
     
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const fetchSectorGrowth = async (): Promise<number | null> => {
+        try {
+            const url = `${API_BASE_URL}/api/financials/sector-growth?sectorName=${sectorMap[sectorName].name}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Failed to fetch sector growth");
+            const growth = await response.json();
+            return growth;
+        } catch (err) {
+            console.error("Error fetching sector growth:", err);
+            return null;
+        }
+    };
 
     const fetchTopMarketCapWithChange = async (): Promise<StockWithChange[]> => {
         const count = 100;
@@ -93,6 +107,8 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
             setLoading(true);
             const stocks = await fetchTopMarketCapWithChange();
             setStocks(stocks);
+            const growth = await fetchSectorGrowth();
+            setSectorGrowth(growth);
             setLoading(false);
         };
         if (selectedDate) {
@@ -148,10 +164,25 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
                     </div>
                 )}
             </div>
+            <div className="mb-8 p-6  shadow-md rounded-lg text-center">
+                <h2 className="text-2xl font-semibold text-black mb-2"> Sector Growth Forecast (Next Quarter)</h2>
+                {sectorGrowth === null ? (
+                    <p className="text-gray-500">Loading forecast...</p>
+                ) : (
+                    <p className={`text-xl font-bold ${sectorGrowth > 0 ? "text-green-600" : sectorGrowth < 0 ? "text-red-500" : "text-gray-500"}`}>
+                        {sectorGrowth > 0 ? "▲" : sectorGrowth < 0 ? "▼" : "–"} {Math.abs(sectorGrowth).toFixed(2)}%
+                    </p>
+                )}
+            </div>
+
+            {/* Heatmap Section */}
+            <div className="w-full flex flex-col items-center">
+                <Treemap stocks={stocks} width={1200} height={800} />
+            </div>
 
             {/* Main Content */}
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8">
-
+                
                 {/* Top Movers Section */}
                 <div className="p-6 bg-white shadow-md rounded-lg">
                     <h2 className="text-2xl font-semibold text-gray-700 mb-4">Top Movers</h2>
@@ -216,13 +247,9 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
             </div>
            
             <div className="w-max">
-                <SectorAnalysis sectorName={sectorName} />
+                {/*<SectorAnalysis sectorName={sectorName} />*/}
             </div>
-            {/* Heatmap Section */}
-            <div className="w-full flex flex-col items-center">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4 text-center">Heatmap</h2>
-                <Treemap stocks={stocks} width={1200} height={800} />
-            </div>
+            
             <Footer />
         </div>
     );

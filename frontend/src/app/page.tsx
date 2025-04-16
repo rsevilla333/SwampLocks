@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from 'next/navigation';
 import Treemap from "./components/TreeMap";
 import Footer from "./components/Footer";
 import StockSearchBar from "./components/StockSearchBar";
@@ -11,8 +11,10 @@ import MountainMap from "./components/MountainMap";
 import {useState, useEffect} from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import {
-    BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList
+    BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList, PieChart, Pie, Cell
 } from "recharts";
+import {router} from "next/client";
+
 
 
 interface StockWithChange {
@@ -28,7 +30,7 @@ interface RankedSector {
 }
 
 export default function Home() {
-
+    const router = useRouter();
     const [selectedMap, setSelectedMap] = useState<'mountain' | 'treemap'>('treemap');
     const [stocks, setStocks] = useState<StockWithChange[]>([]);
     const [loading, setLoading] = useState(true);
@@ -72,7 +74,7 @@ export default function Home() {
             const results: RankedSector[] = await Promise.all(
                 sectors.map(async (sector) => {
                     try {
-                        const res = await fetch(`${API_BASE_URL}/api/financials/sector/${sector.name}/performance_ml`);
+                        const res = await fetch(`${API_BASE_URL}/api/financials/sector-growth?sectorName=${sector.name}`);
                         const score = await res.json();
                         return { ...sector, score };
                     } catch (err) {
@@ -100,9 +102,7 @@ export default function Home() {
         load();
     }, []);
 
-
-
-
+    const barColors = (value: number) => (value >= 0 ? "#16A34A" : "#DC2626"); // green/red
         return (
             <div className="w-full h-full flex flex-row">
                 {/* Right Sidebar for Articles */}
@@ -150,7 +150,7 @@ export default function Home() {
                     
                     <div className="flex w-full max-w-7xl gap-8 max-h-full">
                         
-                        <div className="w-3/4 flex flex-col gap-8">
+                        <div className="w-full flex flex-col gap-8">
                             {/* Sectors Section */}
                             <div className="w-full h-[600px]">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -159,36 +159,29 @@ export default function Home() {
                                         data={rankedSectors}
                                         margin={{ top: 20, right: 30, left: 100, bottom: 20 }}
                                     >
-                                        {/*<CartesianGrid strokeDasharray="3 3" />*/}
-                                        <XAxis type="number" domain={[0, 1]} />
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis type="number" />
                                         <YAxis
                                             dataKey="name"
                                             type="category"
-                                            tick={({ x, y, payload }) => {
-                                                return (
-                                                    <g transform={`translate(${x},${y})`}>
-                                                        <Link href={`/sector/${rankedSectors.find(sector => sector.name === payload.value)?.path || ''}`}>
-                                                            <text
-                                                                x={0}
-                                                                y={0}
-                                                                dy={4}
-                                                                textAnchor="end"
-                                                                fill="#1f2937"
-                                                                fontSize={16}
-                                                                fontWeight={600}
-                                                                className="hover:underline cursor-pointer"
-                                                            >
-                                                                {payload.value}
-                                                            </text>
-                                                        </Link>
-                                                    </g>
-                                                );
-                                            }}
+                                            tick={{ fontSize: 14, fill: "#374151" }}
                                         />
-
-                                        <Tooltip />
-                                        <Bar dataKey="score" fill="#4f46e5">
-                                            <LabelList dataKey="score" position="right" formatter={(val: number) => val.toFixed(2)} />
+                                        <Tooltip formatter={(val: number) => `${(val).toFixed(2)}%`} />
+                                        <Bar 
+                                            dataKey="score"
+                                            onClick={(data) => {
+                                                const match = rankedSectors.find(s => s.name === data.name);
+                                                if (match) router.push(`/sector/${match.path}`);
+                                            }}
+                                            cursor="pointer">
+                                            {rankedSectors.map((entry, index) => (
+                                                <Cell key={`bar-${index}`} fill={barColors(entry.score)} />
+                                            ))}
+                                            <LabelList
+                                                dataKey="score"
+                                                position="right"
+                                                formatter={(val: number) => `${(val).toFixed(2)}%`}
+                                            />
                                         </Bar>
                                     </BarChart>
                                 </ResponsiveContainer>

@@ -50,7 +50,7 @@ namespace SwampLocksAPI.Controllers
             if (existingUser != null)
             {
                 // If the user exists, don't send the email and return a success message
-                return Ok(new { message = "User already exists, no email sent." });
+                return Ok(new { message = "User already exists, no email sent." , userId = existingUser.UserId,});
             }
 
             // If the user does not exist, create the new user in the database
@@ -89,7 +89,7 @@ namespace SwampLocksAPI.Controllers
             // Send the welcome email
             await _emailService.SendEmailNotification(userEmail, subject, body);
 
-            return Ok(new { message = "Welcome email sent successfully and user created." });
+            return Ok(new { message = "Welcome email sent successfully and user created.", userId =  newUser.UserId });
         }
 
         [HttpGet("stocks")]
@@ -167,6 +167,80 @@ namespace SwampLocksAPI.Controllers
 
             return Ok(topStocks);
         }
+        
+        [HttpGet("sector-growth")]
+        public async Task<ActionResult<decimal>> GetSectorGrowthPercentageAsync(
+            [FromQuery] string sectorName,
+            [FromQuery] DateTime? date = null,
+            [FromQuery] int count = 70)
+        {
+            if (string.IsNullOrEmpty(sectorName))
+                return BadRequest("Sector name is required.");
+
+            DateTime targetDate;
+
+            if (date.HasValue)
+            {
+                targetDate = date.Value.Date;
+            }
+            else
+            {
+                var latestEntry = await _context.StockDataEntries
+                    .OrderByDescending(sd => sd.Date)
+                    .FirstOrDefaultAsync();
+
+                if (latestEntry == null)
+                    return NotFound("No stock data available in the database.");
+
+                targetDate = latestEntry.Date.Date;
+            }
+
+            var stocks = await _context.StockDataEntries
+                .Include(sd => sd.Stock)
+                .Where(sd => sd.Date.Date == targetDate &&
+                             sd.MarketCap > 0 &&
+                             sd.Stock.SectorName == sectorName)
+                .OrderByDescending(sd => sd.MarketCap)
+                .Take(count)
+                .ToListAsync();
+
+            if (!stocks.Any())
+                return NotFound("No stock data found for the given sector and date.");
+
+            decimal totalWeightedGrowth = 0;
+            decimal totalMarketCap = 0;
+
+            var httpClient = new HttpClient();
+
+            foreach (var stock in stocks)
+            {
+                try
+                {
+                    var response = await httpClient.GetAsync($"http://localhost:7071/api/MLModel?ticker={stock.Ticker}");
+                    if (!response.IsSuccessStatusCode) continue;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    var parsed = JsonDocument.Parse(json);
+                    var predictedPrice = parsed.RootElement.GetProperty("price").GetDecimal();
+
+                    var growth = (predictedPrice - stock.ClosingPrice) / stock.ClosingPrice;
+                    totalWeightedGrowth += growth * stock.MarketCap;
+                    totalMarketCap += stock.MarketCap;
+                }
+                catch
+                {
+                    continue; // skip stock
+                }
+            }
+
+            if (totalMarketCap == 0)
+                return Ok(0);
+
+            var weightedGrowthPercent = totalWeightedGrowth / totalMarketCap * 100;
+
+            return Ok(Math.Round(weightedGrowthPercent, 2));
+        }
+
         
         [HttpGet("top-marketcap-with-change")]
         public ActionResult<List<StockWithChangeDto>> GetTopMarketCapWithChange(
@@ -338,6 +412,93 @@ namespace SwampLocksAPI.Controllers
             }
 
             return Ok(stockData);
+        }
+        
+        [HttpPost("holdings")]
+        public async Task<ActionResult<Holding>> AddHolding([FromBody] CreateHoldingDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var holding = new Holding
+                {
+                    UserId = dto.UserId,
+                    Ticker = dto.Ticker,
+                    Shares = dto.Shares
+                };
+
+                _context.Holdings.Add(holding);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetHoldingsByUser), new { userId = dto.UserId }, holding);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
+        [HttpPut("holdings/{holdingId}")]
+        public async Task<IActionResult> UpdateHolding(int holdingId, [FromBody] CreateHoldingDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            try
+            {
+                var holding = await _context.Holdings.FindAsync(holdingId);
+                if (holding == null) return NotFound();
+
+                holding.Shares = dto.Shares;
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
+        [HttpDelete("holdings/{holdingId}")]
+        public async Task<IActionResult> DeleteHolding(int holdingId)
+        {
+            var holding = await _context.Holdings.FindAsync(holdingId);
+            if (holding == null) return NotFound();
+
+            _context.Holdings.Remove(holding);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        
+        [HttpGet("user/holdings/{userId}/get-holdings")]
+        public async Task<ActionResult<List<Holding>>> GetHoldingsByUser(Guid userId)
+        {
+            var holdings = await _context.Holdings
+                .Include(h => h.Stock)
+                .Where(h => h.UserId == userId)
+                .ToListAsync();
+
+            return Ok(holdings);
+        }
+        
+        [HttpGet("stocks/{ticker}/latest-price")]
+        public async Task<ActionResult<decimal>> GetLatestStockPrice(string ticker)
+        {
+            var latestEntry = await _context
+                .StockDataEntries
+                .Where(data => data.Ticker == ticker)
+                .OrderByDescending(data => data.Date)
+                .FirstOrDefaultAsync();
+
+            if (latestEntry == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(latestEntry.ClosingPrice);
         }
         
         [HttpGet("stocks/{ticker}/todays_data")]

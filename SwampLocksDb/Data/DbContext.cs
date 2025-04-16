@@ -32,6 +32,7 @@ namespace SwampLocksDb.Data
 	    public DbSet<DataUpdateTracker> DataUpdateTrackers { get; set; }
         public DbSet<StockSplit> StockSplits { get; set; }
         public DbSet<User> Users { get; set; } 
+        public DbSet<Holding> Holdings { get; set; } 
 
         public FinancialContext(DbContextOptions<FinancialContext> options) : base(options)
         {
