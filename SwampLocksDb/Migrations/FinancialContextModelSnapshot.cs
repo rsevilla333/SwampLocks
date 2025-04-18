@@ -33,6 +33,9 @@ namespace SwampLocks.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("RelevanceScore")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("SentimentScore")
                         .HasColumnType("decimal(18,2)");
 
@@ -247,6 +250,34 @@ namespace SwampLocks.Migrations
                     b.ToTable("ExchangeRates");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.Holding", b =>
+                {
+                    b.Property<int>("HoldingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HoldingId"));
+
+                    b.Property<decimal>("Shares")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Ticker")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("HoldingId");
+
+                    b.HasIndex("Ticker");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Holdings");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.IncomeStatement", b =>
                 {
                     b.Property<string>("Ticker")
@@ -394,6 +425,9 @@ namespace SwampLocks.Migrations
                     b.Property<string>("Ticker")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<bool>("IsETF")
+                        .HasColumnType("bit");
 
                     b.Property<string>("SectorName")
                         .IsRequired()
@@ -654,6 +688,25 @@ namespace SwampLocks.Migrations
                     b.Navigation("Indicator");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.Holding", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.Stock", "Stock")
+                        .WithMany()
+                        .HasForeignKey("Ticker")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SwampLocksDb.Models.User", "User")
+                        .WithMany("Holdings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.IncomeStatement", b =>
                 {
                     b.HasOne("SwampLocksDb.Models.Stock", "Stock")
@@ -763,6 +816,11 @@ namespace SwampLocks.Migrations
                     b.Navigation("IncomeStatements");
 
                     b.Navigation("StockSplits");
+                });
+
+            modelBuilder.Entity("SwampLocksDb.Models.User", b =>
+                {
+                    b.Navigation("Holdings");
                 });
 #pragma warning restore 612, 618
         }

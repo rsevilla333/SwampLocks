@@ -1,41 +1,36 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import StockChart from "../../components/StockChart";
-import BalanceSheet from "../../components/BalanceSheet";
-import IncomeStatement from "../../components/IncomeStatement";
 import FinancialStatements from "../../components/FinancialStatements";
 import Articles from "../../components/Articles";
 import axios from "axios";
 import StockSearchBar from "../../components/StockSearchBar";
+import Footer from "../../components/Footer";
+import StockPrediction from "../../components/StockPrediction";
 
 const StockPage = () => {
-    const { ticker } = useParams(); 
+    const { ticker } = useParams();
     
     return (
-        <div className="w-full flex flex-col items-center gap-11">
-            <StockSearchBar/>
-            <StockChart ticker={ticker?.toString() || ""} />
-
-            {/*/!* Articles Section *!/*/}
-            <div className=" w-full border-2 border-gray-700 p-4">
+        <div className="w-full h-full flex flex-row">
+            <div className="flex flex-col items-center gap-11 w-3/4">
+                <StockSearchBar/>
+                <StockChart ticker={ticker?.toString() || ""} />
+                <StockPrediction ticker={ticker?.toString() || ""} />
+                    {/* Cash Flow Statement Section */}
+                <div className=" w-full p-4">
+                    <FinancialStatements ticker={ticker?.toString() || ""} />
+                </div>
+                <Footer/>
+            </div>
+            <div className=" w-1/4 p-4 h-full">
                 <Articles ticker={ticker?.toString() || ""} />
             </div>
-            
-            {/* Balance Sheet Section */}
-            <div className= "w-full border-2 border-gray-700 p-4">
-                <BalanceSheet ticker={ticker?.toString() || ""} />
-            </div>
-            
-            {/* Cash Flow Statement Section */}
-        <div className=" w-full border-2 border-gray-700 p-4">
-            <FinancialStatements ticker={ticker?.toString() || ""} />
-        </div>
-            
-           
         </div>
     );
 };
 
 export default StockPage;
+
+{/*/!* Articles Section *!/*/}

@@ -14,30 +14,33 @@ const Login = () => {
 
     useEffect(() => {
         if (session?.user) {
-            setUser({
-                email: session.user?.email || null,
-                name: session.user?.name || null,
-            });
-            sendWelcomeEmail(session.user?.email ?? "NONE", session.user?.name ?? "NONE");
-
+            validateUser(session.user?.email ?? "NONE", session.user?.name ?? "NONE");
         }
     }, [session, setUser])
 
-    const sendWelcomeEmail = async (userEmail: string, name: string) => {
+    const validateUser = async (userEmail: string, name: string) => {
         if (userEmail) {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/financials/login/${userEmail}/${name}`);
 
                 if (response.ok) {
-                    console.log("Welcome email sent successfully.");
+                    const data = await response.json(); 
+                    console.log("User validated:", data);
+
+                    setUser({
+                        email: session?.user?.email || null,
+                        name: session?.user?.name || null,
+                        userId: data.userId || null,
+                    });
                 } else {
-                    console.error("Failed to send welcome email.");
+                    console.error("Failed to validate user.");
                 }
             } catch (error) {
-                console.error("Error sending welcome email:", error);
+                console.error("Error validating user:", error);
             }
         }
     };
+
 
     const handleLogout = async () => {
         signOut();

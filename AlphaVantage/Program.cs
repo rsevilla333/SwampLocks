@@ -12,7 +12,7 @@ using System;
 using System.Threading.Tasks;
 using DotNetEnv;
 using SwampLocks.AlphaVantage.CLI;
-using SwampLocks.Email;
+using SwampLocks.EmailSevice;
 
 class Program
 {
@@ -31,10 +31,10 @@ class Program
 		var emailLogger = new EmailNotificationService(smtpServer,smtpUsername, smtpPassword);
 		//await emailLogger.SendEmailNotification("rsevilla@ufl.edu", "TEST" , "please work");
         
-       AlphaVantageService service = new AlphaVantageService(context, client, emailLogger); // get service
-
-       var cli = new AlphaCLI(service);
-	   cli.Run();
+        AlphaVantageService service = new AlphaVantageService(context, client, emailLogger); // get service
+        //service.BackfillMarketCap();
+        var cli = new AlphaCLI(service);
+        cli.Run();
 
     }
 

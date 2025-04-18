@@ -1,7 +1,7 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using SwampLocksDb.Data;
-using SwampLocks.Email;
+using SwampLocks.EmailSevice;
 
 Env.Load();  // Load environment variables (e.g., DB_NAME, SERVER_NAME, etc.)
 
@@ -18,6 +18,7 @@ string? emailUsername = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
 string? emailServer = Environment.GetEnvironmentVariable("EMAIL_SERVER");
 string? emailPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
 
+Console.WriteLine(connectionString);
 if (connectionString is null)
 {
     // using netra ID

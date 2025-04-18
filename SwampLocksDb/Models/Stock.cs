@@ -14,6 +14,8 @@ namespace SwampLocksDb.Models
 
 	    [Required]
 	    public string SectorName { get; set; }  
+		
+	    public bool IsETF { get; set; } = false;
 
 	    [ForeignKey("SectorName")]
 	    public virtual Sector Sector { get; set; }
