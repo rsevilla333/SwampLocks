@@ -1,0 +1,8 @@
+{
+    "ticker": "ICE",
+    "lastQuartersPrice": 172.5,
+    "predictedQuartersPrice": 156.0174901527632,
+    "percentChange": -10.564526984184974,
+    "val_mse": 17.637807972941193,
+    "test_mse": 109.50882113220334
+}

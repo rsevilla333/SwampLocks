@@ -1,0 +1,8 @@
+{
+    "ticker": "MAA",
+    "lastQuartersPrice": 167.58,
+    "predictedQuartersPrice": 151.54833660178437,
+    "percentChange": -10.578580905405243,
+    "val_mse": 125.95938269628462,
+    "test_mse": 142.99752608287542
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "CB",
+    "lastQuartersPrice": 275.41,
+    "predictedQuartersPrice": 249.18680082870523,
+    "percentChange": -10.523510508616795,
+    "val_mse": 137.89248984893646,
+    "test_mse": 185.50629437721935
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "MSFT",
+    "lastQuartersPrice": 375.39,
+    "predictedQuartersPrice": 414.8435748723047,
+    "percentChange": 9.510470274114557,
+    "val_mse": 241.5578832139389,
+    "test_mse": 484.0666288971762
+}

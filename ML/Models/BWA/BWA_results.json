@@ -1,0 +1,8 @@
+{
+    "ticker": "BWA",
+    "lastQuartersPrice": 28.65,
+    "predictedQuartersPrice": 25.823814409140216,
+    "percentChange": -10.94410587871739,
+    "val_mse": 29.474636033146467,
+    "test_mse": 46.28927254413686
+}

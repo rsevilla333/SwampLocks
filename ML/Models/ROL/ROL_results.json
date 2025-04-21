@@ -1,0 +1,8 @@
+{
+    "ticker": "ROL",
+    "lastQuartersPrice": 54.03,
+    "predictedQuartersPrice": 48.804863119406036,
+    "percentChange": -10.70618079147183,
+    "val_mse": 11.844621938114512,
+    "test_mse": 37.87093946590226
+}

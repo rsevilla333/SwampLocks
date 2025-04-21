@@ -1,0 +1,8 @@
+{
+    "ticker": "RL",
+    "lastQuartersPrice": 220.74,
+    "predictedQuartersPrice": 199.65911315571557,
+    "percentChange": -10.558439587900658,
+    "val_mse": 955.0074045567098,
+    "test_mse": 831.1882575022815
+}

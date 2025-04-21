@@ -1,0 +1,8 @@
+{
+    "ticker": "TJX",
+    "lastQuartersPrice": 62.65,
+    "predictedQuartersPrice": 56.6118983355153,
+    "percentChange": -10.665782003456892,
+    "val_mse": 26.862001895838482,
+    "test_mse": 19.405286118930583
+}

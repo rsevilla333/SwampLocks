@@ -1,0 +1,8 @@
+{
+    "ticker": "TFX",
+    "lastQuartersPrice": 177.05,
+    "predictedQuartersPrice": 195.76214835031905,
+    "percentChange": 9.558614118207053,
+    "val_mse": 233.4927357739691,
+    "test_mse": 494.84993323297033
+}

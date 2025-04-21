@@ -1,0 +1,8 @@
+{
+    "ticker": "CHD",
+    "lastQuartersPrice": 110.09,
+    "predictedQuartersPrice": 99.48554831793868,
+    "percentChange": -10.659288571412716,
+    "val_mse": 25.20554767416346,
+    "test_mse": 10.28143482507388
+}

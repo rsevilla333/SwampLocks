@@ -1,0 +1,8 @@
+{
+    "ticker": "TT",
+    "lastQuartersPrice": 336.92,
+    "predictedQuartersPrice": 304.77400029094986,
+    "percentChange": -10.547487541050838,
+    "val_mse": 1278.5582673947492,
+    "test_mse": 223.4496721839637
+}

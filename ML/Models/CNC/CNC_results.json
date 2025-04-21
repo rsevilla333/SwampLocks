@@ -1,0 +1,8 @@
+{
+    "ticker": "CNC",
+    "lastQuartersPrice": 60.36,
+    "predictedQuartersPrice": 66.83077068739456,
+    "percentChange": 9.682322410528565,
+    "val_mse": 45.07084201810093,
+    "test_mse": 272.72543654650974
+}

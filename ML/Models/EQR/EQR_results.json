@@ -1,0 +1,8 @@
+{
+    "ticker": "EQR",
+    "lastQuartersPrice": 71.58,
+    "predictedQuartersPrice": 64.68648522471119,
+    "percentChange": -10.656808375569904,
+    "val_mse": 104.13566342558236,
+    "test_mse": 107.74391590212333
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "CCL",
+    "lastQuartersPrice": 23.93,
+    "predictedQuartersPrice": 21.55670142957414,
+    "percentChange": -11.009562748639624,
+    "val_mse": 75.50170859399512,
+    "test_mse": 72.76432886080228
+}

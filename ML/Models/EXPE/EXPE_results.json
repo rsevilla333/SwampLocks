@@ -1,0 +1,8 @@
+{
+    "ticker": "EXPE",
+    "lastQuartersPrice": 168.1,
+    "predictedQuartersPrice": 151.99179318713806,
+    "percentChange": -10.598076695515335,
+    "val_mse": 464.1020550554326,
+    "test_mse": 1163.9303157469794
+}

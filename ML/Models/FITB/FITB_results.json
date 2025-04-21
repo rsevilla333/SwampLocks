@@ -1,0 +1,8 @@
+{
+    "ticker": "FITB",
+    "lastQuartersPrice": 39.2,
+    "predictedQuartersPrice": 35.375929498960055,
+    "percentChange": -10.80980925505397,
+    "val_mse": 35.799549218566625,
+    "test_mse": 26.055216670189893
+}

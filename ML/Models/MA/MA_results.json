@@ -1,0 +1,8 @@
+{
+    "ticker": "MA",
+    "lastQuartersPrice": 548.12,
+    "predictedQuartersPrice": 495.8329196883081,
+    "percentChange": -10.545302305575177,
+    "val_mse": 887.2270158454093,
+    "test_mse": 1025.0217210583667
+}

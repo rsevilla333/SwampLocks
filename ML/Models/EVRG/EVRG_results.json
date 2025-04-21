@@ -1,0 +1,8 @@
+{
+    "ticker": "EVRG",
+    "lastQuartersPrice": 61.52,
+    "predictedQuartersPrice": 55.80904636520905,
+    "percentChange": -10.233024942621348,
+    "val_mse": 14.324901079012411,
+    "test_mse": 18.241302921426875
+}

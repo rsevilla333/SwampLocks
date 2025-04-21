@@ -1,0 +1,8 @@
+{
+    "ticker": "VLO",
+    "lastQuartersPrice": 119.59,
+    "predictedQuartersPrice": 122.81681505237472,
+    "percentChange": 2.627339791378447,
+    "val_mse": 147.00776418539533,
+    "test_mse": 432.38034729803036
+}

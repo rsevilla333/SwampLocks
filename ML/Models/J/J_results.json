@@ -1,0 +1,8 @@
+{
+    "ticker": "J",
+    "lastQuartersPrice": 120.89,
+    "predictedQuartersPrice": 92.48303938250044,
+    "percentChange": -30.715859694025905,
+    "val_mse": 136.3483248685484,
+    "test_mse": 86.99383160906662
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "SRE",
+    "lastQuartersPrice": 71.36,
+    "predictedQuartersPrice": 68.43450657869246,
+    "percentChange": -4.27488056473897,
+    "val_mse": 52.02077030382778,
+    "test_mse": 70.9403229214142
+}

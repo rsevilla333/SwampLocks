@@ -1,0 +1,8 @@
+{
+    "ticker": "NEM",
+    "lastQuartersPrice": 37.0,
+    "predictedQuartersPrice": 49.27249224442869,
+    "percentChange": 24.90739088972379,
+    "val_mse": 77.55100823552388,
+    "test_mse": 49.774663288424605
+}

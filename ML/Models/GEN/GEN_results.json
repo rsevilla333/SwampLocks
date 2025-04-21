@@ -1,0 +1,8 @@
+{
+    "ticker": "GEN",
+    "lastQuartersPrice": 26.54,
+    "predictedQuartersPrice": 23.923328621304442,
+    "percentChange": -10.937739560059946,
+    "val_mse": 9.093787566168373,
+    "test_mse": 15.855142791017833
+}

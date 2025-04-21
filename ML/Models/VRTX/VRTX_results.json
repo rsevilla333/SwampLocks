@@ -1,0 +1,8 @@
+{
+    "ticker": "VRTX",
+    "lastQuartersPrice": 484.82,
+    "predictedQuartersPrice": 438.67870628708965,
+    "percentChange": -10.518243318314502,
+    "val_mse": 844.2718984658298,
+    "test_mse": 8245.709692325585
+}

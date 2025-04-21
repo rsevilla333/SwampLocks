@@ -1,0 +1,8 @@
+{
+    "ticker": "VMC",
+    "lastQuartersPrice": 258.16,
+    "predictedQuartersPrice": 233.43462976105005,
+    "percentChange": -10.59198897107063,
+    "val_mse": 208.24732697978706,
+    "test_mse": 440.97220324304766
+}

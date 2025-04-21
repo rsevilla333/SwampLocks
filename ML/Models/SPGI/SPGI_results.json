@@ -1,0 +1,8 @@
+{
+    "ticker": "SPGI",
+    "lastQuartersPrice": 508.1,
+    "predictedQuartersPrice": 433.118694185566,
+    "percentChange": -17.311953240768887,
+    "val_mse": 738.7547397586251,
+    "test_mse": 738.178968453872
+}

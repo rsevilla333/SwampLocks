@@ -1,0 +1,8 @@
+{
+    "ticker": "CRWD",
+    "lastQuartersPrice": 398.07,
+    "predictedQuartersPrice": 360.13273426571004,
+    "percentChange": -10.53424532808489,
+    "val_mse": 1349.7592684403544,
+    "test_mse": 675.6659413363249
+}

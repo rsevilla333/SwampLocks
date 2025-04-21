@@ -1,0 +1,8 @@
+{
+    "ticker": "ALB",
+    "lastQuartersPrice": 72.02,
+    "predictedQuartersPrice": 79.7004150102246,
+    "percentChange": 9.636606044321482,
+    "val_mse": 1178.0696647337134,
+    "test_mse": 627.0991042105935
+}

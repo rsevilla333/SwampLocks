@@ -1,0 +1,8 @@
+{
+    "ticker": "NEE",
+    "lastQuartersPrice": 71.76,
+    "predictedQuartersPrice": 78.61869615799772,
+    "percentChange": 8.7240014057394,
+    "val_mse": 7.71903037219163,
+    "test_mse": 60.440552912211984
+}

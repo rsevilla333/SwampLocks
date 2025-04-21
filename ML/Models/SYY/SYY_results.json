@@ -1,0 +1,8 @@
+{
+    "ticker": "SYY",
+    "lastQuartersPrice": 75.04,
+    "predictedQuartersPrice": 77.82338946720125,
+    "percentChange": 3.576546185224061,
+    "val_mse": 59.2103272735026,
+    "test_mse": 57.18826928692754
+}

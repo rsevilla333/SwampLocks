@@ -1,0 +1,8 @@
+{
+    "ticker": "EPAM",
+    "lastQuartersPrice": 234.68,
+    "predictedQuartersPrice": 259.5641714369659,
+    "percentChange": 9.586905349534703,
+    "val_mse": 5923.670789462616,
+    "test_mse": 3454.8209429761423
+}

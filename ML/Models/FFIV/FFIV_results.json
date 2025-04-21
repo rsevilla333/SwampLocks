@@ -1,0 +1,8 @@
+{
+    "ticker": "FFIV",
+    "lastQuartersPrice": 266.27,
+    "predictedQuartersPrice": 240.80112569328395,
+    "percentChange": -10.576725600177038,
+    "val_mse": 956.7247463225696,
+    "test_mse": 370.0549074126496
+}

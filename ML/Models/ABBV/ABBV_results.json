@@ -1,0 +1,8 @@
+{
+    "ticker": "ABBV",
+    "lastQuartersPrice": 176.2,
+    "predictedQuartersPrice": 178.11604894471782,
+    "percentChange": 1.0757306576638204,
+    "val_mse": 376.41127522793033,
+    "test_mse": 724.1092662517756
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "REGN",
+    "lastQuartersPrice": 634.23,
+    "predictedQuartersPrice": 700.968554704534,
+    "percentChange": 9.520905646425891,
+    "val_mse": 38290.332206635074,
+    "test_mse": 46923.24849245158
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "CLX",
+    "lastQuartersPrice": 147.25,
+    "predictedQuartersPrice": 152.07817947279818,
+    "percentChange": 3.174800940894873,
+    "val_mse": 235.27402773296362,
+    "test_mse": 309.49836302000267
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "CCI",
+    "lastQuartersPrice": 89.78,
+    "predictedQuartersPrice": 94.86605472440426,
+    "percentChange": 5.3613009829277525,
+    "val_mse": 83.02384256083691,
+    "test_mse": 119.57807497825235
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "KLAC",
+    "lastQuartersPrice": 679.8,
+    "predictedQuartersPrice": 615.1786115382839,
+    "percentChange": -10.504492069405202,
+    "val_mse": 8009.909764554782,
+    "test_mse": 3326.4853744388215
+}

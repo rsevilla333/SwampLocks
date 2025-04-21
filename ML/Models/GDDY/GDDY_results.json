@@ -1,0 +1,8 @@
+{
+    "ticker": "GDDY",
+    "lastQuartersPrice": 199.45,
+    "predictedQuartersPrice": 180.38905049137128,
+    "percentChange": -10.566577880812389,
+    "val_mse": 149.16396447473838,
+    "test_mse": 165.56982951681607
+}

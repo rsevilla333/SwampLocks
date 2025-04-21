@@ -1,0 +1,8 @@
+{
+    "ticker": "MAS",
+    "lastQuartersPrice": 69.54,
+    "predictedQuartersPrice": 62.808214603624194,
+    "percentChange": -10.718001520755482,
+    "val_mse": 117.85814699935193,
+    "test_mse": 37.83360343152143
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "AWK",
+    "lastQuartersPrice": 147.52,
+    "predictedQuartersPrice": 133.4174027722907,
+    "percentChange": -10.570283137484559,
+    "val_mse": 134.13336414438265,
+    "test_mse": 74.04722767928666
+}

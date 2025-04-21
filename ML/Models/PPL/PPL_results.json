@@ -1,0 +1,8 @@
+{
+    "ticker": "PPL",
+    "lastQuartersPrice": 36.11,
+    "predictedQuartersPrice": 32.57589308694105,
+    "percentChange": -10.848841207904414,
+    "val_mse": 15.395229764873442,
+    "test_mse": 13.517972787779629
+}

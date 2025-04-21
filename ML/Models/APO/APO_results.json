@@ -1,0 +1,8 @@
+{
+    "ticker": "APO",
+    "lastQuartersPrice": 136.94,
+    "predictedQuartersPrice": 123.81327360057979,
+    "percentChange": -10.602034836561124,
+    "val_mse": 1355.322012313037,
+    "test_mse": 329.0200157339947
+}

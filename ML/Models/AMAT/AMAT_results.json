@@ -1,0 +1,8 @@
+{
+    "ticker": "AMAT",
+    "lastQuartersPrice": 151.59,
+    "predictedQuartersPrice": 137.02073794715122,
+    "percentChange": -10.632888328530331,
+    "val_mse": 1542.4009685414344,
+    "test_mse": 1.6122867125455458
+}

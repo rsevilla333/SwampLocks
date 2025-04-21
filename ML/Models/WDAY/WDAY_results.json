@@ -1,0 +1,8 @@
+{
+    "ticker": "WDAY",
+    "lastQuartersPrice": 262.06,
+    "predictedQuartersPrice": 237.05929855797797,
+    "percentChange": -10.546180467967424,
+    "val_mse": 701.4173909611784,
+    "test_mse": 635.649780005771
+}

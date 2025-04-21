@@ -1,0 +1,8 @@
+{
+    "ticker": "AMCR",
+    "lastQuartersPrice": 9.7,
+    "predictedQuartersPrice": 10.14642545612343,
+    "percentChange": 4.3998298519407175,
+    "val_mse": 1.8838611162995142,
+    "test_mse": 1.7284792750230058
+}

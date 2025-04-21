@@ -1,0 +1,8 @@
+{
+    "ticker": "K",
+    "lastQuartersPrice": 80.82,
+    "predictedQuartersPrice": 70.54994156197871,
+    "percentChange": -14.557146626406414,
+    "val_mse": 36.62368820558044,
+    "test_mse": 33.703699726233275
+}

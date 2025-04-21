@@ -1,0 +1,8 @@
+{
+    "ticker": "GRMN",
+    "lastQuartersPrice": 217.13,
+    "predictedQuartersPrice": 196.42547050382473,
+    "percentChange": -10.540654143817928,
+    "val_mse": 105.15435788553755,
+    "test_mse": 328.86819565287294
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "ECL",
+    "lastQuartersPrice": 234.52,
+    "predictedQuartersPrice": 225.3007601835875,
+    "percentChange": -4.091970133123457,
+    "val_mse": 848.3862344592867,
+    "test_mse": 303.1990810778216
+}

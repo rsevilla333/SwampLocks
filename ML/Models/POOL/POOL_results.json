@@ -1,0 +1,8 @@
+{
+    "ticker": "POOL",
+    "lastQuartersPrice": 339.32,
+    "predictedQuartersPrice": 373.6746127195706,
+    "percentChange": 9.193724044976125,
+    "val_mse": 122.98278187786129,
+    "test_mse": 2784.2310832760663
+}

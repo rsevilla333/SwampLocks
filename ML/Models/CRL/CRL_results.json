@@ -1,0 +1,8 @@
+{
+    "ticker": "CRL",
+    "lastQuartersPrice": 150.52,
+    "predictedQuartersPrice": 166.52981388244103,
+    "percentChange": 9.613782366767598,
+    "val_mse": 1762.4690091806567,
+    "test_mse": 1598.1186874054802
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "EQIX",
+    "lastQuartersPrice": 815.35,
+    "predictedQuartersPrice": 737.3227392369369,
+    "percentChange": -10.582511105491532,
+    "val_mse": 3116.768420401082,
+    "test_mse": 5834.861165403661
+}

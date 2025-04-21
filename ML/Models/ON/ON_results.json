@@ -1,0 +1,8 @@
+{
+    "ticker": "ON",
+    "lastQuartersPrice": 40.69,
+    "predictedQuartersPrice": 45.08617954603167,
+    "percentChange": 9.750614468327933,
+    "val_mse": 27.172572932566354,
+    "test_mse": 76.47801153104612
+}

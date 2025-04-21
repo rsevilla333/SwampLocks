@@ -1,0 +1,8 @@
+{
+    "ticker": "EXC",
+    "lastQuartersPrice": 46.08,
+    "predictedQuartersPrice": 41.60351299399384,
+    "percentChange": -10.759877433072585,
+    "val_mse": 15.533811031828346,
+    "test_mse": 13.048238898592361
+}

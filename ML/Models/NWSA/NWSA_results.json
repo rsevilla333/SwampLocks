@@ -1,0 +1,8 @@
+{
+    "ticker": "NWSA",
+    "lastQuartersPrice": 27.22,
+    "predictedQuartersPrice": 24.542169511677457,
+    "percentChange": -10.911140056499068,
+    "val_mse": 5.390152528930402,
+    "test_mse": 9.427796978233799
+}

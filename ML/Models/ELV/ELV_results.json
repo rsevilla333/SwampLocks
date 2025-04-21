@@ -1,0 +1,8 @@
+{
+    "ticker": "ELV",
+    "lastQuartersPrice": 368.8,
+    "predictedQuartersPrice": 345.52924288080885,
+    "percentChange": -6.734815532594007,
+    "val_mse": 404.9341083593088,
+    "test_mse": 1168.0743810502934
+}

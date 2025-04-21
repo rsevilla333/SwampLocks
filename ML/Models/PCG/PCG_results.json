@@ -1,0 +1,8 @@
+{
+    "ticker": "PCG",
+    "lastQuartersPrice": 17.18,
+    "predictedQuartersPrice": 16.407038510549032,
+    "percentChange": -4.71115789088925,
+    "val_mse": 62.525831330364326,
+    "test_mse": 46.31811525514135
+}

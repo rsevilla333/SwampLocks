@@ -1,0 +1,8 @@
+{
+    "ticker": "GEHC",
+    "lastQuartersPrice": 80.71,
+    "predictedQuartersPrice": 76.64594809729157,
+    "percentChange": -5.302370188636285,
+    "val_mse": 8.276814683136816,
+    "test_mse": 12.228923516650218
+}

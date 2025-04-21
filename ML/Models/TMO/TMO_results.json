@@ -1,0 +1,8 @@
+{
+    "ticker": "TMO",
+    "lastQuartersPrice": 518.84,
+    "predictedQuartersPrice": 530.3457274774776,
+    "percentChange": 2.169476792469527,
+    "val_mse": 2334.842323910955,
+    "test_mse": 1988.9587590940355
+}

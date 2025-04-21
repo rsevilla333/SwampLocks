@@ -1,0 +1,8 @@
+{
+    "ticker": "TSLA",
+    "lastQuartersPrice": 259.16,
+    "predictedQuartersPrice": 286.628600385661,
+    "percentChange": 9.58334246781436,
+    "val_mse": 1045.4886992555382,
+    "test_mse": 768.4449916418547
+}

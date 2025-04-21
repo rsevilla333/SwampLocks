@@ -1,0 +1,8 @@
+{
+    "ticker": "CHRW",
+    "lastQuartersPrice": 103.48,
+    "predictedQuartersPrice": 98.79512062381608,
+    "percentChange": -4.742014936165351,
+    "val_mse": 100.9956609677151,
+    "test_mse": 105.1582596034797
+}

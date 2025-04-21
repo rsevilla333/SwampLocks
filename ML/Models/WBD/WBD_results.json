@@ -1,0 +1,8 @@
+{
+    "ticker": "WBD",
+    "lastQuartersPrice": 10.51,
+    "predictedQuartersPrice": 16.20122276201407,
+    "percentChange": 35.128353246014875,
+    "val_mse": 175.6037982216865,
+    "test_mse": 53.06871466651701
+}

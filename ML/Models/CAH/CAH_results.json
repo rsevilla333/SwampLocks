@@ -1,0 +1,8 @@
+{
+    "ticker": "CAH",
+    "lastQuartersPrice": 137.77,
+    "predictedQuartersPrice": 124.57221251174131,
+    "percentChange": -10.594487504197424,
+    "val_mse": 240.3948401389766,
+    "test_mse": 94.09178716512747
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "AFL",
+    "lastQuartersPrice": 102.97,
+    "predictedQuartersPrice": 93.09671401584257,
+    "percentChange": -10.605407600613347,
+    "val_mse": 24.297209246963757,
+    "test_mse": 17.322786583650085
+}

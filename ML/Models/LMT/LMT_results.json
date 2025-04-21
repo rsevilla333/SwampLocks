@@ -1,0 +1,8 @@
+{
+    "ticker": "LMT",
+    "lastQuartersPrice": 483.37,
+    "predictedQuartersPrice": 534.5001706998985,
+    "percentChange": 9.565978366844362,
+    "val_mse": 289.291387061261,
+    "test_mse": 2251.023244446052
+}

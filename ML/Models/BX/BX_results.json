@@ -1,0 +1,8 @@
+{
+    "ticker": "BX",
+    "lastQuartersPrice": 172.05,
+    "predictedQuartersPrice": 155.63382233731357,
+    "percentChange": -10.547949935398204,
+    "val_mse": 300.19507589189215,
+    "test_mse": 117.32057897537425
+}

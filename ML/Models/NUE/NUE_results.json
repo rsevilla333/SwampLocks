@@ -1,0 +1,8 @@
+{
+    "ticker": "NUE",
+    "lastQuartersPrice": 115.86,
+    "predictedQuartersPrice": 128.1574386111963,
+    "percentChange": 9.59557146620591,
+    "val_mse": 49.45193830551477,
+    "test_mse": 385.9225458006729
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "CBRE",
+    "lastQuartersPrice": 130.27,
+    "predictedQuartersPrice": 117.78078720923477,
+    "percentChange": -10.60377765057594,
+    "val_mse": 42.98858158122278,
+    "test_mse": 127.14626394981687
+}

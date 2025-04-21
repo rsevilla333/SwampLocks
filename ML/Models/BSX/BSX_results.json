@@ -1,0 +1,8 @@
+{
+    "ticker": "BSX",
+    "lastQuartersPrice": 89.68,
+    "predictedQuartersPrice": 81.05114550722158,
+    "percentChange": -10.646184503351176,
+    "val_mse": 66.59551718040402,
+    "test_mse": 25.194868977909795
+}

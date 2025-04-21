@@ -1,0 +1,8 @@
+{
+    "ticker": "STX",
+    "lastQuartersPrice": 84.95,
+    "predictedQuartersPrice": 76.76871828871055,
+    "percentChange": -10.657051327236466,
+    "val_mse": 225.60194286398294,
+    "test_mse": 327.6338848019662
+}

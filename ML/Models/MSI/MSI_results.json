@@ -1,0 +1,8 @@
+{
+    "ticker": "MSI",
+    "lastQuartersPrice": 463.59,
+    "predictedQuartersPrice": 368.03691839265747,
+    "percentChange": -25.962906662911788,
+    "val_mse": 139.13525597096015,
+    "test_mse": 2002.859601052456
+}

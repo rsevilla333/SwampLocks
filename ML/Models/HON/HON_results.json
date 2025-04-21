@@ -1,0 +1,8 @@
+{
+    "ticker": "HON",
+    "lastQuartersPrice": 226.6,
+    "predictedQuartersPrice": 205.02474582682896,
+    "percentChange": -10.5232439558268,
+    "val_mse": 150.9092841424905,
+    "test_mse": 473.0280918124385
+}

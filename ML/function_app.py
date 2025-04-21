@@ -57,6 +57,35 @@ def MLModel(req: func.HttpRequest) -> func.HttpResponse:
         )
     
 
+@app.route(route="MLModelResults")
+def MLModelResults(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
+
+    ticker = req.params.get('ticker')
+    if not ticker:
+        try:
+            req_body = req.get_json()
+        except ValueError:
+            pass
+        else:
+            ticker = req_body.get('name')
+
+    if ticker:
+        data = {}
+        with open(f"./Models/{ticker}/{ticker}_results.json", 'r') as file:
+            data = json.load(file)
+        
+        return func.HttpResponse(
+            json.dumps(data),
+            mimetype="application/json"
+        )
+    else:
+        return func.HttpResponse(
+             f"Ticker {ticker} not found",
+             status_code=400
+        )
+    
+
 def predict_next_quarter_price(ticker: str):
     model_dir = os.path.join('Models', ticker)
     

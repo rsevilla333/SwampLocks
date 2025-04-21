@@ -1,0 +1,8 @@
+{
+    "ticker": "TEL",
+    "lastQuartersPrice": 141.32,
+    "predictedQuartersPrice": 139.24884723445663,
+    "percentChange": -1.4873751608558194,
+    "val_mse": 31.105352395994963,
+    "test_mse": 153.32725391699472
+}

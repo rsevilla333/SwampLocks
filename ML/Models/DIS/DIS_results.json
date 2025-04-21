@@ -1,0 +1,8 @@
+{
+    "ticker": "DIS",
+    "lastQuartersPrice": 98.7,
+    "predictedQuartersPrice": 107.73735451695516,
+    "percentChange": 8.388320427464091,
+    "val_mse": 121.11511524247426,
+    "test_mse": 1427.7534227738518
+}

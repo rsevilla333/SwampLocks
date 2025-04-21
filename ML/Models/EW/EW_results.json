@@ -1,0 +1,8 @@
+{
+    "ticker": "EW",
+    "lastQuartersPrice": 74.24,
+    "predictedQuartersPrice": 74.74694143738233,
+    "percentChange": 0.6782102754090857,
+    "val_mse": 96.4102082227757,
+    "test_mse": 62.233265054632625
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "STLD",
+    "lastQuartersPrice": 113.8,
+    "predictedQuartersPrice": 117.30195447850839,
+    "percentChange": 2.9854186949203942,
+    "val_mse": 74.39754319578927,
+    "test_mse": 27.79951813514405
+}

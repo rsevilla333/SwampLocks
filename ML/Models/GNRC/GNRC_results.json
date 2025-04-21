@@ -1,0 +1,8 @@
+{
+    "ticker": "GNRC",
+    "lastQuartersPrice": 126.65,
+    "predictedQuartersPrice": 125.39853078831118,
+    "percentChange": -0.9979935201964052,
+    "val_mse": 558.6653987735793,
+    "test_mse": 102.87695304759421
+}

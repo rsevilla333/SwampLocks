@@ -1,0 +1,8 @@
+{
+    "ticker": "PH",
+    "lastQuartersPrice": 607.85,
+    "predictedQuartersPrice": 543.0181488901202,
+    "percentChange": -11.939168376303865,
+    "val_mse": 646.7868019020184,
+    "test_mse": 1893.727732892871
+}

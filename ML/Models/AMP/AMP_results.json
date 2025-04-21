@@ -1,0 +1,8 @@
+{
+    "ticker": "AMP",
+    "lastQuartersPrice": 530.54,
+    "predictedQuartersPrice": 368.7433738573447,
+    "percentChange": -43.877839607024185,
+    "val_mse": 209.50847293638122,
+    "test_mse": 7159.940539325653
+}

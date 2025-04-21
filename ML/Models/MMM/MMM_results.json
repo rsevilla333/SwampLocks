@@ -1,0 +1,8 @@
+{
+    "ticker": "MMM",
+    "lastQuartersPrice": 146.86,
+    "predictedQuartersPrice": 132.78823007415008,
+    "percentChange": -10.597151508075786,
+    "val_mse": 1114.9818302206374,
+    "test_mse": 407.00288444697986
+}

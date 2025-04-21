@@ -1,0 +1,8 @@
+{
+    "ticker": "ACN",
+    "lastQuartersPrice": 348.5,
+    "predictedQuartersPrice": 324.98172117029037,
+    "percentChange": -7.236800502199947,
+    "val_mse": 189.5341093668799,
+    "test_mse": 648.411157652702
+}

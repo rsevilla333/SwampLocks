@@ -1,0 +1,8 @@
+{
+    "ticker": "L",
+    "lastQuartersPrice": 91.91,
+    "predictedQuartersPrice": 83.07417443958897,
+    "percentChange": -10.63606785143123,
+    "val_mse": 51.2095109828542,
+    "test_mse": 14.509123884514112
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "ADP",
+    "lastQuartersPrice": 305.53,
+    "predictedQuartersPrice": 276.405713411002,
+    "percentChange": -10.536788921469054,
+    "val_mse": 218.33979354835654,
+    "test_mse": 425.47524289725857
+}

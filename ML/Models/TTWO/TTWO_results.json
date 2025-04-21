@@ -1,0 +1,8 @@
+{
+    "ticker": "TTWO",
+    "lastQuartersPrice": 207.25,
+    "predictedQuartersPrice": 187.49131337549377,
+    "percentChange": -10.538454432251477,
+    "val_mse": 232.9012656809526,
+    "test_mse": 872.488012239474
+}

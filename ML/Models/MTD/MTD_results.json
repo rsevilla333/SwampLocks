@@ -1,0 +1,8 @@
+{
+    "ticker": "MTD",
+    "lastQuartersPrice": 1180.91,
+    "predictedQuartersPrice": 1087.9006510258475,
+    "percentChange": -8.549434076213513,
+    "val_mse": 24516.102139225073,
+    "test_mse": 43404.46519361586
+}

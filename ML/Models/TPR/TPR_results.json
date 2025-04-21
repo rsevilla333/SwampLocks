@@ -1,0 +1,8 @@
+{
+    "ticker": "TPR",
+    "lastQuartersPrice": 70.41,
+    "predictedQuartersPrice": 63.62445129151557,
+    "percentChange": -10.665001537528852,
+    "val_mse": 151.44993237352557,
+    "test_mse": 163.7356394158128
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "BF-B",
+    "lastQuartersPrice": 33.01,
+    "predictedQuartersPrice": 36.58064878394365,
+    "percentChange": 9.761031864232327,
+    "val_mse": 57.99852339849747,
+    "test_mse": 36.87862946729077
+}

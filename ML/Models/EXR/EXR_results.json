@@ -1,0 +1,8 @@
+{
+    "ticker": "EXR",
+    "lastQuartersPrice": 147.25,
+    "predictedQuartersPrice": 154.27540628389534,
+    "percentChange": 4.5538083179423205,
+    "val_mse": 177.09373457242305,
+    "test_mse": 396.8074312330152
+}

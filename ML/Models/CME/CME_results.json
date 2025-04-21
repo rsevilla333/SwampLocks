@@ -1,0 +1,8 @@
+{
+    "ticker": "CME",
+    "lastQuartersPrice": 231.53,
+    "predictedQuartersPrice": 209.43186804865545,
+    "percentChange": -10.551465809496907,
+    "val_mse": 84.56688851095247,
+    "test_mse": 239.362515248845
+}

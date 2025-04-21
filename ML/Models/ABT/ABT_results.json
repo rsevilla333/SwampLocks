@@ -1,0 +1,8 @@
+{
+    "ticker": "ABT",
+    "lastQuartersPrice": 112.8,
+    "predictedQuartersPrice": 104.17306716035348,
+    "percentChange": -8.281346680872016,
+    "val_mse": 75.5657662185166,
+    "test_mse": 46.46530191479764
+}

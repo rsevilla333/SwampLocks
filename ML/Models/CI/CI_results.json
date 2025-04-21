@@ -1,0 +1,8 @@
+{
+    "ticker": "CI",
+    "lastQuartersPrice": 275.14,
+    "predictedQuartersPrice": 304.19058751053956,
+    "percentChange": 9.550127026705923,
+    "val_mse": 1539.9548328273454,
+    "test_mse": 291.81269094614555
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "MRK",
+    "lastQuartersPrice": 89.76,
+    "predictedQuartersPrice": 99.30906091665875,
+    "percentChange": 9.615498151445035,
+    "val_mse": 57.79410760195829,
+    "test_mse": 47.212180706482854
+}

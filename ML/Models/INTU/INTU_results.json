@@ -1,0 +1,8 @@
+{
+    "ticker": "INTU",
+    "lastQuartersPrice": 232.91065573770493,
+    "predictedQuartersPrice": 257.569657873084,
+    "percentChange": 9.573721663880786,
+    "val_mse": 3643.6048043091773,
+    "test_mse": 9121.767603243958
+}

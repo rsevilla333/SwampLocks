@@ -1,0 +1,8 @@
+{
+    "ticker": "NTRS",
+    "lastQuartersPrice": 98.65,
+    "predictedQuartersPrice": 89.15870257373209,
+    "percentChange": -10.6453965258398,
+    "val_mse": 64.80962676310914,
+    "test_mse": 94.72143491620325
+}

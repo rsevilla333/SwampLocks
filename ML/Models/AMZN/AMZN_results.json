@@ -1,0 +1,8 @@
+{
+    "ticker": "AMZN",
+    "lastQuartersPrice": 190.26,
+    "predictedQuartersPrice": 179.62534129636379,
+    "percentChange": -5.920466804341418,
+    "val_mse": 612.4859682012541,
+    "test_mse": 385.5979768919737
+}

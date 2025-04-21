@@ -1,0 +1,8 @@
+{
+    "ticker": "MMC",
+    "lastQuartersPrice": 244.03,
+    "predictedQuartersPrice": 220.68209272710365,
+    "percentChange": -10.579883027377512,
+    "val_mse": 106.45282037029628,
+    "test_mse": 62.905678451826454
+}

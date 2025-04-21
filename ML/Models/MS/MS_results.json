@@ -1,0 +1,8 @@
+{
+    "ticker": "MS",
+    "lastQuartersPrice": 125.75,
+    "predictedQuartersPrice": 92.56512586087297,
+    "percentChange": -35.85029872805929,
+    "val_mse": 41.10337873737514,
+    "test_mse": 146.4522017620519
+}

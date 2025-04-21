@@ -1,0 +1,8 @@
+{
+    "ticker": "SPG",
+    "lastQuartersPrice": 170.87,
+    "predictedQuartersPrice": 154.46072309438912,
+    "percentChange": -10.623591924779063,
+    "val_mse": 221.80243770728407,
+    "test_mse": 669.809747162196
+}

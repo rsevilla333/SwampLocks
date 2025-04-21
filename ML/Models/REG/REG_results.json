@@ -1,0 +1,8 @@
+{
+    "ticker": "REG",
+    "lastQuartersPrice": 73.41,
+    "predictedQuartersPrice": 66.3491949315849,
+    "percentChange": -10.641885068380642,
+    "val_mse": 34.15825395312205,
+    "test_mse": 52.22981615272847
+}

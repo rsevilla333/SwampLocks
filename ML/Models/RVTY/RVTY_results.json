@@ -1,0 +1,8 @@
+{
+    "ticker": "RVTY",
+    "lastQuartersPrice": 105.8,
+    "predictedQuartersPrice": 113.94656853812593,
+    "percentChange": 7.149463685165857,
+    "val_mse": 86.13730677008442,
+    "test_mse": 344.8179087661781
+}

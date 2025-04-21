@@ -1,0 +1,8 @@
+{
+    "ticker": "FOX",
+    "lastQuartersPrice": 52.71,
+    "predictedQuartersPrice": 47.60387638458546,
+    "percentChange": -10.726276940480295,
+    "val_mse": 41.50556288729989,
+    "test_mse": 17.563274800945226
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "DFS",
+    "lastQuartersPrice": 140.29,
+    "predictedQuartersPrice": 126.89161168710275,
+    "percentChange": -10.55892358427586,
+    "val_mse": 216.77503759848827,
+    "test_mse": 184.5155717693669
+}

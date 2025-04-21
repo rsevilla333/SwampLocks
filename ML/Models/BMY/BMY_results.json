@@ -1,0 +1,8 @@
+{
+    "ticker": "BMY",
+    "lastQuartersPrice": 60.99,
+    "predictedQuartersPrice": 64.31312512069653,
+    "percentChange": 5.167102538494294,
+    "val_mse": 48.54201259068125,
+    "test_mse": 44.22512696455869
+}

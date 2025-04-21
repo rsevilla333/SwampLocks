@@ -1,0 +1,8 @@
+{
+    "ticker": "CMCSA",
+    "lastQuartersPrice": 36.9,
+    "predictedQuartersPrice": 39.774286637576566,
+    "percentChange": 7.22649450326307,
+    "val_mse": 24.48334908621411,
+    "test_mse": 3.311011047131483
+}

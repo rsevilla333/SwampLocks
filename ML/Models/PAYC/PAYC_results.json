@@ -1,0 +1,8 @@
+{
+    "ticker": "PAYC",
+    "lastQuartersPrice": 204.44,
+    "predictedQuartersPrice": 203.61817885070343,
+    "percentChange": -0.40360892820829886,
+    "val_mse": 1026.9352378521262,
+    "test_mse": 12817.308230477625
+}

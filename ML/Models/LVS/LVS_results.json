@@ -1,0 +1,8 @@
+{
+    "ticker": "LVS",
+    "lastQuartersPrice": 38.63,
+    "predictedQuartersPrice": 42.803489784691195,
+    "percentChange": 9.750349342272212,
+    "val_mse": 84.6463315241423,
+    "test_mse": 71.36468707752394
+}

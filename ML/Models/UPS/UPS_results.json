@@ -1,0 +1,8 @@
+{
+    "ticker": "UPS",
+    "lastQuartersPrice": 125.32,
+    "predictedQuartersPrice": 138.6740985158296,
+    "percentChange": 9.629843394514825,
+    "val_mse": 167.67931123744702,
+    "test_mse": 276.27249265884177
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "APH",
+    "lastQuartersPrice": 65.59,
+    "predictedQuartersPrice": 64.40474088497066,
+    "percentChange": -1.8403289862562344,
+    "val_mse": 36.420182749910325,
+    "test_mse": 9.964849563046585
+}

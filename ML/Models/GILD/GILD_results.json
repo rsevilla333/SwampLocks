@@ -1,0 +1,8 @@
+{
+    "ticker": "GILD",
+    "lastQuartersPrice": 92.01,
+    "predictedQuartersPrice": 70.92483240060685,
+    "percentChange": -29.728893091064613,
+    "val_mse": 36.43202791840396,
+    "test_mse": 67.74877073207686
+}

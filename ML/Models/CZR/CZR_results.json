@@ -1,0 +1,8 @@
+{
+    "ticker": "CZR",
+    "lastQuartersPrice": 25.0,
+    "predictedQuartersPrice": 27.734639087760026,
+    "percentChange": 9.86001324591561,
+    "val_mse": 2022.6887263722888,
+    "test_mse": 130.9473188309331
+}

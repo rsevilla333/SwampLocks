@@ -1,0 +1,8 @@
+{
+    "ticker": "MDLZ",
+    "lastQuartersPrice": 67.85,
+    "predictedQuartersPrice": 62.496729483430315,
+    "percentChange": -8.565681053740558,
+    "val_mse": 14.097372730696367,
+    "test_mse": 16.14204571940976
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "WMT",
+    "lastQuartersPrice": 98.16,
+    "predictedQuartersPrice": 68.30146726973126,
+    "percentChange": -43.715799855885315,
+    "val_mse": 10.092110208739141,
+    "test_mse": 72.63933368325317
+}

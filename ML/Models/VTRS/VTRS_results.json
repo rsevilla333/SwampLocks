@@ -1,0 +1,8 @@
+{
+    "ticker": "VTRS",
+    "lastQuartersPrice": 12.38,
+    "predictedQuartersPrice": 11.104990726943527,
+    "percentChange": -11.481407813902788,
+    "val_mse": 5.3600843055695755,
+    "test_mse": 3.692142908544573
+}

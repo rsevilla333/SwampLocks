@@ -1,0 +1,8 @@
+{
+    "ticker": "LEN",
+    "lastQuartersPrice": 119.63,
+    "predictedQuartersPrice": 123.67360250676622,
+    "percentChange": 3.2695760653895345,
+    "val_mse": 102.2317471898498,
+    "test_mse": 241.13356566737988
+}

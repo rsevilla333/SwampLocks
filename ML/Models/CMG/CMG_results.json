@@ -1,0 +1,8 @@
+{
+    "ticker": "CMG",
+    "lastQuartersPrice": 50.21,
+    "predictedQuartersPrice": 47.27999199447703,
+    "percentChange": -6.197141500923342,
+    "val_mse": 30.265215016760497,
+    "test_mse": 28.6958432079568
+}

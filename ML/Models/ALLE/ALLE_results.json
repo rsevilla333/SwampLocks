@@ -1,0 +1,8 @@
+{
+    "ticker": "ALLE",
+    "lastQuartersPrice": 130.97,
+    "predictedQuartersPrice": 122.83591297763664,
+    "percentChange": -6.621912782008832,
+    "val_mse": 79.86782138573984,
+    "test_mse": 121.76023703446589
+}

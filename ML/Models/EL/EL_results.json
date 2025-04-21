@@ -1,0 +1,8 @@
+{
+    "ticker": "EL",
+    "lastQuartersPrice": 66.0,
+    "predictedQuartersPrice": 73.06958925094226,
+    "percentChange": 9.675145739034097,
+    "val_mse": 698.3124817791553,
+    "test_mse": 1597.9824851343071
+}

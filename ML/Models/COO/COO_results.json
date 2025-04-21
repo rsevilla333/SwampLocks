@@ -1,0 +1,8 @@
+{
+    "ticker": "COO",
+    "lastQuartersPrice": 96.55,
+    "predictedQuartersPrice": 87.24434594494447,
+    "percentChange": -10.666197281056888,
+    "val_mse": 99.14766729719248,
+    "test_mse": 126.83236253613343
+}

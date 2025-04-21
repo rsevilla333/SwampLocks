@@ -1,0 +1,8 @@
+{
+    "ticker": "CMS",
+    "lastQuartersPrice": 75.11,
+    "predictedQuartersPrice": 67.8542255241207,
+    "percentChange": -10.693180004390502,
+    "val_mse": 18.68268090800013,
+    "test_mse": 12.755571604111768
+}

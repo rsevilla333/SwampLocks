@@ -1,0 +1,8 @@
+{
+    "ticker": "KEY",
+    "lastQuartersPrice": 17.11,
+    "predictedQuartersPrice": 10.42070440653255,
+    "percentChange": -64.19235526222249,
+    "val_mse": 4.53860533743522,
+    "test_mse": 7.334678609456257
+}

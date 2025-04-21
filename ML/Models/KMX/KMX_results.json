@@ -1,0 +1,8 @@
+{
+    "ticker": "KMX",
+    "lastQuartersPrice": 82.97,
+    "predictedQuartersPrice": 82.80167340266186,
+    "percentChange": -0.2032888834499369,
+    "val_mse": 634.5097146124403,
+    "test_mse": 101.7924354996178
+}

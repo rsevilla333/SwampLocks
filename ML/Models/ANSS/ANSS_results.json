@@ -1,0 +1,8 @@
+{
+    "ticker": "ANSS",
+    "lastQuartersPrice": 316.56,
+    "predictedQuartersPrice": 286.4846062111913,
+    "percentChange": -10.49808371436114,
+    "val_mse": 1782.9674202939502,
+    "test_mse": 1035.4025278055317
+}

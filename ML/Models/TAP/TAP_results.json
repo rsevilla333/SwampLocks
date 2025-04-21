@@ -1,0 +1,8 @@
+{
+    "ticker": "TAP",
+    "lastQuartersPrice": 56.88,
+    "predictedQuartersPrice": 56.33487739921645,
+    "percentChange": -0.9676467331606098,
+    "val_mse": 323.2663255810558,
+    "test_mse": 162.80844236430102
+}

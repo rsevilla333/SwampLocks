@@ -1,0 +1,8 @@
+{
+    "ticker": "NOW",
+    "lastQuartersPrice": 796.14,
+    "predictedQuartersPrice": 720.0879043699284,
+    "percentChange": -10.561501612308932,
+    "val_mse": 21460.657809839286,
+    "test_mse": 12433.907873391663
+}

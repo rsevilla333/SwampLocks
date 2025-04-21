@@ -1,0 +1,8 @@
+{
+    "ticker": "CVS",
+    "lastQuartersPrice": 67.75,
+    "predictedQuartersPrice": 65.98460280021455,
+    "percentChange": -2.6754684045468213,
+    "val_mse": 50.69966969150236,
+    "test_mse": 111.64919329445402
+}

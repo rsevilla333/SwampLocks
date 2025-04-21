@@ -1,0 +1,8 @@
+{
+    "ticker": "CPT",
+    "lastQuartersPrice": 114.77,
+    "predictedQuartersPrice": 113.68084885061845,
+    "percentChange": -0.958077952789349,
+    "val_mse": 153.15867749627805,
+    "test_mse": 109.95152370555331
+}

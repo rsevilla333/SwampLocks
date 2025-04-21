@@ -1,0 +1,8 @@
+{
+    "ticker": "AAPL",
+    "lastQuartersPrice": 222.13,
+    "predictedQuartersPrice": 200.89331275926898,
+    "percentChange": -10.571127007188629,
+    "val_mse": 32.503778787051466,
+    "test_mse": 668.1490790501567
+}

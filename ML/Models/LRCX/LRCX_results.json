@@ -1,0 +1,8 @@
+{
+    "ticker": "LRCX",
+    "lastQuartersPrice": 72.7,
+    "predictedQuartersPrice": 65.65854015465504,
+    "percentChange": -10.724362480127025,
+    "val_mse": 63.23515686179359,
+    "test_mse": 175.60892924625549
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "TRMB",
+    "lastQuartersPrice": 70.43,
+    "predictedQuartersPrice": 63.652955447872685,
+    "percentChange": -10.64686549814211,
+    "val_mse": 26.599863874801,
+    "test_mse": 33.612796314804996
+}

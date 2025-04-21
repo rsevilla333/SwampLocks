@@ -1,0 +1,8 @@
+{
+    "ticker": "DGX",
+    "lastQuartersPrice": 150.97,
+    "predictedQuartersPrice": 140.02078411306715,
+    "percentChange": -7.819707592903735,
+    "val_mse": 85.4693358795116,
+    "test_mse": 59.44111830871673
+}

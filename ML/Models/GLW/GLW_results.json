@@ -1,0 +1,8 @@
+{
+    "ticker": "GLW",
+    "lastQuartersPrice": 45.78,
+    "predictedQuartersPrice": 41.34248748246365,
+    "percentChange": -10.733540209496638,
+    "val_mse": 8.304740485948313,
+    "test_mse": 11.95117986135052
+}

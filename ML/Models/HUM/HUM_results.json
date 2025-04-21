@@ -1,0 +1,8 @@
+{
+    "ticker": "HUM",
+    "lastQuartersPrice": 254.26,
+    "predictedQuartersPrice": 281.26988180547767,
+    "percentChange": 9.602834698155604,
+    "val_mse": 2749.8460296437484,
+    "test_mse": 4144.838706904792
+}

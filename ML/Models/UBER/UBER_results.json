@@ -1,0 +1,8 @@
+{
+    "ticker": "UBER",
+    "lastQuartersPrice": 60.77,
+    "predictedQuartersPrice": 67.30662214475902,
+    "percentChange": 9.711707312692718,
+    "val_mse": 85.53232601929622,
+    "test_mse": 208.9903200494276
+}
