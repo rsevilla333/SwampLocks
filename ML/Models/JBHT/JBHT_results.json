@@ -1,0 +1,8 @@
+{
+    "ticker": "JBHT",
+    "lastQuartersPrice": 170.33,
+    "predictedQuartersPrice": 185.1346560970609,
+    "percentChange": 7.996696247567625,
+    "val_mse": 1203.0233315001158,
+    "test_mse": 126.59727879702662
+}

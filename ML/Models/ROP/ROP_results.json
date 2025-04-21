@@ -1,0 +1,8 @@
+{
+    "ticker": "ROP",
+    "lastQuartersPrice": 589.58,
+    "predictedQuartersPrice": 533.3446460811008,
+    "percentChange": -10.543905208780902,
+    "val_mse": 874.4650538461811,
+    "test_mse": 570.3307297443985
+}

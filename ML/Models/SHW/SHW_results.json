@@ -1,0 +1,8 @@
+{
+    "ticker": "SHW",
+    "lastQuartersPrice": 338.75,
+    "predictedQuartersPrice": 306.5430304777149,
+    "percentChange": -10.506508489882771,
+    "val_mse": 344.01682149728776,
+    "test_mse": 657.8840503715559
+}

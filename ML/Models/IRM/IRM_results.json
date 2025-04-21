@@ -1,0 +1,8 @@
+{
+    "ticker": "IRM",
+    "lastQuartersPrice": 103.69,
+    "predictedQuartersPrice": 93.69778418464695,
+    "percentChange": -10.66430321944618,
+    "val_mse": 44.4113372204706,
+    "test_mse": 125.75308867849309
+}

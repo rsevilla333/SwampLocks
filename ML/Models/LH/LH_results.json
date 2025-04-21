@@ -1,0 +1,8 @@
+{
+    "ticker": "LH",
+    "lastQuartersPrice": 232.74,
+    "predictedQuartersPrice": 210.48595058716666,
+    "percentChange": -10.572700624794184,
+    "val_mse": 458.7121630053883,
+    "test_mse": 67.51295703046075
+}

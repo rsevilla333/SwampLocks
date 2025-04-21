@@ -1,0 +1,8 @@
+{
+    "ticker": "V",
+    "lastQuartersPrice": 350.46,
+    "predictedQuartersPrice": 226.8659919280568,
+    "percentChange": -54.478860855944,
+    "val_mse": 621.4812173091713,
+    "test_mse": 1510.8117032133896
+}

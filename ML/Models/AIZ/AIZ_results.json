@@ -1,0 +1,8 @@
+{
+    "ticker": "AIZ",
+    "lastQuartersPrice": 212.27,
+    "predictedQuartersPrice": 192.03256372065027,
+    "percentChange": -10.538544029849618,
+    "val_mse": 276.64240150278755,
+    "test_mse": 140.80509320598318
+}

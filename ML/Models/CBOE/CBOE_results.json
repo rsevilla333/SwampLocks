@@ -1,0 +1,8 @@
+{
+    "ticker": "CBOE",
+    "lastQuartersPrice": 195.93,
+    "predictedQuartersPrice": 177.28214335579813,
+    "percentChange": -10.518745030499987,
+    "val_mse": 492.7622643907651,
+    "test_mse": 1370.2548280239828
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "LULU",
+    "lastQuartersPrice": 378.53,
+    "predictedQuartersPrice": 342.36694962209936,
+    "percentChange": -10.562658112243884,
+    "val_mse": 106.80341444788945,
+    "test_mse": 2348.554602077272
+}

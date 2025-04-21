@@ -1,0 +1,8 @@
+{
+    "ticker": "PSX",
+    "lastQuartersPrice": 111.99,
+    "predictedQuartersPrice": 110.49624711215358,
+    "percentChange": -1.3518584810670031,
+    "val_mse": 906.7196299327934,
+    "test_mse": 140.20759286227383
+}

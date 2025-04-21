@@ -1,0 +1,8 @@
+{
+    "ticker": "TPL",
+    "lastQuartersPrice": 1324.99,
+    "predictedQuartersPrice": 1199.1178851699547,
+    "percentChange": -10.497059245530727,
+    "val_mse": 36320.54540954782,
+    "test_mse": 9077.105769056576
+}

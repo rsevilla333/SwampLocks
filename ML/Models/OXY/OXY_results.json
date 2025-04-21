@@ -1,0 +1,8 @@
+{
+    "ticker": "OXY",
+    "lastQuartersPrice": 48.46,
+    "predictedQuartersPrice": 51.43307454571177,
+    "percentChange": 5.7804721416554905,
+    "val_mse": 122.87071835667962,
+    "test_mse": 160.20463512979157
+}

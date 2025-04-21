@@ -1,0 +1,8 @@
+{
+    "ticker": "VRSN",
+    "lastQuartersPrice": 253.87,
+    "predictedQuartersPrice": 229.63013145384878,
+    "percentChange": -10.556048717423216,
+    "val_mse": 933.5894624867852,
+    "test_mse": 246.9617006885032
+}

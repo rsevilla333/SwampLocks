@@ -1,0 +1,8 @@
+{
+    "ticker": "PTC",
+    "lastQuartersPrice": 154.95,
+    "predictedQuartersPrice": 162.13392535696414,
+    "percentChange": 4.4308588354643135,
+    "val_mse": 540.275660450632,
+    "test_mse": 262.73670407481717
+}

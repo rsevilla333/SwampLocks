@@ -1,0 +1,8 @@
+{
+    "ticker": "KKR",
+    "lastQuartersPrice": 148.39,
+    "predictedQuartersPrice": 134.16531298644742,
+    "percentChange": -10.602358163163572,
+    "val_mse": 22.372928539307523,
+    "test_mse": 105.10375279185105
+}

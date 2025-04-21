@@ -1,0 +1,8 @@
+{
+    "ticker": "SJM",
+    "lastQuartersPrice": 106.89,
+    "predictedQuartersPrice": 118.27289119835612,
+    "percentChange": 9.624260541044706,
+    "val_mse": 189.89319105125512,
+    "test_mse": 152.22461706708938
+}

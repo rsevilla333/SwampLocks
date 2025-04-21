@@ -1,0 +1,8 @@
+{
+    "ticker": "PEG",
+    "lastQuartersPrice": 82.3,
+    "predictedQuartersPrice": 74.65719495822296,
+    "percentChange": -10.237198231267385,
+    "val_mse": 15.683478509395455,
+    "test_mse": 39.38808388118778
+}

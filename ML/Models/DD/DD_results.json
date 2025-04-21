@@ -1,0 +1,8 @@
+{
+    "ticker": "DD",
+    "lastQuartersPrice": 75.95,
+    "predictedQuartersPrice": 75.54232768004657,
+    "percentChange": -0.5396607868374037,
+    "val_mse": 315.0649328711173,
+    "test_mse": 462.2796787615872
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "CHTR",
+    "lastQuartersPrice": 368.53,
+    "predictedQuartersPrice": 335.1177482543397,
+    "percentChange": -9.970302056428793,
+    "val_mse": 1966.341564542087,
+    "test_mse": 3603.8681033493813
+}

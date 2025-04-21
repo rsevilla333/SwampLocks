@@ -1,0 +1,8 @@
+{
+    "ticker": "PM",
+    "lastQuartersPrice": 158.73,
+    "predictedQuartersPrice": 143.5502005806594,
+    "percentChange": -10.574558139200384,
+    "val_mse": 156.01945348914052,
+    "test_mse": 171.6289937819594
+}

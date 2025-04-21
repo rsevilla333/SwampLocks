@@ -1,0 +1,8 @@
+{
+    "ticker": "AEP",
+    "lastQuartersPrice": 109.27,
+    "predictedQuartersPrice": 98.77464984489345,
+    "percentChange": -10.625550352835944,
+    "val_mse": 88.67106321867224,
+    "test_mse": 137.2101882319931
+}

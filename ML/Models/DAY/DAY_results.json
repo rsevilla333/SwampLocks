@@ -1,0 +1,8 @@
+{
+    "ticker": "DAY",
+    "lastQuartersPrice": 72.49,
+    "predictedQuartersPrice": 74.28666565371896,
+    "percentChange": 2.418557405839117,
+    "val_mse": 384.982277902071,
+    "test_mse": 686.9166500029529
+}

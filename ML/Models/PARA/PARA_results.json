@@ -1,0 +1,8 @@
+{
+    "ticker": "PARA",
+    "lastQuartersPrice": 10.34,
+    "predictedQuartersPrice": 11.535295845388742,
+    "percentChange": 10.362073599235543,
+    "val_mse": 160.5673713931903,
+    "test_mse": 17.482781651499224
+}

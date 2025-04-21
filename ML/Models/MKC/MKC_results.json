@@ -1,0 +1,8 @@
+{
+    "ticker": "MKC",
+    "lastQuartersPrice": 82.61,
+    "predictedQuartersPrice": 74.68800706796776,
+    "percentChange": -10.606780449802411,
+    "val_mse": 68.83028346896293,
+    "test_mse": 42.50159928606973
+}

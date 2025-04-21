@@ -1,0 +1,8 @@
+{
+    "ticker": "PFE",
+    "lastQuartersPrice": 26.42,
+    "predictedQuartersPrice": 37.01031174305147,
+    "percentChange": 28.61448943358267,
+    "val_mse": 8.18132392423043,
+    "test_mse": 18.82658095926112
+}

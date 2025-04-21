@@ -1,0 +1,8 @@
+{
+    "ticker": "MSCI",
+    "lastQuartersPrice": 565.5,
+    "predictedQuartersPrice": 519.9534413854886,
+    "percentChange": -8.7597378898284,
+    "val_mse": 755.5275962872342,
+    "test_mse": 2697.427342613983
+}

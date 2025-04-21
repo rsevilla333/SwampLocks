@@ -1,0 +1,8 @@
+{
+    "ticker": "WMB",
+    "lastQuartersPrice": 59.76,
+    "predictedQuartersPrice": 53.990537657800594,
+    "percentChange": -10.686062025844322,
+    "val_mse": 42.61345152076437,
+    "test_mse": 17.191266123101457
+}

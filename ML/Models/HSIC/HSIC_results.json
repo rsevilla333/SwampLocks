@@ -1,0 +1,8 @@
+{
+    "ticker": "HSIC",
+    "lastQuartersPrice": 68.49,
+    "predictedQuartersPrice": 66.86245679230188,
+    "percentChange": -2.43416602646509,
+    "val_mse": 61.307024844564666,
+    "test_mse": 26.10052568228476
+}

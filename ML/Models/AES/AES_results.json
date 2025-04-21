@@ -1,0 +1,8 @@
+{
+    "ticker": "AES",
+    "lastQuartersPrice": 12.65,
+    "predictedQuartersPrice": 22.36016875236241,
+    "percentChange": 43.426187252439696,
+    "val_mse": 6.181876921982022,
+    "test_mse": 13.605562683644184
+}

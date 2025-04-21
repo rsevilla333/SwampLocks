@@ -1,0 +1,8 @@
+{
+    "ticker": "ADM",
+    "lastQuartersPrice": 50.07,
+    "predictedQuartersPrice": 60.696794416817994,
+    "percentChange": 17.507999423892972,
+    "val_mse": 20.586404322559954,
+    "test_mse": 59.27532146486159
+}

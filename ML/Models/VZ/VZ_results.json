@@ -1,0 +1,8 @@
+{
+    "ticker": "VZ",
+    "lastQuartersPrice": 45.36,
+    "predictedQuartersPrice": 42.777974405606145,
+    "percentChange": -6.035876243021621,
+    "val_mse": 28.41214687509411,
+    "test_mse": 31.682286422305257
+}

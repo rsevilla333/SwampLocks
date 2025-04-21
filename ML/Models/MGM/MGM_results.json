@@ -1,0 +1,8 @@
+{
+    "ticker": "MGM",
+    "lastQuartersPrice": 34.35,
+    "predictedQuartersPrice": 30.97904967745314,
+    "percentChange": -10.881387123376719,
+    "val_mse": 67.28301559959598,
+    "test_mse": 42.66166010434331
+}

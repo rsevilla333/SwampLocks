@@ -1,0 +1,8 @@
+{
+    "ticker": "AXP",
+    "lastQuartersPrice": 269.05,
+    "predictedQuartersPrice": 243.41219367517397,
+    "percentChange": -10.532671325019539,
+    "val_mse": 153.54339558477542,
+    "test_mse": 227.6712210282102
+}

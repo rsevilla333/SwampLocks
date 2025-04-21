@@ -1,0 +1,8 @@
+{
+    "ticker": "PPG",
+    "lastQuartersPrice": 119.09,
+    "predictedQuartersPrice": 137.07305992658817,
+    "percentChange": 13.11932478651845,
+    "val_mse": 126.86241640117966,
+    "test_mse": 112.24150191483484
+}

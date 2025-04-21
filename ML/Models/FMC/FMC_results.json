@@ -1,0 +1,8 @@
+{
+    "ticker": "FMC",
+    "lastQuartersPrice": 48.45,
+    "predictedQuartersPrice": 86.36758281593183,
+    "percentChange": 43.90256341519071,
+    "val_mse": 78.5293388541981,
+    "test_mse": 458.3569724352104
+}

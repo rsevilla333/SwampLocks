@@ -1,0 +1,8 @@
+{
+    "ticker": "APTV",
+    "lastQuartersPrice": 59.5,
+    "predictedQuartersPrice": 65.84683532757514,
+    "percentChange": 9.638785669806104,
+    "val_mse": 807.1124219312455,
+    "test_mse": 80.70582287225632
+}

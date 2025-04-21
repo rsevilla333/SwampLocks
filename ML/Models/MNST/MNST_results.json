@@ -1,0 +1,8 @@
+{
+    "ticker": "MNST",
+    "lastQuartersPrice": 52.53,
+    "predictedQuartersPrice": 55.89479005457201,
+    "percentChange": 6.019863481528153,
+    "val_mse": 102.64163209365397,
+    "test_mse": 18.139325752525167
+}

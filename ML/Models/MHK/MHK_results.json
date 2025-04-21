@@ -1,0 +1,8 @@
+{
+    "ticker": "MHK",
+    "lastQuartersPrice": 118.54,
+    "predictedQuartersPrice": 131.12230947187302,
+    "percentChange": 9.59585712191261,
+    "val_mse": 571.0542075379765,
+    "test_mse": 353.6753695011849
+}

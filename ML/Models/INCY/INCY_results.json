@@ -1,0 +1,8 @@
+{
+    "ticker": "INCY",
+    "lastQuartersPrice": 60.55,
+    "predictedQuartersPrice": 55.55324923490004,
+    "percentChange": -8.994524773828827,
+    "val_mse": 157.10351454712887,
+    "test_mse": 295.71264044608813
+}

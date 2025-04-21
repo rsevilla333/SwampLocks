@@ -1,0 +1,8 @@
+{
+    "ticker": "MCK",
+    "lastQuartersPrice": 672.99,
+    "predictedQuartersPrice": 616.4286927390598,
+    "percentChange": -9.175644795120386,
+    "val_mse": 447.73944595345995,
+    "test_mse": 521.0676794091223
+}

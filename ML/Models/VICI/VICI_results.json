@@ -1,0 +1,8 @@
+{
+    "ticker": "VICI",
+    "lastQuartersPrice": 29.01,
+    "predictedQuartersPrice": 30.942227059430245,
+    "percentChange": 6.244628273585628,
+    "val_mse": 8.20195212717925,
+    "test_mse": 23.700129264503897
+}

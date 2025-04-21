@@ -1,0 +1,8 @@
+{
+    "ticker": "FANG",
+    "lastQuartersPrice": 160.98,
+    "predictedQuartersPrice": 145.48308875303576,
+    "percentChange": -10.652036178081815,
+    "val_mse": 609.0604109151806,
+    "test_mse": 3493.8902105779207
+}

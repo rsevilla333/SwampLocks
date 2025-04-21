@@ -1,0 +1,8 @@
+{
+    "ticker": "ANET",
+    "lastQuartersPrice": 77.48,
+    "predictedQuartersPrice": 69.99519095962319,
+    "percentChange": -10.693318980577459,
+    "val_mse": 14.440787503264877,
+    "test_mse": 124.980091322782
+}

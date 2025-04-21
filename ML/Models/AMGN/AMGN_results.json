@@ -1,0 +1,8 @@
+{
+    "ticker": "AMGN",
+    "lastQuartersPrice": 259.3,
+    "predictedQuartersPrice": 249.31505834854164,
+    "percentChange": -4.004949286897652,
+    "val_mse": 547.3648683049236,
+    "test_mse": 744.1981554938957
+}

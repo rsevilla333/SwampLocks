@@ -1,0 +1,8 @@
+{
+    "ticker": "CDNS",
+    "lastQuartersPrice": 301.86,
+    "predictedQuartersPrice": 273.02898071107666,
+    "percentChange": -10.559691946926609,
+    "val_mse": 723.1685894751125,
+    "test_mse": 216.80622394515606
+}

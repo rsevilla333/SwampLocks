@@ -1,0 +1,8 @@
+{
+    "ticker": "DECK",
+    "lastQuartersPrice": 111.81,
+    "predictedQuartersPrice": 101.04108588001853,
+    "percentChange": -10.657955648624995,
+    "val_mse": 110.7709043826393,
+    "test_mse": 772.5016405266804
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "STE",
+    "lastQuartersPrice": 226.65,
+    "predictedQuartersPrice": 204.98440064428956,
+    "percentChange": -10.569389323096278,
+    "val_mse": 659.8926444032116,
+    "test_mse": 1004.2038159605416
+}

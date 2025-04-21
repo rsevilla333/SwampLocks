@@ -1,0 +1,8 @@
+{
+    "ticker": "PLTR",
+    "lastQuartersPrice": 77.18,
+    "predictedQuartersPrice": 69.75033324733226,
+    "percentChange": -10.651801083619784,
+    "val_mse": 72.40437497843091,
+    "test_mse": 20.26408110459705
+}

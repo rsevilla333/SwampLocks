@@ -1,0 +1,8 @@
+{
+    "ticker": "HIG",
+    "lastQuartersPrice": 109.27,
+    "predictedQuartersPrice": 99.97303302550938,
+    "percentChange": -9.299474761477299,
+    "val_mse": 63.21790745473135,
+    "test_mse": 44.466443994972785
+}

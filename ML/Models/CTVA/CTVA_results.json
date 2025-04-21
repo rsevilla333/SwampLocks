@@ -1,0 +1,8 @@
+{
+    "ticker": "CTVA",
+    "lastQuartersPrice": 56.56,
+    "predictedQuartersPrice": 51.06620279805083,
+    "percentChange": -10.758186238509326,
+    "val_mse": 41.75022505424191,
+    "test_mse": 59.34355233008991
+}

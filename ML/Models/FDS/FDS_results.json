@@ -1,0 +1,8 @@
+{
+    "ticker": "FDS",
+    "lastQuartersPrice": 461.74,
+    "predictedQuartersPrice": 421.1401549210721,
+    "percentChange": -9.640459263861189,
+    "val_mse": 941.9507503853075,
+    "test_mse": 1765.9766631972307
+}

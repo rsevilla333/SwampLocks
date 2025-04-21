@@ -1,0 +1,8 @@
+{
+    "ticker": "TDG",
+    "lastQuartersPrice": 1383.29,
+    "predictedQuartersPrice": 1251.3904434169538,
+    "percentChange": -10.540240040741477,
+    "val_mse": 5239.4137135931205,
+    "test_mse": 15901.009932792884
+}

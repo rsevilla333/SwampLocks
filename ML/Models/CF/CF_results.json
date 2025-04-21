@@ -1,0 +1,8 @@
+{
+    "ticker": "CF",
+    "lastQuartersPrice": 84.03,
+    "predictedQuartersPrice": 80.67553681102014,
+    "percentChange": -4.157968228755116,
+    "val_mse": 167.07733639326003,
+    "test_mse": 114.37274422523042
+}

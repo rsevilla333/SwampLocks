@@ -1,0 +1,8 @@
+{
+    "ticker": "CNP",
+    "lastQuartersPrice": 31.83,
+    "predictedQuartersPrice": 29.762050651820207,
+    "percentChange": -6.948275750123156,
+    "val_mse": 5.047066204384643,
+    "test_mse": 9.253635100959743
+}

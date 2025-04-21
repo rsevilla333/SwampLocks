@@ -1,0 +1,8 @@
+{
+    "ticker": "VTR",
+    "lastQuartersPrice": 68.76,
+    "predictedQuartersPrice": 62.11137734195521,
+    "percentChange": -10.704355534479127,
+    "val_mse": 162.408148237416,
+    "test_mse": 84.61715180753221
+}

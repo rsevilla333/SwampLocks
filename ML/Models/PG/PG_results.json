@@ -1,0 +1,8 @@
+{
+    "ticker": "PG",
+    "lastQuartersPrice": 170.42,
+    "predictedQuartersPrice": 154.18668256937357,
+    "percentChange": -10.528352488109682,
+    "val_mse": 94.8560551487393,
+    "test_mse": 227.29905176842536
+}

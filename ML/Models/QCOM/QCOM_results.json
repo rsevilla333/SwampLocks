@@ -1,0 +1,8 @@
+{
+    "ticker": "QCOM",
+    "lastQuartersPrice": 153.61,
+    "predictedQuartersPrice": 144.47384052211925,
+    "percentChange": -6.323746530765195,
+    "val_mse": 65.08107515895163,
+    "test_mse": 458.8668018876076
+}

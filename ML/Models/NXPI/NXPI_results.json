@@ -1,0 +1,8 @@
+{
+    "ticker": "NXPI",
+    "lastQuartersPrice": 207.47,
+    "predictedQuartersPrice": 224.95169248870408,
+    "percentChange": 7.771309606653409,
+    "val_mse": 1486.2485068014853,
+    "test_mse": 899.6092759583843
+}

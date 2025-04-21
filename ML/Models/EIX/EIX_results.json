@@ -1,0 +1,8 @@
+{
+    "ticker": "EIX",
+    "lastQuartersPrice": 79.68,
+    "predictedQuartersPrice": 79.21984598120191,
+    "percentChange": -0.5808569975095379,
+    "val_mse": 49.33895591392847,
+    "test_mse": 30.180991866438713
+}

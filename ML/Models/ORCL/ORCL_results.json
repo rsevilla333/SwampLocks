@@ -1,0 +1,8 @@
+{
+    "ticker": "ORCL",
+    "lastQuartersPrice": 181.41,
+    "predictedQuartersPrice": 164.10380663128151,
+    "percentChange": -10.54588173423856,
+    "val_mse": 52.381885236649595,
+    "test_mse": 108.44519668397373
+}

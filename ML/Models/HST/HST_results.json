@@ -1,0 +1,8 @@
+{
+    "ticker": "HST",
+    "lastQuartersPrice": 17.78,
+    "predictedQuartersPrice": 18.630930894064345,
+    "percentChange": 4.567302079014435,
+    "val_mse": 5.882362215422219,
+    "test_mse": 16.41332659246795
+}

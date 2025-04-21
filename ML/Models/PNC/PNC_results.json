@@ -1,0 +1,8 @@
+{
+    "ticker": "PNC",
+    "lastQuartersPrice": 192.53,
+    "predictedQuartersPrice": 174.1153818572626,
+    "percentChange": -10.576100713395586,
+    "val_mse": 193.0767413321684,
+    "test_mse": 79.32189982158599
+}

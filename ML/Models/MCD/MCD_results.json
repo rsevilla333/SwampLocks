@@ -1,0 +1,8 @@
+{
+    "ticker": "MCD",
+    "lastQuartersPrice": 312.37,
+    "predictedQuartersPrice": 282.6253067797275,
+    "percentChange": -10.524426690301624,
+    "val_mse": 247.23668172988755,
+    "test_mse": 400.9720267908803
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "TMUS",
+    "lastQuartersPrice": 266.71,
+    "predictedQuartersPrice": 241.18399926224006,
+    "percentChange": -10.583621142298671,
+    "val_mse": 153.86461391706018,
+    "test_mse": 491.43980311057607
+}

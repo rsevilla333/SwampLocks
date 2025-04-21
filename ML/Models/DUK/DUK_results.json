@@ -1,0 +1,8 @@
+{
+    "ticker": "DUK",
+    "lastQuartersPrice": 107.71,
+    "predictedQuartersPrice": 98.0739123798159,
+    "percentChange": -9.825332125903085,
+    "val_mse": 13.10581429101763,
+    "test_mse": 55.771119002660036
+}

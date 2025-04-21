@@ -1,0 +1,8 @@
+{
+    "ticker": "ARE",
+    "lastQuartersPrice": 92.51,
+    "predictedQuartersPrice": 102.38569607743058,
+    "percentChange": 9.645581810531368,
+    "val_mse": 298.1527350495764,
+    "test_mse": 129.17061972461144
+}

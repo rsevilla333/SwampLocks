@@ -1,0 +1,8 @@
+{
+    "ticker": "CVX",
+    "lastQuartersPrice": 143.07,
+    "predictedQuartersPrice": 149.7910169823175,
+    "percentChange": 4.486929268335837,
+    "val_mse": 130.6872014922398,
+    "test_mse": 274.9555576076101
+}

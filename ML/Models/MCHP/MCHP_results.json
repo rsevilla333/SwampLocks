@@ -1,0 +1,8 @@
+{
+    "ticker": "MCHP",
+    "lastQuartersPrice": 48.41,
+    "predictedQuartersPrice": 53.63031135451402,
+    "percentChange": 9.73388224432643,
+    "val_mse": 34.33637520524988,
+    "test_mse": 158.3046445048243
+}

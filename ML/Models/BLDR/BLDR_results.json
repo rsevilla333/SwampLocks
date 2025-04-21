@@ -1,0 +1,8 @@
+{
+    "ticker": "BLDR",
+    "lastQuartersPrice": 143.37,
+    "predictedQuartersPrice": 129.64211503711783,
+    "percentChange": -10.589062789473736,
+    "val_mse": 365.8610973160279,
+    "test_mse": 3292.6073748926715
+}

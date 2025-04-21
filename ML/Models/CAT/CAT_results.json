@@ -1,0 +1,8 @@
+{
+    "ticker": "CAT",
+    "lastQuartersPrice": 363.01,
+    "predictedQuartersPrice": 328.41430158202365,
+    "percentChange": -10.534163174783618,
+    "val_mse": 741.8029423003214,
+    "test_mse": 499.2470172276965
+}

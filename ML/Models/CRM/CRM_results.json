@@ -1,0 +1,8 @@
+{
+    "ticker": "CRM",
+    "lastQuartersPrice": 341.7,
+    "predictedQuartersPrice": 219.1143715110934,
+    "percentChange": -55.94595536728648,
+    "val_mse": 422.53415984418837,
+    "test_mse": 2110.4811699061656
+}

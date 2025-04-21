@@ -1,0 +1,8 @@
+{
+    "ticker": "HES",
+    "lastQuartersPrice": 130.71,
+    "predictedQuartersPrice": 148.3492308714104,
+    "percentChange": 11.890341977371055,
+    "val_mse": 186.8123315454391,
+    "test_mse": 427.42065695614167
+}

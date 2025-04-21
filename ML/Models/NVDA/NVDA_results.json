@@ -1,0 +1,8 @@
+{
+    "ticker": "NVDA",
+    "lastQuartersPrice": 46.729,
+    "predictedQuartersPrice": 42.20281090708446,
+    "percentChange": -10.724852197358592,
+    "val_mse": 9.799867501622547,
+    "test_mse": 0.038658107142284175
+}

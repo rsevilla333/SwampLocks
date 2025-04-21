@@ -1,0 +1,8 @@
+{
+    "ticker": "PKG",
+    "lastQuartersPrice": 224.96,
+    "predictedQuartersPrice": 203.42695731696566,
+    "percentChange": -10.585147104905612,
+    "val_mse": 567.530142199347,
+    "test_mse": 424.66313292488553
+}

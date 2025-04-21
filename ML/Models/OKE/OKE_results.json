@@ -1,0 +1,8 @@
+{
+    "ticker": "OKE",
+    "lastQuartersPrice": 99.22,
+    "predictedQuartersPrice": 89.70253313429146,
+    "percentChange": -10.61003132593834,
+    "val_mse": 193.69380613321152,
+    "test_mse": 106.50160998761147
+}

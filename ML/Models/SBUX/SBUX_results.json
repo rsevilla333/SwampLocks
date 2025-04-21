@@ -1,0 +1,8 @@
+{
+    "ticker": "SBUX",
+    "lastQuartersPrice": 90.58,
+    "predictedQuartersPrice": 81.8462012257799,
+    "percentChange": -10.670988565647853,
+    "val_mse": 50.094643126793954,
+    "test_mse": 48.4485333766351
+}

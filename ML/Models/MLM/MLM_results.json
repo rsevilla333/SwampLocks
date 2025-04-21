@@ -1,0 +1,8 @@
+{
+    "ticker": "MLM",
+    "lastQuartersPrice": 520.25,
+    "predictedQuartersPrice": 484.3395833340236,
+    "percentChange": -7.414305561974044,
+    "val_mse": 2096.1225038289863,
+    "test_mse": 1758.772135303008
+}

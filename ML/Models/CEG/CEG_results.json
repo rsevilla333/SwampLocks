@@ -1,0 +1,8 @@
+{
+    "ticker": "CEG",
+    "lastQuartersPrice": 226.32,
+    "predictedQuartersPrice": 204.6606561289794,
+    "percentChange": -10.583052102291024,
+    "val_mse": 451.4758881918015,
+    "test_mse": 4750.0516443856395
+}

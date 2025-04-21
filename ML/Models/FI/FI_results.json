@@ -1,0 +1,8 @@
+{
+    "ticker": "FI",
+    "lastQuartersPrice": 206.27,
+    "predictedQuartersPrice": 186.5456998391273,
+    "percentChange": -10.573441348625279,
+    "val_mse": 82.19466999916057,
+    "test_mse": 233.53506378385975
+}

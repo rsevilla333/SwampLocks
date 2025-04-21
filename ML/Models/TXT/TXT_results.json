@@ -1,0 +1,8 @@
+{
+    "ticker": "TXT",
+    "lastQuartersPrice": 72.25,
+    "predictedQuartersPrice": 68.99748926290565,
+    "percentChange": -4.713955205965692,
+    "val_mse": 70.52181411996146,
+    "test_mse": 93.01305354985655
+}

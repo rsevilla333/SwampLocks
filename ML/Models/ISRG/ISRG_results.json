@@ -1,0 +1,8 @@
+{
+    "ticker": "ISRG",
+    "lastQuartersPrice": 495.27,
+    "predictedQuartersPrice": 448.21168878703446,
+    "percentChange": -10.499126281225802,
+    "val_mse": 365.68919677896423,
+    "test_mse": 1772.3758711349535
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "ALL",
+    "lastQuartersPrice": 207.07,
+    "predictedQuartersPrice": 187.31179807707392,
+    "percentChange": -10.548295476185698,
+    "val_mse": 188.6927605345497,
+    "test_mse": 118.69949808621074
+}

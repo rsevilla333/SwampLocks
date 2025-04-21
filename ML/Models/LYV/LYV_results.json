@@ -1,0 +1,8 @@
+{
+    "ticker": "LYV",
+    "lastQuartersPrice": 131.01,
+    "predictedQuartersPrice": 118.47372639287747,
+    "percentChange": -10.581479952399132,
+    "val_mse": 59.311945900567046,
+    "test_mse": 78.29777415097142
+}

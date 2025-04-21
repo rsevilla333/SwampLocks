@@ -1,0 +1,8 @@
+{
+    "ticker": "MPWR",
+    "lastQuartersPrice": 579.98,
+    "predictedQuartersPrice": 617.580932408798,
+    "percentChange": 6.088421846532766,
+    "val_mse": 18766.537445657435,
+    "test_mse": 9189.509140307604
+}

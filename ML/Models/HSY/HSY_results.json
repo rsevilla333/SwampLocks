@@ -1,0 +1,8 @@
+{
+    "ticker": "HSY",
+    "lastQuartersPrice": 168.67,
+    "predictedQuartersPrice": 161.02004356937096,
+    "percentChange": -4.750934269455254,
+    "val_mse": 359.59441692604054,
+    "test_mse": 794.1898538958079
+}

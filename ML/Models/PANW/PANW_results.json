@@ -1,0 +1,8 @@
+{
+    "ticker": "PANW",
+    "lastQuartersPrice": 184.42,
+    "predictedQuartersPrice": 166.7601543042188,
+    "percentChange": -10.58996723135943,
+    "val_mse": 103.9728302114241,
+    "test_mse": 1204.9455165219747
+}

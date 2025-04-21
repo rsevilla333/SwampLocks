@@ -1,0 +1,8 @@
+{
+    "ticker": "BDX",
+    "lastQuartersPrice": 229.06,
+    "predictedQuartersPrice": 238.97699919833687,
+    "percentChange": 4.149771413819758,
+    "val_mse": 511.48898211619667,
+    "test_mse": 415.17919754220736
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "LIN",
+    "lastQuartersPrice": 417.66,
+    "predictedQuartersPrice": 381.53010571552045,
+    "percentChange": -9.46973613437967,
+    "val_mse": 1624.2497781480388,
+    "test_mse": 2271.329298635041
+}

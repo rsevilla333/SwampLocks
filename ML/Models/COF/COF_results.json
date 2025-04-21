@@ -1,0 +1,8 @@
+{
+    "ticker": "COF",
+    "lastQuartersPrice": 177.93,
+    "predictedQuartersPrice": 160.9430602138137,
+    "percentChange": -10.55462706103578,
+    "val_mse": 111.33329614225288,
+    "test_mse": 271.40834033549277
+}

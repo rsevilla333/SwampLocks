@@ -1,0 +1,8 @@
+{
+    "ticker": "RMD",
+    "lastQuartersPrice": 223.85,
+    "predictedQuartersPrice": 225.962358067084,
+    "percentChange": 0.9348274133592183,
+    "val_mse": 104.65360924392677,
+    "test_mse": 279.98607683390856
+}

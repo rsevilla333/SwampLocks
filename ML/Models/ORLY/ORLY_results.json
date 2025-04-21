@@ -1,0 +1,8 @@
+{
+    "ticker": "ORLY",
+    "lastQuartersPrice": 1179.92,
+    "predictedQuartersPrice": 1067.4488498566554,
+    "percentChange": -10.536443985906029,
+    "val_mse": 28232.868645719907,
+    "test_mse": 580.8089340608949
+}

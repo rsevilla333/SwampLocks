@@ -1,0 +1,8 @@
+{
+    "ticker": "BRK-B",
+    "lastQuartersPrice": 532.58,
+    "predictedQuartersPrice": 319.36219892644357,
+    "percentChange": -66.76363132214824,
+    "val_mse": 190.16167616559775,
+    "test_mse": 4075.269714805853
+}

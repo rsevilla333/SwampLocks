@@ -1,0 +1,8 @@
+{
+    "ticker": "UNH",
+    "lastQuartersPrice": 507.8,
+    "predictedQuartersPrice": 529.0508758061404,
+    "percentChange": 4.01679248215201,
+    "val_mse": 614.4124008075747,
+    "test_mse": 676.5489960269407
+}

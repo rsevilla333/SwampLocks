@@ -1,0 +1,8 @@
+{
+    "ticker": "TRGP",
+    "lastQuartersPrice": 177.76,
+    "predictedQuartersPrice": 160.80218634595707,
+    "percentChange": -10.545760626387946,
+    "val_mse": 307.2334506474079,
+    "test_mse": 442.11413093927825
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "FRT",
+    "lastQuartersPrice": 97.82,
+    "predictedQuartersPrice": 96.01669191233266,
+    "percentChange": -1.8781193683633957,
+    "val_mse": 173.60416577177344,
+    "test_mse": 177.6713917729594
+}

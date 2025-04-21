@@ -1,0 +1,8 @@
+{
+    "ticker": "TSCO",
+    "lastQuartersPrice": 52.59,
+    "predictedQuartersPrice": 52.59893848313128,
+    "percentChange": 0.016993656885566644,
+    "val_mse": 15.785545816061555,
+    "test_mse": 28.202801086137573
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "MCO",
+    "lastQuartersPrice": 473.53,
+    "predictedQuartersPrice": 432.35660825080356,
+    "percentChange": -9.523016640308256,
+    "val_mse": 224.0653006725652,
+    "test_mse": 1097.2321286891056
+}

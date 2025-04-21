@@ -1,0 +1,8 @@
+{
+    "ticker": "AMT",
+    "lastQuartersPrice": 217.6,
+    "predictedQuartersPrice": 204.69079745380355,
+    "percentChange": -6.306684377987204,
+    "val_mse": 572.3674810786518,
+    "test_mse": 72.72582451638286
+}

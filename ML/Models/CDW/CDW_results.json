@@ -1,0 +1,8 @@
+{
+    "ticker": "CDW",
+    "lastQuartersPrice": 173.35,
+    "predictedQuartersPrice": 158.00427719568358,
+    "percentChange": -9.712219869409733,
+    "val_mse": 230.91299205168707,
+    "test_mse": 1014.4106779822908
+}

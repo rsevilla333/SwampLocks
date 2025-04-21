@@ -1,0 +1,8 @@
+{
+    "ticker": "EMN",
+    "lastQuartersPrice": 90.81,
+    "predictedQuartersPrice": 98.58944252930802,
+    "percentChange": 7.890746037026619,
+    "val_mse": 78.5410488089648,
+    "test_mse": 321.3193006169332
+}

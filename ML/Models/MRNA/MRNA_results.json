@@ -1,0 +1,8 @@
+{
+    "ticker": "MRNA",
+    "lastQuartersPrice": 39.38,
+    "predictedQuartersPrice": 43.6140312756327,
+    "percentChange": 9.70795670979,
+    "val_mse": 1103.146100095564,
+    "test_mse": 1343.4673848345685
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "GS",
+    "lastQuartersPrice": 573.55,
+    "predictedQuartersPrice": 518.8644241329043,
+    "percentChange": -10.539472995953215,
+    "val_mse": 1261.0490022421334,
+    "test_mse": 1751.8272120837
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "TFC",
+    "lastQuartersPrice": 41.15,
+    "predictedQuartersPrice": 38.87600883710083,
+    "percentChange": -5.849343157698383,
+    "val_mse": 30.398079234710778,
+    "test_mse": 23.92496069302333
+}

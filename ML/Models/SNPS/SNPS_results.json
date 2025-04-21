@@ -1,0 +1,8 @@
+{
+    "ticker": "SNPS",
+    "lastQuartersPrice": 525.48,
+    "predictedQuartersPrice": 475.40214184919614,
+    "percentChange": -10.533788921525144,
+    "val_mse": 3853.875520612128,
+    "test_mse": 1071.714966986731
+}

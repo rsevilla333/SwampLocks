@@ -1,0 +1,8 @@
+{
+    "ticker": "C",
+    "lastQuartersPrice": 70.39,
+    "predictedQuartersPrice": 62.740800231536724,
+    "percentChange": -12.19174722068399,
+    "val_mse": 144.73874497252712,
+    "test_mse": 69.82945576652789
+}

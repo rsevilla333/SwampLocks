@@ -1,0 +1,8 @@
+{
+    "ticker": "KMI",
+    "lastQuartersPrice": 28.53,
+    "predictedQuartersPrice": 25.71821606805545,
+    "percentChange": -10.933044206892184,
+    "val_mse": 11.044856854648817,
+    "test_mse": 16.11220109888127
+}

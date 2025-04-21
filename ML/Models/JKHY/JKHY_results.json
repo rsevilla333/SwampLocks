@@ -1,0 +1,8 @@
+{
+    "ticker": "JKHY",
+    "lastQuartersPrice": 182.6,
+    "predictedQuartersPrice": 165.68333860021352,
+    "percentChange": -10.210236915013905,
+    "val_mse": 75.06111909450328,
+    "test_mse": 168.15759718019964
+}

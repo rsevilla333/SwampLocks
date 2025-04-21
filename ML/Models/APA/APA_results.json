@@ -1,0 +1,8 @@
+{
+    "ticker": "APA",
+    "lastQuartersPrice": 22.42,
+    "predictedQuartersPrice": 24.872730394657083,
+    "percentChange": 9.861122424999035,
+    "val_mse": 1280.5870263124964,
+    "test_mse": 160.3615221055123
+}

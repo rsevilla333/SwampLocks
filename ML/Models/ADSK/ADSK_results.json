@@ -1,0 +1,8 @@
+{
+    "ticker": "ADSK",
+    "lastQuartersPrice": 311.34,
+    "predictedQuartersPrice": 281.4989871443708,
+    "percentChange": -10.600753188616196,
+    "val_mse": 376.4338465313539,
+    "test_mse": 356.18337513625437
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "IBM",
+    "lastQuartersPrice": 248.66,
+    "predictedQuartersPrice": 225.00322246361281,
+    "percentChange": -10.513972767751323,
+    "val_mse": 273.93011632999054,
+    "test_mse": 361.4869580168467
+}

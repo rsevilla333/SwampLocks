@@ -1,0 +1,8 @@
+{
+    "ticker": "RTX",
+    "lastQuartersPrice": 132.46,
+    "predictedQuartersPrice": 119.80154902790514,
+    "percentChange": -10.56618305423276,
+    "val_mse": 84.01495538441563,
+    "test_mse": 80.35300392896004
+}

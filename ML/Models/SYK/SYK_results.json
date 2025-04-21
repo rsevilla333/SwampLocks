@@ -1,0 +1,8 @@
+{
+    "ticker": "SYK",
+    "lastQuartersPrice": 372.25,
+    "predictedQuartersPrice": 336.8538657204928,
+    "percentChange": -10.507860494282518,
+    "val_mse": 293.2702395113371,
+    "test_mse": 587.8668305112052
+}

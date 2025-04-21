@@ -1,0 +1,8 @@
+{
+    "ticker": "PFG",
+    "lastQuartersPrice": 84.37,
+    "predictedQuartersPrice": 78.80044617199718,
+    "percentChange": -7.067921691517065,
+    "val_mse": 220.59295258295026,
+    "test_mse": 71.86817162636939
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "ETR",
+    "lastQuartersPrice": 75.75,
+    "predictedQuartersPrice": 58.09238370815455,
+    "percentChange": -30.395750982700353,
+    "val_mse": 19.309480279061237,
+    "test_mse": 43.051525204595784
+}

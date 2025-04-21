@@ -1,0 +1,8 @@
+{
+    "ticker": "ABNB",
+    "lastQuartersPrice": 119.46,
+    "predictedQuartersPrice": 132.1897875198042,
+    "percentChange": 9.629932658676132,
+    "val_mse": 225.92470067351277,
+    "test_mse": 59.175185735619536
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "ACGL",
+    "lastQuartersPrice": 91.89,
+    "predictedQuartersPrice": 83.08800098810742,
+    "percentChange": -10.593586206451677,
+    "val_mse": 199.2517250610404,
+    "test_mse": 17.10517217694043
+}

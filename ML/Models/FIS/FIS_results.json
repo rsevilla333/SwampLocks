@@ -1,0 +1,8 @@
+{
+    "ticker": "FIS",
+    "lastQuartersPrice": 74.68,
+    "predictedQuartersPrice": 73.47931448601136,
+    "percentChange": -1.634045611867041,
+    "val_mse": 193.46661255983807,
+    "test_mse": 84.53547341005047
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "PNW",
+    "lastQuartersPrice": 95.25,
+    "predictedQuartersPrice": 86.08894283582859,
+    "percentChange": -10.64138652700326,
+    "val_mse": 35.60089988805485,
+    "test_mse": 51.65371756314749
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "F",
+    "lastQuartersPrice": 10.03,
+    "predictedQuartersPrice": 11.18940480049185,
+    "percentChange": 10.361630677986444,
+    "val_mse": 6.5431599231544135,
+    "test_mse": 2.354525642112748
+}

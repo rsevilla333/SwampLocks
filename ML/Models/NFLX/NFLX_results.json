@@ -1,0 +1,8 @@
+{
+    "ticker": "NFLX",
+    "lastQuartersPrice": 932.53,
+    "predictedQuartersPrice": 843.6446151151897,
+    "percentChange": -10.535880072283055,
+    "val_mse": 12774.014279277182,
+    "test_mse": 5407.79548491055
+}

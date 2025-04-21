@@ -1,0 +1,8 @@
+{
+    "ticker": "ATO",
+    "lastQuartersPrice": 154.58,
+    "predictedQuartersPrice": 139.73067143663226,
+    "percentChange": -10.6271074279507,
+    "val_mse": 128.72047774112917,
+    "test_mse": 102.28391176845888
+}

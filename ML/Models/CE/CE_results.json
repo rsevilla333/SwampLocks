@@ -1,0 +1,8 @@
+{
+    "ticker": "CE",
+    "lastQuartersPrice": 68.22,
+    "predictedQuartersPrice": 127.37855428488078,
+    "percentChange": 46.4431038780463,
+    "val_mse": 154.38500333988773,
+    "test_mse": 924.3465317416529
+}

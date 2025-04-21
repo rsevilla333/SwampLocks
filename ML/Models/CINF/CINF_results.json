@@ -1,0 +1,8 @@
+{
+    "ticker": "CINF",
+    "lastQuartersPrice": 147.72,
+    "predictedQuartersPrice": 133.60758164462436,
+    "percentChange": -10.562587977164718,
+    "val_mse": 145.60577764396274,
+    "test_mse": 99.68172962504373
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "AON",
+    "lastQuartersPrice": 357.97,
+    "predictedQuartersPrice": 295.0132941085137,
+    "percentChange": -21.340294538838368,
+    "val_mse": 155.8918633301747,
+    "test_mse": 787.614755858536
+}

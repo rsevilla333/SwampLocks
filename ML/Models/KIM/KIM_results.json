@@ -1,0 +1,8 @@
+{
+    "ticker": "KIM",
+    "lastQuartersPrice": 23.23,
+    "predictedQuartersPrice": 19.805758939627,
+    "percentChange": -17.28911813382643,
+    "val_mse": 13.505858174667939,
+    "test_mse": 42.12714367121464
+}

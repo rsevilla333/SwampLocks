@@ -1,0 +1,8 @@
+{
+    "ticker": "TGT",
+    "lastQuartersPrice": 165.55,
+    "predictedQuartersPrice": 149.73310992083157,
+    "percentChange": -10.56338847669116,
+    "val_mse": 4826.209600854348,
+    "test_mse": 24.94106751258898
+}

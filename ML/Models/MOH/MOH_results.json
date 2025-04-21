@@ -1,0 +1,8 @@
+{
+    "ticker": "MOH",
+    "lastQuartersPrice": 329.39,
+    "predictedQuartersPrice": 297.93264051546754,
+    "percentChange": -10.558547539506424,
+    "val_mse": 530.6091414455361,
+    "test_mse": 854.5826759455674
+}

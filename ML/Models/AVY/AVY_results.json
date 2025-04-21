@@ -1,0 +1,8 @@
+{
+    "ticker": "AVY",
+    "lastQuartersPrice": 187.24,
+    "predictedQuartersPrice": 190.4123364263366,
+    "percentChange": 1.666035135052213,
+    "val_mse": 241.46841159838394,
+    "test_mse": 278.7315687534098
+}

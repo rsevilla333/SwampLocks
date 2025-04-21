@@ -1,0 +1,8 @@
+{
+    "ticker": "ETN",
+    "lastQuartersPrice": 332.38,
+    "predictedQuartersPrice": 300.7199128192245,
+    "percentChange": -10.528098017841515,
+    "val_mse": 280.8671599167871,
+    "test_mse": 1454.6659367461864
+}

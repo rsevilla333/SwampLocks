@@ -1,0 +1,8 @@
+{
+    "ticker": "FICO",
+    "lastQuartersPrice": 1844.16,
+    "predictedQuartersPrice": 1692.7608138316004,
+    "percentChange": -8.943920779079484,
+    "val_mse": 53593.05467615231,
+    "test_mse": 28068.40565718524
+}
