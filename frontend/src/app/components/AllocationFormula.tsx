@@ -8,7 +8,6 @@ export function optimizePortfolio(
   const n = items.length;
   if (n === 0) return [];
 
-  // Edge case: alpha === 1 => maximize performance
   if (alpha === 1) {
     let maxIdx = 0;
     let maxPerf = items[0].performance;
@@ -44,12 +43,11 @@ export function optimizePortfolio(
     }
 
     if (!anyNegative) {
-      let sumW = 0;
-      for (const i of active) sumW += weights[i];
+      let sumW = active.reduce((acc, i) => acc + weights[i], 0);
       if (sumW <= 0) {
-        for (const i of active) weights[i] = 1 / freeCount;
+        active.forEach(i => (weights[i] = 1 / freeCount));
       } else {
-        for (const i of active) weights[i] /= sumW;
+        active.forEach(i => (weights[i] /= sumW));
       }
       break;
     }
@@ -71,7 +69,6 @@ export function optimizePortfolio(
 }
 
 export default function DiversityOptimizer() {
-  // performance data from ml model weighted mean average aggregated ml targets
   const [rows] = useState([
     { sector: "Tech", performance: 0.15 },
     { sector: "Healthcare", performance: 0.10 },
@@ -87,7 +84,11 @@ export default function DiversityOptimizer() {
   ]);
 
   const [alpha, setAlpha] = useState(0.5);
-  const optimized = optimizePortfolio(rows, alpha);
+
+  // Compute and then sort by weight descending
+  const optimized = optimizePortfolio(rows, alpha)
+    .slice()
+    .sort((a, b) => b.weight - a.weight);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-8 text-black">
@@ -126,7 +127,6 @@ export default function DiversityOptimizer() {
           <thead>
             <tr className="bg-gray-200">
               <th className="border p-2 text-left">Sector</th>
-              <th className="border p-2 text-left">Performance</th>
               <th className="border p-2 text-left">Weight %</th>
             </tr>
           </thead>
@@ -134,7 +134,6 @@ export default function DiversityOptimizer() {
             {optimized.map((row, i) => (
               <tr key={i} className="hover:bg-gray-100 transition-colors">
                 <td className="border p-2">{row.sector}</td>
-                <td className="border p-2">{row.performance}</td>
                 <td className="border p-2">
                   {(row.weight * 100).toFixed(2)}%
                 </td>
