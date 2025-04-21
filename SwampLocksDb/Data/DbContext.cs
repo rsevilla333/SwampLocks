@@ -33,7 +33,8 @@ namespace SwampLocksDb.Data
         public DbSet<StockSplit> StockSplits { get; set; }
         public DbSet<User> Users { get; set; } 
         public DbSet<Holding> Holdings { get; set; } 
-
+        public DbSet<SectorSentiment> SectorSentiments { get; set; } 
+        
         public FinancialContext(DbContextOptions<FinancialContext> options) : base(options)
         {
         }
@@ -214,6 +215,16 @@ namespace SwampLocksDb.Data
                     .WithMany(s => s.StockSplits)
                     .HasForeignKey(ss => ss.Ticker)
                     .OnDelete(DeleteBehavior.Cascade);
+                
+                // Sector Sentiment
+                modelBuilder.Entity<SectorSentiment>()
+                    .HasIndex(s => new { s.SectorName, s.Date })
+                    .IsUnique(); 
+
+                modelBuilder.Entity<SectorSentiment>()
+                    .HasOne(s => s.Sector)
+                    .WithMany(sector => sector.Sentiments)
+                    .HasForeignKey(s => s.SectorName);
         }
     }
 }

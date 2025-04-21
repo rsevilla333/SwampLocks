@@ -17,7 +17,6 @@ namespace SwampLocksAPI.Controllers
         private readonly FinancialContext _context;
         private readonly HttpClient _httpClient;
         private readonly EmailNotificationService _emailService;
-
         private readonly string _alphaKey;
 
         public FinancialsController(FinancialContext context, HttpClient httpClient, EmailNotificationService emailService)
@@ -116,6 +115,22 @@ namespace SwampLocksAPI.Controllers
             }
 
             return Ok(sectors);
+        }
+        
+        [HttpGet("sector/sentiment/{sectorName}")]
+        public async Task<ActionResult<SectorSentiment>> GetLatestSectorSentiment(string sectorName)
+        {
+            var latestSentiment = await _context.SectorSentiments
+                .Where(s => s.SectorName == sectorName)
+                .OrderByDescending(s => s.Date)
+                .FirstOrDefaultAsync();
+
+            if (latestSentiment == null)
+            {
+                return NotFound($"No sentiment data found for sector '{sectorName}'.");
+            }
+
+            return Ok(latestSentiment);
         }
         
         [HttpGet("top-marketcap")]
@@ -510,7 +525,7 @@ namespace SwampLocksAPI.Controllers
             }
 
             string interval = "1min";
-            string url = $"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={interval}&apikey={_alphaKey}";
+            string url = $"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={Uri.EscapeDataString(ticker)}&interval={interval}&apikey={_alphaKey}";
             
             try
             {

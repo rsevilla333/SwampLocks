@@ -420,6 +420,36 @@ namespace SwampLocks.Migrations
                     b.ToTable("SectorPerformances");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.SectorSentiment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SectorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Sentiment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectorName", "Date")
+                        .IsUnique();
+
+                    b.ToTable("SectorSentiments");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.Stock", b =>
                 {
                     b.Property<string>("Ticker")
@@ -729,6 +759,17 @@ namespace SwampLocks.Migrations
                     b.Navigation("Sector");
                 });
 
+            modelBuilder.Entity("SwampLocksDb.Models.SectorSentiment", b =>
+                {
+                    b.HasOne("SwampLocksDb.Models.Sector", "Sector")
+                        .WithMany("Sentiments")
+                        .HasForeignKey("SectorName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sector");
+                });
+
             modelBuilder.Entity("SwampLocksDb.Models.Stock", b =>
                 {
                     b.HasOne("SwampLocksDb.Models.Sector", "Sector")
@@ -797,6 +838,8 @@ namespace SwampLocks.Migrations
             modelBuilder.Entity("SwampLocksDb.Models.Sector", b =>
                 {
                     b.Navigation("Performances");
+
+                    b.Navigation("Sentiments");
 
                     b.Navigation("Stocks");
                 });

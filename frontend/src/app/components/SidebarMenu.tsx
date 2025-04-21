@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import Login from "./Login"
+import Login from "./Login";
+import { usePathname } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 
 export default function SidebarMenu() {
+    const pathname = usePathname();
     
     return (
         <SessionProvider>
@@ -17,11 +19,28 @@ export default function SidebarMenu() {
                         SwampLocks
                     </h2>
                 </Link>
-    
-                <nav className="flex flex-col justify-between space-y-6 text-lg font-medium ">
-                    <Link href="/commodities" className="hover:text-blue-500 hover:text-accent">Commodities</Link>
-                    <Link href="/economic_indicators_dashboard" className="hover:text-blue-500 hover:text-accent">Economic Indicators</Link>
-                    <Link href="/ex_rates" className="hover:text-blue-500 hover:text-accent">Ex Rates</Link>
+
+                <nav className="flex flex-col justify-between space-y-6 text-lg font-medium">
+                    {[
+                        { href: "/commodities", label: "Commodities" },
+                        { href: "/economic_indicators_dashboard", label: "Economic Indicators" },
+                        { href: "/ex_rates", label: "Ex Rates" },
+                        { href: "/correlations", label: "Correlations" },
+                    ].map(({ href, label }) => {
+                        const isActive = pathname === href;
+
+                        return (
+                            <Link
+                                key={href}
+                                href={href}
+                                className={`px-2 py-1 rounded transition-all duration-150
+                  ${isActive ? "bg-gray-700 text-white" : ""}
+                  hover:bg-gray-600 hover:text-lg hover:font-semibold`}
+                            >
+                                {label}
+                            </Link>
+                        );
+                    })}
                 </nav>
             </aside>
         </SessionProvider>
