@@ -216,7 +216,7 @@ namespace SwampLocksAPI.Controllers
             {
                 try
                 {
-                    var response = await httpClient.GetAsync($"http://localhost:7071/api/MLModel?ticker={stock.Ticker}");
+                    var response = await httpClient.GetAsync($"https://swamplocksmlmodel.azurewebsites.net/api/MLModel?ticker={stock.Ticker}");
                     if (!response.IsSuccessStatusCode) continue;
 
                     var json = await response.Content.ReadAsStringAsync();
