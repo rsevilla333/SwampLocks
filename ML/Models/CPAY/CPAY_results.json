@@ -1,0 +1,8 @@
+{
+    "ticker": "CPAY",
+    "lastQuartersPrice": 337.57,
+    "predictedQuartersPrice": 305.350327850454,
+    "percentChange": -10.551707075725059,
+    "val_mse": 1231.5425910325375,
+    "test_mse": 2336.348959731351
+}

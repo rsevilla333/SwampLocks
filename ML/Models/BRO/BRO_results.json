@@ -1,0 +1,8 @@
+{
+    "ticker": "BRO",
+    "lastQuartersPrice": 124.4,
+    "predictedQuartersPrice": 112.48382913132356,
+    "percentChange": -10.593674629234439,
+    "val_mse": 19.78305015045227,
+    "test_mse": 47.92869352880464
+}

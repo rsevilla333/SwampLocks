@@ -1,0 +1,8 @@
+{
+    "ticker": "IQV",
+    "lastQuartersPrice": 176.3,
+    "predictedQuartersPrice": 195.03032873697236,
+    "percentChange": 9.60380308963793,
+    "val_mse": 409.2854033358512,
+    "test_mse": 879.4582983067846
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "GL",
+    "lastQuartersPrice": 109.95,
+    "predictedQuartersPrice": 99.39179426649828,
+    "percentChange": -10.622814299128258,
+    "val_mse": 93.43431777778848,
+    "test_mse": 73.58466904429633
+}

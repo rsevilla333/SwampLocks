@@ -1,0 +1,8 @@
+{
+    "ticker": "PGR",
+    "lastQuartersPrice": 283.01,
+    "predictedQuartersPrice": 255.91172539205922,
+    "percentChange": -10.588914816789252,
+    "val_mse": 170.54834752322415,
+    "test_mse": 449.93073927080883
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "LYB",
+    "lastQuartersPrice": 73.18,
+    "predictedQuartersPrice": 81.00111561156795,
+    "percentChange": 9.655565299956182,
+    "val_mse": 162.56310517150027,
+    "test_mse": 285.2359118159334
+}

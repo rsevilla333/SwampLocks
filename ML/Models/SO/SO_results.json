@@ -1,0 +1,8 @@
+{
+    "ticker": "SO",
+    "lastQuartersPrice": 82.38,
+    "predictedQuartersPrice": 77.07744904644434,
+    "percentChange": -6.879510179897763,
+    "val_mse": 4.755475284859683,
+    "test_mse": 34.734926536625814
+}

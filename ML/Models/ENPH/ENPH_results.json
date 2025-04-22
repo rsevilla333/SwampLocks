@@ -1,0 +1,8 @@
+{
+    "ticker": "ENPH",
+    "lastQuartersPrice": 62.05,
+    "predictedQuartersPrice": 68.69270020738526,
+    "percentChange": 9.670169009706642,
+    "val_mse": 3177.9713018001285,
+    "test_mse": 1190.0070835218503
+}

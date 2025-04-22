@@ -1,0 +1,8 @@
+{
+    "ticker": "BG",
+    "lastQuartersPrice": 76.89,
+    "predictedQuartersPrice": 94.07539480927989,
+    "percentChange": 18.267682898509253,
+    "val_mse": 212.06195656641074,
+    "test_mse": 13.839706588000203
+}

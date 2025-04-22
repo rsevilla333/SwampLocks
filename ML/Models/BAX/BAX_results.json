@@ -1,0 +1,8 @@
+{
+    "ticker": "BAX",
+    "lastQuartersPrice": 28.63,
+    "predictedQuartersPrice": 38.934169260906216,
+    "percentChange": 26.46561993362635,
+    "val_mse": 110.79166041030066,
+    "test_mse": 165.97465741527782
+}

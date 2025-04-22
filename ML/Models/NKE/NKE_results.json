@@ -1,0 +1,8 @@
+{
+    "ticker": "NKE",
+    "lastQuartersPrice": 79.43,
+    "predictedQuartersPrice": 87.86646820635832,
+    "percentChange": 9.601465016830868,
+    "val_mse": 44.56404193132588,
+    "test_mse": 135.68607073640015
+}

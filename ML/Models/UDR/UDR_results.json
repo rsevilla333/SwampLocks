@@ -1,0 +1,8 @@
+{
+    "ticker": "UDR",
+    "lastQuartersPrice": 43.07,
+    "predictedQuartersPrice": 40.85023669056619,
+    "percentChange": -5.433905625194169,
+    "val_mse": 3.3986488071715826,
+    "test_mse": 11.408619530988906
+}

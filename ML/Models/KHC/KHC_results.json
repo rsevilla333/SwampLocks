@@ -1,0 +1,8 @@
+{
+    "ticker": "KHC",
+    "lastQuartersPrice": 30.43,
+    "predictedQuartersPrice": 33.72662421714099,
+    "percentChange": 9.774545462707573,
+    "val_mse": 292.0593186403927,
+    "test_mse": 146.907525472146
+}

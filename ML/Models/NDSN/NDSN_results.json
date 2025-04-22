@@ -1,0 +1,8 @@
+{
+    "ticker": "NDSN",
+    "lastQuartersPrice": 220.22,
+    "predictedQuartersPrice": 215.50504957202187,
+    "percentChange": -2.1878607658343485,
+    "val_mse": 287.9718149656008,
+    "test_mse": 480.3742012207578
+}

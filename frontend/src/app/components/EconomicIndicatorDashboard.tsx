@@ -13,6 +13,17 @@ interface DataPoint {
     date: string;
     value: number;
 }
+const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-white p-2 border rounded shadow text-sm text-gray-500">
+                <p className="font-semibold">Date: {new Date(label).toLocaleDateString()}</p>
+                <p>Value: {payload[0].value}</p>
+            </div>
+        );
+    }
+    return null;
+};
 
 export default function EconomicIndicatorDashboard() {
     const [indicators, setIndicators] = useState<Indicator[]>([]);
@@ -21,6 +32,7 @@ export default function EconomicIndicatorDashboard() {
     const [loading, setLoading] = useState(false);
 
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     
     useEffect(() => {
         const fetchIndicators = async () => {
@@ -82,6 +94,8 @@ export default function EconomicIndicatorDashboard() {
 
     const chartType = getChartType();
 
+
+
     return (
         <div className="w-full max-w-5xl mx-auto p-6">
             {/* Dropdown Selector */}
@@ -106,14 +120,10 @@ export default function EconomicIndicatorDashboard() {
             <div className="p-6 bg-white shadow-lg rounded-lg">
                 {loading ? (
                     <p className="text-center text-gray-500">Loading data...</p>
-                ) : chartType === "line" ? (
-                    <LineChartComponent data={data} indicator={selectedIndicator!.name} />
-                ) : chartType === "bar" ? (
-                    <BarChartComponent data={data} indicator={selectedIndicator!.name} />
-                ) : chartType === "single" ? (
-                    <SingleValue data={data} indicator={selectedIndicator!.name} />
+                ) : selectedIndicator ? (
+                    <LineChartComponent data={data} indicator={selectedIndicator.name} />
                 ) : (
-                    <p className="text-center text-gray-500">Select an indicator to view data</p>
+                    <p className="text-center text-gray-500">No indicator selected.</p>
                 )}
             </div>
         </div>
@@ -126,29 +136,31 @@ const LineChartComponent = ({ data, indicator }: { data: DataPoint[], indicator:
         <h2 className="text-xl font-semibold text-center mb-4">{indicator} Trend</h2>
         <ResponsiveContainer width="100%" height={400}>
             <LineChart data={data} >
-                <XAxis dataKey="date" />
+                <XAxis
+                    dataKey="date"
+                    tickFormatter={(date) => `${new Date(date).getFullYear()}`}
+                />
                 <YAxis />
-                <Tooltip />
                 <Line type="monotone" dataKey="value" stroke="#3182CE" strokeWidth={2} dot={{ r: 0.3 }}/>
+                <Tooltip content={<CustomTooltip />} />
             </LineChart>
         </ResponsiveContainer>
     </div>
 );
 
 /* Bar Chart */
-const BarChartComponent = ({ data, indicator }: { data: DataPoint[], indicator: string }) => (
-    <div className="w-full">
-        <h2 className="text-xl font-semibold text-center mb-4">{indicator} Overview</h2>
-        <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={data}>
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#34D399" />
-            </BarChart>
-        </ResponsiveContainer>
-    </div>
-);
+// const BarChartComponent = ({ data, indicator }: { data: DataPoint[], indicator: string }) => (
+//     <div className="w-full">
+//         <h2 className="text-xl font-semibold text-center mb-4">{indicator} Overview</h2>
+//         <ResponsiveContainer width="100%" height={400}>
+//             <BarChart data={data}>
+//                 <XAxis dataKey="date" />
+//                 <Tooltip />
+//                 <Bar dataKey="value" fill="#34D399" />
+//             </BarChart>
+//         </ResponsiveContainer>
+//     </div>
+// );
 
 /* Single Value */
 const SingleValue = ({ data, indicator }: { data: DataPoint[], indicator: string }) => {

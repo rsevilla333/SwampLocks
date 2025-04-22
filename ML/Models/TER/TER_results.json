@@ -1,0 +1,8 @@
+{
+    "ticker": "TER",
+    "lastQuartersPrice": 126.7,
+    "predictedQuartersPrice": 137.3685534313708,
+    "percentChange": 7.766372408297062,
+    "val_mse": 298.0069727455181,
+    "test_mse": 43.717066423746935
+}

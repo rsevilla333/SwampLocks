@@ -1,0 +1,8 @@
+{
+    "ticker": "DXCM",
+    "lastQuartersPrice": 78.0,
+    "predictedQuartersPrice": 75.61862831666399,
+    "percentChange": -3.149186564669848,
+    "val_mse": 310.56959535658683,
+    "test_mse": 1095.5461955638802
+}

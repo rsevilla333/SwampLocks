@@ -1,0 +1,8 @@
+{
+    "ticker": "LNT",
+    "lastQuartersPrice": 59.33,
+    "predictedQuartersPrice": 53.60487148071658,
+    "percentChange": -10.680239241582612,
+    "val_mse": 11.137515888552938,
+    "test_mse": 8.750826657321692
+}

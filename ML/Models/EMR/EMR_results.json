@@ -1,0 +1,8 @@
+{
+    "ticker": "EMR",
+    "lastQuartersPrice": 109.64,
+    "predictedQuartersPrice": 94.74224755293852,
+    "percentChange": -15.724508159611862,
+    "val_mse": 114.56112184809561,
+    "test_mse": 97.26391484925622
+}

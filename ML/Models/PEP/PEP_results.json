@@ -1,0 +1,8 @@
+{
+    "ticker": "PEP",
+    "lastQuartersPrice": 149.94,
+    "predictedQuartersPrice": 137.9954959948228,
+    "percentChange": -8.655720187871442,
+    "val_mse": 123.05437972785765,
+    "test_mse": 975.8456346603967
+}

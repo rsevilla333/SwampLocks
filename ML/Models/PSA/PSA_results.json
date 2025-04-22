@@ -1,0 +1,8 @@
+{
+    "ticker": "PSA",
+    "lastQuartersPrice": 299.29,
+    "predictedQuartersPrice": 293.7457409712906,
+    "percentChange": -1.8874346945003895,
+    "val_mse": 197.2435785167756,
+    "test_mse": 1298.3388947346064
+}

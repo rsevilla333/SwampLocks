@@ -1,0 +1,8 @@
+{
+    "ticker": "EOG",
+    "lastQuartersPrice": 120.58,
+    "predictedQuartersPrice": 115.307776606365,
+    "percentChange": -4.572305137435095,
+    "val_mse": 352.1472647389296,
+    "test_mse": 697.2283480278426
+}

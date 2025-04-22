@@ -1,0 +1,8 @@
+{
+    "ticker": "ALGN",
+    "lastQuartersPrice": 206.58,
+    "predictedQuartersPrice": 228.38997281164214,
+    "percentChange": 9.54944411225499,
+    "val_mse": 551.0552869475042,
+    "test_mse": 1807.8728315481928
+}

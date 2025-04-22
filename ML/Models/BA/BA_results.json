@@ -1,0 +1,8 @@
+{
+    "ticker": "BA",
+    "lastQuartersPrice": 170.55,
+    "predictedQuartersPrice": 188.66442074242931,
+    "percentChange": 9.601397375904641,
+    "val_mse": 1230.8933818440355,
+    "test_mse": 1036.4091357239083
+}

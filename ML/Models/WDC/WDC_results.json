@@ -1,0 +1,8 @@
+{
+    "ticker": "WDC",
+    "lastQuartersPrice": 40.43,
+    "predictedQuartersPrice": 36.48805860517926,
+    "percentChange": -10.803373885891542,
+    "val_mse": 202.66308522061175,
+    "test_mse": 37.55274701392015
+}

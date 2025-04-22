@@ -1,0 +1,8 @@
+{
+    "ticker": "FCX",
+    "lastQuartersPrice": 38.16,
+    "predictedQuartersPrice": 34.43832053552678,
+    "percentChange": -10.806797214846497,
+    "val_mse": 45.88893867982832,
+    "test_mse": 101.16796768527466
+}

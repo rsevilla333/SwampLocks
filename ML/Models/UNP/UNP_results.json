@@ -1,0 +1,8 @@
+{
+    "ticker": "UNP",
+    "lastQuartersPrice": 236.24,
+    "predictedQuartersPrice": 218.77403321976817,
+    "percentChange": -7.983564833165779,
+    "val_mse": 227.46985824548645,
+    "test_mse": 341.0545779284123
+}

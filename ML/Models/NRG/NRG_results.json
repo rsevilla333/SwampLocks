@@ -1,0 +1,8 @@
+{
+    "ticker": "NRG",
+    "lastQuartersPrice": 92.15,
+    "predictedQuartersPrice": 44.926711623835864,
+    "percentChange": -105.11182917538488,
+    "val_mse": 20.64213862710685,
+    "test_mse": 328.05437351515565
+}

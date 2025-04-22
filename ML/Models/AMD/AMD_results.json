@@ -1,0 +1,8 @@
+{
+    "ticker": "AMD",
+    "lastQuartersPrice": 102.74,
+    "predictedQuartersPrice": 92.86313544092252,
+    "percentChange": -10.635936975616023,
+    "val_mse": 448.1617710911312,
+    "test_mse": 636.576561574645
+}

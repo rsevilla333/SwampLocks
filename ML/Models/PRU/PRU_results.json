@@ -1,0 +1,8 @@
+{
+    "ticker": "PRU",
+    "lastQuartersPrice": 111.68,
+    "predictedQuartersPrice": 100.97448290881917,
+    "percentChange": -10.602200459741894,
+    "val_mse": 281.69445018836404,
+    "test_mse": 157.6657959168372
+}

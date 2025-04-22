@@ -1,0 +1,8 @@
+{
+    "ticker": "PLD",
+    "lastQuartersPrice": 105.1,
+    "predictedQuartersPrice": 116.21741493985333,
+    "percentChange": 9.566049068985915,
+    "val_mse": 104.32121407486407,
+    "test_mse": 69.51313259869785
+}

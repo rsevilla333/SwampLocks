@@ -1,0 +1,8 @@
+{
+    "ticker": "BEN",
+    "lastQuartersPrice": 19.25,
+    "predictedQuartersPrice": 23.587260833966372,
+    "percentChange": 18.388149707152877,
+    "val_mse": 71.26985147782587,
+    "test_mse": 23.660004237267394
+}

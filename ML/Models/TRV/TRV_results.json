@@ -1,0 +1,8 @@
+{
+    "ticker": "TRV",
+    "lastQuartersPrice": 264.46,
+    "predictedQuartersPrice": 239.16117724908372,
+    "percentChange": -10.57814777545094,
+    "val_mse": 140.48391292242314,
+    "test_mse": 248.51323243785643
+}

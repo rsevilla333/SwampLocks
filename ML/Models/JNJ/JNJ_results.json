@@ -1,0 +1,8 @@
+{
+    "ticker": "JNJ",
+    "lastQuartersPrice": 165.84,
+    "predictedQuartersPrice": 149.9839568526338,
+    "percentChange": -10.571826134008111,
+    "val_mse": 154.39642639374213,
+    "test_mse": 160.27593145993757
+}

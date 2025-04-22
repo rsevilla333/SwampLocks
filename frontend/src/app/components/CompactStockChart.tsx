@@ -26,7 +26,7 @@ export default function CompactStockChart({ ticker }: StockChartProps) {
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/financials/stocks/${ticker}/todays_data`);
+                const response = await axios.get(`${API_BASE_URL}/api/financials/stocks/${encodeURIComponent(ticker)}/todays_data`);
                 const processedData: StockData[] = response.data.map((item: any) => ({
                     date: new Date(item.date),
                     price: item.closingPrice,

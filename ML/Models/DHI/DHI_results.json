@@ -1,0 +1,8 @@
+{
+    "ticker": "DHI",
+    "lastQuartersPrice": 127.13,
+    "predictedQuartersPrice": 125.17647139248648,
+    "percentChange": -1.5606196482310875,
+    "val_mse": 162.01456824031644,
+    "test_mse": 689.2586161240324
+}

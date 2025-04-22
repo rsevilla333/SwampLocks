@@ -1,0 +1,8 @@
+{
+    "ticker": "TSN",
+    "lastQuartersPrice": 63.81,
+    "predictedQuartersPrice": 50.523190112697996,
+    "percentChange": -26.298438118543576,
+    "val_mse": 81.49944082961647,
+    "test_mse": 56.076660491738075
+}

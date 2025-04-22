@@ -1,0 +1,8 @@
+{
+    "ticker": "HD",
+    "lastQuartersPrice": 333.84,
+    "predictedQuartersPrice": 302.00189405776075,
+    "percentChange": -10.542353067543964,
+    "val_mse": 787.1935971019287,
+    "test_mse": 13.709879269451122
+}

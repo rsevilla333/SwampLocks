@@ -1,0 +1,8 @@
+{
+    "ticker": "PODD",
+    "lastQuartersPrice": 263.36,
+    "predictedQuartersPrice": 264.49031232688463,
+    "percentChange": 0.42735490647675123,
+    "val_mse": 1918.8552292705601,
+    "test_mse": 714.1381392260334
+}

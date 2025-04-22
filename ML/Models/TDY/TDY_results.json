@@ -1,0 +1,8 @@
+{
+    "ticker": "TDY",
+    "lastQuartersPrice": 465.23,
+    "predictedQuartersPrice": 496.3449865801647,
+    "percentChange": 6.268822577326327,
+    "val_mse": 1433.9667793368499,
+    "test_mse": 6060.456346588394
+}

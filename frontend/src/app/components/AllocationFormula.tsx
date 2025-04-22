@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 
 export function optimizePortfolio(
   items: { sector: string; performance: number }[],
@@ -8,7 +8,6 @@ export function optimizePortfolio(
   const n = items.length;
   if (n === 0) return [];
 
-  // Edge case: alpha === 1 => maximize performance
   if (alpha === 1) {
     let maxIdx = 0;
     let maxPerf = items[0].performance;
@@ -44,12 +43,11 @@ export function optimizePortfolio(
     }
 
     if (!anyNegative) {
-      let sumW = 0;
-      for (const i of active) sumW += weights[i];
+      let sumW = active.reduce((acc, i) => acc + weights[i], 0);
       if (sumW <= 0) {
-        for (const i of active) weights[i] = 1 / freeCount;
+        active.forEach(i => (weights[i] = 1 / freeCount));
       } else {
-        for (const i of active) weights[i] /= sumW;
+        active.forEach(i => (weights[i] /= sumW));
       }
       break;
     }
@@ -71,27 +69,60 @@ export function optimizePortfolio(
 }
 
 export default function DiversityOptimizer() {
-  // performance data from ml model weighted mean average aggregated ml targets
-  const [rows] = useState([
-    { sector: "Tech", performance: 0.15 },
-    { sector: "Healthcare", performance: 0.10 },
-    { sector: "Energy", performance: 0.05 },
-    { sector: "Utilities", performance: 0.03 },
-    { sector: "Financials", performance: 0.09 },
-    { sector: "Consumer Discretionary", performance: 0.12 },
-    { sector: "Industrials", performance: 0.06 },
-    { sector: "Materials", performance: 0.04 },
-    { sector: "Real Estate", performance: 0.02 },
-    { sector: "Communication", performance: 0.13 },
-    { sector: "Automotive", performance: 0.07 },
-  ]);
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+  const sectors = [
+    { name: "Information Technology"},
+    { name: "Energy"},
+    { name: "Healthcare" },
+    { name: "Financials" },
+    { name: "Consumer Discretionary" },
+    { name: "Consumer Staples" },
+    { name: "Industrials" },
+    { name: "Materials" },
+    { name: "Real Estate" },
+    { name: "Utilities" },
+    { name: "Communication Services" }
+  ];
+
+  const [rows, setRows] = useState<{ sector: string; performance: number }[]>([]);
   const [alpha, setAlpha] = useState(0.5);
-  const optimized = optimizePortfolio(rows, alpha);
+
+  useEffect(() => {
+    const fetchSectorScores = async () => {
+      try {
+        const results: { sector: string; performance: number }[] = await Promise.all(
+            sectors.map(async (sector) => {
+              try {
+                const res = await fetch(`${API_BASE_URL}/api/financials/sector-growth?sectorName=${encodeURIComponent(sector.name)}`);
+                const score = await res.json();
+                console.log(score);
+                return { sector: sector.name, performance: score * 0.01};
+              } catch (err) {
+                console.error(`Failed to fetch score for ${sector.name}`, err);
+                return { sector: sector.name, performance: 0 };
+              }
+            })
+        );
+
+        results.sort((a, b) => b.performance - a.performance);
+        setRows(results);
+      } catch (err) {
+        console.error("Error fetching sector scores:", err);
+      }
+    };
+
+    fetchSectorScores();
+  }, []);
+
+  // Compute and then sort by weight descending
+  const optimized = optimizePortfolio(rows, alpha)
+    .slice()
+    .sort((a, b) => b.weight - a.weight);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 text-black">
-      <div className="bg-white shadow-2xl rounded-xl p-8 w-full max-w-4xl">
+    <div className="  min-h-screen flex items-center justify-center p-8 text-black">
+      <div className=" shadow-2xl rounded-xl p-8 w-full max-w-4xl">
         <h1 className="text-3xl font-extrabold mb-6 text-center">
           Portfolio Optimizer
         </h1>
@@ -126,7 +157,6 @@ export default function DiversityOptimizer() {
           <thead>
             <tr className="bg-gray-200">
               <th className="border p-2 text-left">Sector</th>
-              <th className="border p-2 text-left">Performance</th>
               <th className="border p-2 text-left">Weight %</th>
             </tr>
           </thead>
@@ -134,7 +164,6 @@ export default function DiversityOptimizer() {
             {optimized.map((row, i) => (
               <tr key={i} className="hover:bg-gray-100 transition-colors">
                 <td className="border p-2">{row.sector}</td>
-                <td className="border p-2">{row.performance}</td>
                 <td className="border p-2">
                   {(row.weight * 100).toFixed(2)}%
                 </td>

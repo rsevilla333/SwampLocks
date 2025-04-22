@@ -1,0 +1,8 @@
+{
+    "ticker": "MPC",
+    "lastQuartersPrice": 135.6,
+    "predictedQuartersPrice": 150.03302923315073,
+    "percentChange": 9.61990123569515,
+    "val_mse": 222.14030172971826,
+    "test_mse": 2080.041431866907
+}

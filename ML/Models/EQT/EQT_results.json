@@ -1,0 +1,8 @@
+{
+    "ticker": "EQT",
+    "lastQuartersPrice": 53.43,
+    "predictedQuartersPrice": 48.244579391007946,
+    "percentChange": -10.748193215585445,
+    "val_mse": 15.720029821740399,
+    "test_mse": 38.930364583480475
+}

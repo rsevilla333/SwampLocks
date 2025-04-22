@@ -1,0 +1,8 @@
+{
+    "ticker": "ESS",
+    "lastQuartersPrice": 282.8,
+    "predictedQuartersPrice": 271.0269410108861,
+    "percentChange": -4.343870371411174,
+    "val_mse": 464.69844138997183,
+    "test_mse": 1161.5048882357262
+}

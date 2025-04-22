@@ -1,0 +1,8 @@
+{
+    "ticker": "JNPR",
+    "lastQuartersPrice": 37.35,
+    "predictedQuartersPrice": 33.71183619891454,
+    "percentChange": -10.79194790701612,
+    "val_mse": 31.5874982706818,
+    "test_mse": 19.255857995929247
+}

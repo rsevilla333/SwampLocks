@@ -1,0 +1,8 @@
+{
+    "ticker": "DLR",
+    "lastQuartersPrice": 143.29,
+    "predictedQuartersPrice": 142.09941169649707,
+    "percentChange": -0.837855899112272,
+    "val_mse": 254.88815762486715,
+    "test_mse": 205.82254422202405
+}

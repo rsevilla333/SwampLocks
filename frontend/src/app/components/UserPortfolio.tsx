@@ -252,7 +252,6 @@ export default function UserPortfolio({ userId }: { userId: string }) {
             color: totals.totalFutureValue >= totals.totalNonETFValue ? "#16A34A" : "#DC2626", // green or red
         },
     ];
-    
     return (
         <div className="flex flex-col items-center max-w mx-auto gap-4 p-4 text-black">
             <div className="mt-8 w-full max-w-xl text-center">
@@ -280,8 +279,8 @@ export default function UserPortfolio({ userId }: { userId: string }) {
             </div>
             <div className="flex max-w mx-auto gap-4 p-4 text-black">
                 {/*  Holdings */}
-                <div className="w-1/4">
-                    <h2 className="text-2xl font-bold mb-4">Your Holdings</h2>
+                <div className="w-1/4 bg-white shadow-2xl p-3">
+                    <h2 className="text-2xl font-bold mb-4">Holdings</h2>
     
                     <ul className="mb-6 space-y-2">
                         {holdings.map((h, index) => (
@@ -359,9 +358,9 @@ export default function UserPortfolio({ userId }: { userId: string }) {
                 </div>
     
                 {/* Sector Bubble Chart */}
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full bg-white shadow-2xl">
                 <h2 className="font-semibold mb-4 text-2xl ">Sector Allocation</h2>
-                <div className="w-[90%] border border-dashed border-gray-300 rounded-lg p-3">
+                <div className="w-[90%] rounded-lg p-3">
                     <ResponsiveContainer width="100%" height={400}>
                         <ScatterChart margin={{ top: 20, bottom: 20 }}>
                             <XAxis type="number" dataKey="x" domain={[0, 100]} hide />

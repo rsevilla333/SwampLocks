@@ -1,0 +1,8 @@
+{
+    "ticker": "GOOG",
+    "lastQuartersPrice": 156.23,
+    "predictedQuartersPrice": 170.09968645751505,
+    "percentChange": 8.153857744458115,
+    "val_mse": 76.76129284863025,
+    "test_mse": 541.9031303114275
+}

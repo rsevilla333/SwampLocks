@@ -1,0 +1,8 @@
+{
+    "ticker": "SWKS",
+    "lastQuartersPrice": 64.63,
+    "predictedQuartersPrice": 71.54620722476739,
+    "percentChange": 9.666769900240336,
+    "val_mse": 1445.6552210055504,
+    "test_mse": 445.5585926880367
+}

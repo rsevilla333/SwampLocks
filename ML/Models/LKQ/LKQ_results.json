@@ -1,0 +1,8 @@
+{
+    "ticker": "LKQ",
+    "lastQuartersPrice": 36.22,
+    "predictedQuartersPrice": 40.13575864147556,
+    "percentChange": 9.756284106784241,
+    "val_mse": 99.43258109670052,
+    "test_mse": 18.14864425799026
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "GM",
+    "lastQuartersPrice": 53.66,
+    "predictedQuartersPrice": 48.45889754337936,
+    "percentChange": -10.733018537957296,
+    "val_mse": 84.63546890460727,
+    "test_mse": 28.712919834377292
+}

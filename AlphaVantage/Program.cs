@@ -32,9 +32,9 @@ class Program
 		//await emailLogger.SendEmailNotification("rsevilla@ufl.edu", "TEST" , "please work");
         
         AlphaVantageService service = new AlphaVantageService(context, client, emailLogger); // get service
-        //service.BackfillMarketCap();
-        var cli = new AlphaCLI(service);
-        cli.Run();
+        
+         var cli = new AlphaCLI(service);
+         cli.Run();
 
     }
 

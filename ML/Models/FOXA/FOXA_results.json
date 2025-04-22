@@ -1,0 +1,8 @@
+{
+    "ticker": "FOXA",
+    "lastQuartersPrice": 56.6,
+    "predictedQuartersPrice": 51.127796889157736,
+    "percentChange": -10.70299023974317,
+    "val_mse": 20.21972666915205,
+    "test_mse": 12.640389609667091
+}

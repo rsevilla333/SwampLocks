@@ -1,0 +1,8 @@
+{
+    "ticker": "DVN",
+    "lastQuartersPrice": 37.4,
+    "predictedQuartersPrice": 41.42470502573621,
+    "percentChange": 9.715711972446773,
+    "val_mse": 300.52725535255667,
+    "test_mse": 84.73300690337155
+}

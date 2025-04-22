@@ -1,0 +1,8 @@
+{
+    "ticker": "HCA",
+    "lastQuartersPrice": 298.42,
+    "predictedQuartersPrice": 329.81932961160703,
+    "percentChange": 9.52016052199932,
+    "val_mse": 310.09319354737767,
+    "test_mse": 1023.5802187330263
+}

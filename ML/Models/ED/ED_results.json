@@ -1,0 +1,8 @@
+{
+    "ticker": "ED",
+    "lastQuartersPrice": 89.16,
+    "predictedQuartersPrice": 90.72779656649652,
+    "percentChange": 1.7280223105026637,
+    "val_mse": 29.405212492997688,
+    "test_mse": 72.19306975417753
+}

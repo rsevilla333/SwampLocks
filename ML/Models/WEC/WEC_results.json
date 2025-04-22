@@ -1,0 +1,8 @@
+{
+    "ticker": "WEC",
+    "lastQuartersPrice": 94.21,
+    "predictedQuartersPrice": 87.38394872662248,
+    "percentChange": -7.8115619319659935,
+    "val_mse": 24.639554543131908,
+    "test_mse": 39.19347920985635
+}

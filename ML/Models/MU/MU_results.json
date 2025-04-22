@@ -1,0 +1,8 @@
+{
+    "ticker": "MU",
+    "lastQuartersPrice": 131.58,
+    "predictedQuartersPrice": 118.9633458824292,
+    "percentChange": -10.6054970327077,
+    "val_mse": 354.1052504650797,
+    "test_mse": 4260.121734514499
+}

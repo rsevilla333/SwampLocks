@@ -1,0 +1,8 @@
+{
+    "ticker": "BK",
+    "lastQuartersPrice": 77.11,
+    "predictedQuartersPrice": 64.26282147429602,
+    "percentChange": -19.99161915236265,
+    "val_mse": 20.007962432086,
+    "test_mse": 30.624136082277932
+}

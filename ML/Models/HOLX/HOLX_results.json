@@ -1,0 +1,8 @@
+{
+    "ticker": "HOLX",
+    "lastQuartersPrice": 61.77,
+    "predictedQuartersPrice": 68.38642120213255,
+    "percentChange": 9.675051107845112,
+    "val_mse": 19.40870207411169,
+    "test_mse": 80.04241225568289
+}

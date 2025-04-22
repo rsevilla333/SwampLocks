@@ -1,0 +1,8 @@
+{
+    "ticker": "LLY",
+    "lastQuartersPrice": 825.91,
+    "predictedQuartersPrice": 812.3053970587102,
+    "percentChange": -1.6748138065499463,
+    "val_mse": 1086.380735973727,
+    "test_mse": 21439.438903656326
+}

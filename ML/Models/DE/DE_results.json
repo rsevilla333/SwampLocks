@@ -1,0 +1,8 @@
+{
+    "ticker": "DE",
+    "lastQuartersPrice": 429.6,
+    "predictedQuartersPrice": 388.4867162466666,
+    "percentChange": -10.582931676672525,
+    "val_mse": 91.24762146918741,
+    "test_mse": 1161.2484500371781
+}

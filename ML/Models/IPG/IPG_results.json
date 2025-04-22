@@ -1,0 +1,8 @@
+{
+    "ticker": "IPG",
+    "lastQuartersPrice": 27.79,
+    "predictedQuartersPrice": 29.11826400086103,
+    "percentChange": 4.561618099285559,
+    "val_mse": 7.631942414565974,
+    "test_mse": 9.288820343598609
+}

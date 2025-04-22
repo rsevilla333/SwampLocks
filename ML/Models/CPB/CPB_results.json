@@ -1,0 +1,8 @@
+{
+    "ticker": "CPB",
+    "lastQuartersPrice": 45.82,
+    "predictedQuartersPrice": 46.70777350528221,
+    "percentChange": 1.9006975470192589,
+    "val_mse": 31.67772549462955,
+    "test_mse": 139.00905331331342
+}

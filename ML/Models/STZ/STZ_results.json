@@ -1,0 +1,8 @@
+{
+    "ticker": "STZ",
+    "lastQuartersPrice": 175.5,
+    "predictedQuartersPrice": 194.0270151051116,
+    "percentChange": 9.548678102930575,
+    "val_mse": 1115.8021569368746,
+    "test_mse": 750.7245678743058
+}

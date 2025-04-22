@@ -1,0 +1,8 @@
+{
+    "ticker": "DTE",
+    "lastQuartersPrice": 138.27,
+    "predictedQuartersPrice": 124.99693990391933,
+    "percentChange": -10.618708030999159,
+    "val_mse": 155.1443041941816,
+    "test_mse": 61.69849126591775
+}

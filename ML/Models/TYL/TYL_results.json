@@ -1,0 +1,8 @@
+{
+    "ticker": "TYL",
+    "lastQuartersPrice": 581.39,
+    "predictedQuartersPrice": 525.9396500013429,
+    "percentChange": -10.543101285197931,
+    "val_mse": 1891.9434676097762,
+    "test_mse": 1482.693802729211
+}

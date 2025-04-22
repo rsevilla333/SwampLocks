@@ -1,0 +1,8 @@
+{
+    "ticker": "ADI",
+    "lastQuartersPrice": 171.46,
+    "predictedQuartersPrice": 155.15678072506435,
+    "percentChange": -10.507577689321067,
+    "val_mse": 734.0469343794632,
+    "test_mse": 52.09471806391235
+}

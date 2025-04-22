@@ -1,0 +1,8 @@
+{
+    "ticker": "WELL",
+    "lastQuartersPrice": 153.21,
+    "predictedQuartersPrice": 138.5822734953595,
+    "percentChange": -10.55526521227863,
+    "val_mse": 97.06618749077636,
+    "test_mse": 88.59221475772914
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "WM",
+    "lastQuartersPrice": 231.51,
+    "predictedQuartersPrice": 209.46394942925457,
+    "percentChange": -10.524985626794624,
+    "val_mse": 188.29244087183318,
+    "test_mse": 33.81541110388403
+}

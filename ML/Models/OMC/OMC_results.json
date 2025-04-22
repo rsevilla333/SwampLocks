@@ -1,0 +1,8 @@
+{
+    "ticker": "OMC",
+    "lastQuartersPrice": 82.91,
+    "predictedQuartersPrice": 77.65977797474827,
+    "percentChange": -6.760542152153559,
+    "val_mse": 153.91715518989233,
+    "test_mse": 117.0022645627139
+}

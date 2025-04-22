@@ -1,0 +1,8 @@
+{
+    "ticker": "MET",
+    "lastQuartersPrice": 81.51,
+    "predictedQuartersPrice": 71.6782372255346,
+    "percentChange": -13.716524226914073,
+    "val_mse": 32.1320191985624,
+    "test_mse": 50.45311975073149
+}

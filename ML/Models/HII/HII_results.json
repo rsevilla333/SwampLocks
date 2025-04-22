@@ -1,0 +1,8 @@
+{
+    "ticker": "HII",
+    "lastQuartersPrice": 204.04,
+    "predictedQuartersPrice": 225.55153011499306,
+    "percentChange": 9.537301788210362,
+    "val_mse": 647.032868373244,
+    "test_mse": 593.7327722565693
+}

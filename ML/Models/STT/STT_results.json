@@ -1,0 +1,8 @@
+{
+    "ticker": "STT",
+    "lastQuartersPrice": 89.53,
+    "predictedQuartersPrice": 80.91585332783094,
+    "percentChange": -10.645808352621344,
+    "val_mse": 212.51278076021168,
+    "test_mse": 141.52508706329922
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "PNR",
+    "lastQuartersPrice": 87.48,
+    "predictedQuartersPrice": 79.05814021528255,
+    "percentChange": -10.652742098136848,
+    "val_mse": 124.95253494600892,
+    "test_mse": 48.840440784462096
+}

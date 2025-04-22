@@ -1,0 +1,8 @@
+{
+    "ticker": "TECH",
+    "lastQuartersPrice": 58.63,
+    "predictedQuartersPrice": 64.90413764515041,
+    "percentChange": 9.666776068196025,
+    "val_mse": 159.97130819525657,
+    "test_mse": 68.27091831350407
+}

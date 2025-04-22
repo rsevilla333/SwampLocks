@@ -1,0 +1,8 @@
+{
+    "ticker": "HPQ",
+    "lastQuartersPrice": 32.5,
+    "predictedQuartersPrice": 32.536109793606165,
+    "percentChange": 0.11098374647500187,
+    "val_mse": 22.214309012688275,
+    "test_mse": 62.96652425950717
+}

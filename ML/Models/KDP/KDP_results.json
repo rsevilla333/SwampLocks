@@ -1,0 +1,8 @@
+{
+    "ticker": "KDP",
+    "lastQuartersPrice": 34.22,
+    "predictedQuartersPrice": 30.867701936633043,
+    "percentChange": -10.86021262693524,
+    "val_mse": 72.23162848531304,
+    "test_mse": 119.09668694913698
+}

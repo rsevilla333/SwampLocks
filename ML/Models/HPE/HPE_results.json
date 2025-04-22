@@ -1,0 +1,8 @@
+{
+    "ticker": "HPE",
+    "lastQuartersPrice": 21.19,
+    "predictedQuartersPrice": 16.71727675931042,
+    "percentChange": -26.755094774623323,
+    "val_mse": 4.861269496775455,
+    "test_mse": 6.914219162820022
+}

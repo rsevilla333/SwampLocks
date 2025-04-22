@@ -1,0 +1,8 @@
+{
+    "ticker": "HAL",
+    "lastQuartersPrice": 25.37,
+    "predictedQuartersPrice": 28.152430599529158,
+    "percentChange": 9.883447149233682,
+    "val_mse": 64.3421898985258,
+    "test_mse": 40.854342278036945
+}

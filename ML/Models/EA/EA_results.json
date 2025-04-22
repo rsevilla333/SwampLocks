@@ -1,0 +1,8 @@
+{
+    "ticker": "EA",
+    "lastQuartersPrice": 144.52,
+    "predictedQuartersPrice": 130.70710674205256,
+    "percentChange": -10.567821140136523,
+    "val_mse": 983.109405765398,
+    "test_mse": 421.0497246595561
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "DOC",
+    "lastQuartersPrice": 20.22,
+    "predictedQuartersPrice": 20.846322734808755,
+    "percentChange": 3.0044758626083024,
+    "val_mse": 15.546606338036232,
+    "test_mse": 17.892419112229422
+}

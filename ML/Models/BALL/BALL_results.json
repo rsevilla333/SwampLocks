@@ -1,0 +1,8 @@
+{
+    "ticker": "BALL",
+    "lastQuartersPrice": 54.99,
+    "predictedQuartersPrice": 60.87953535029126,
+    "percentChange": 9.674080651903472,
+    "val_mse": 28.407540681703818,
+    "test_mse": 96.54639857512498
+}

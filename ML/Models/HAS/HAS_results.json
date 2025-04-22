@@ -1,0 +1,8 @@
+{
+    "ticker": "HAS",
+    "lastQuartersPrice": 55.71,
+    "predictedQuartersPrice": 61.64954658553551,
+    "percentChange": 9.634371888355576,
+    "val_mse": 134.50750908945017,
+    "test_mse": 225.0714566357868
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "EG",
+    "lastQuartersPrice": 359.68,
+    "predictedQuartersPrice": 342.8346989760276,
+    "percentChange": -4.913534445108869,
+    "val_mse": 2324.2025707607586,
+    "test_mse": 587.7388271284275
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "EBAY",
+    "lastQuartersPrice": 62.06,
+    "predictedQuartersPrice": 60.874487694752766,
+    "percentChange": -1.9474698681520408,
+    "val_mse": 35.74092691357055,
+    "test_mse": 55.482098339629594
+}

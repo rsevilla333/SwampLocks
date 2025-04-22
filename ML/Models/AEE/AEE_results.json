@@ -1,0 +1,8 @@
+{
+    "ticker": "AEE",
+    "lastQuartersPrice": 89.62,
+    "predictedQuartersPrice": 76.80115431855516,
+    "percentChange": -16.6909544461727,
+    "val_mse": 17.964120800251475,
+    "test_mse": 30.61393458091621
+}

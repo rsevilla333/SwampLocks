@@ -1,0 +1,8 @@
+{
+    "ticker": "AIG",
+    "lastQuartersPrice": 86.94,
+    "predictedQuartersPrice": 78.58110129522476,
+    "percentChange": -10.637288822628399,
+    "val_mse": 279.33956850234676,
+    "test_mse": 112.2294611253878
+}

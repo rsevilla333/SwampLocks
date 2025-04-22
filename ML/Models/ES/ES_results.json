@@ -1,0 +1,8 @@
+{
+    "ticker": "ES",
+    "lastQuartersPrice": 57.3,
+    "predictedQuartersPrice": 60.54259555829518,
+    "percentChange": 5.355891217404052,
+    "val_mse": 63.86953179914693,
+    "test_mse": 65.55048902298552
+}

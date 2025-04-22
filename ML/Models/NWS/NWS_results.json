@@ -1,0 +1,8 @@
+{
+    "ticker": "NWS",
+    "lastQuartersPrice": 30.37,
+    "predictedQuartersPrice": 27.391091701946007,
+    "percentChange": -10.875463929911033,
+    "val_mse": 6.849052662540675,
+    "test_mse": 15.552948891271825
+}

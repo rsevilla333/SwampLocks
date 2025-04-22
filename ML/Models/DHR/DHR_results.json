@@ -1,0 +1,8 @@
+{
+    "ticker": "DHR",
+    "lastQuartersPrice": 229.65,
+    "predictedQuartersPrice": 247.18485701033035,
+    "percentChange": 7.093823311999059,
+    "val_mse": 51.66501416031621,
+    "test_mse": 409.88064842587886
+}

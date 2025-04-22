@@ -1,0 +1,8 @@
+{
+    "ticker": "NDAQ",
+    "lastQuartersPrice": 77.4,
+    "predictedQuartersPrice": 69.9482414588361,
+    "percentChange": -10.653246437294928,
+    "val_mse": 12.463286236572744,
+    "test_mse": 31.250117844264057
+}

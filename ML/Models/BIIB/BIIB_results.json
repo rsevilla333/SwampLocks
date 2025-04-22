@@ -1,0 +1,8 @@
+{
+    "ticker": "BIIB",
+    "lastQuartersPrice": 136.84,
+    "predictedQuartersPrice": 151.34595103504503,
+    "percentChange": 9.584631062700911,
+    "val_mse": 2451.9087286203867,
+    "test_mse": 2986.6597336412865
+}

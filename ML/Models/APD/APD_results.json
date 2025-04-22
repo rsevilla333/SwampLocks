@@ -1,0 +1,8 @@
+{
+    "ticker": "APD",
+    "lastQuartersPrice": 294.92,
+    "predictedQuartersPrice": 261.45053512461305,
+    "percentChange": -12.801452045005245,
+    "val_mse": 705.0628598651698,
+    "test_mse": 469.0755351303088
+}

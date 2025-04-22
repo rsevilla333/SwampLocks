@@ -1,0 +1,8 @@
+{
+    "ticker": "IEX",
+    "lastQuartersPrice": 208.83,
+    "predictedQuartersPrice": 212.05237513310806,
+    "percentChange": 1.5196128461590241,
+    "val_mse": 108.60460347118412,
+    "test_mse": 167.6141859460888
+}

@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import SectorAnalysis from "./SectorAnalysis";
 import Treemap from "./TreeMap";
 import Footer from "./Footer";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface SectorPageProps {
     sectorName: string;
@@ -18,6 +19,13 @@ interface StockWithChange {
     symbol: string;
     marketCap: number;
     change: number;
+}
+
+interface SectorSentiment {
+    sectorName: string;
+    sentiment: number;
+    label: string;
+    date: string;
 }
 
 const sectorMap: Record<string, { name: string }> = {
@@ -34,8 +42,8 @@ const sectorMap: Record<string, { name: string }> = {
     "communication-services": { name: "Communication Services" },
 };
 
-
 const COLORS = ["#FF5733", "#33A1FF", "#33FF57", "#FFD700", "#8B4513", "#807513", "#0F7513"];
+
 
 export default function SectorDashboard({ sectorName }: SectorPageProps) {
     
@@ -43,6 +51,7 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [sectorGrowth, setSectorGrowth] = useState<number | null>(null);
+    const [sectorSentiment, setSectorSentiment] = useState<SectorSentiment | null>(null);
     const [stocks, setStocks] = useState<StockWithChange[]>([]);
     const maxVisible = 20;
     const sortedStocks = [...stocks].sort((a, b) => b.marketCap - a.marketCap);
@@ -73,6 +82,19 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
         }
     };
 
+    const fetchSectorSentiment = async (): Promise<SectorSentiment | null> => {
+        try {
+            const url = `${API_BASE_URL}/api/financials/sector/sentiment/${sectorMap[sectorName].name}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Failed to fetch sector sentiment");
+            const sentiment: SectorSentiment = await response.json();
+            return sentiment;
+        } catch (err) {
+            console.error("Error fetching sector sentiment:", err);
+            return null;
+        }
+    };
+    
     const fetchTopMarketCapWithChange = async (): Promise<StockWithChange[]> => {
         const count = 100;
         
@@ -109,6 +131,8 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
             setStocks(stocks);
             const growth = await fetchSectorGrowth();
             setSectorGrowth(growth);
+            const sentiment = await fetchSectorSentiment();
+            setSectorSentiment(sentiment);
             setLoading(false);
         };
         if (selectedDate) {
@@ -142,6 +166,7 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
             {/* Sector Title */}
             <h1 className="text-4xl font-semibold text-gray-800 mb-8">{sectorMap[sectorName].name}</h1>
 
+            
             {/* Date Picker Button */}
             <div className="mb-8 w-full">
                 <button
@@ -164,7 +189,8 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
                     </div>
                 )}
             </div>
-            <div className="mb-8 p-6  shadow-md rounded-lg text-center">
+            <div className="flex items-center flex flex-row p-5">
+            <div className="mb-8 p-4 bg-white rounded shadow text-center">
                 <h2 className="text-2xl font-semibold text-black mb-2"> Sector Growth Forecast (Next Quarter)</h2>
                 {sectorGrowth === null ? (
                     <p className="text-gray-500">Loading forecast...</p>
@@ -173,6 +199,28 @@ export default function SectorDashboard({ sectorName }: SectorPageProps) {
                         {sectorGrowth > 0 ? "▲" : sectorGrowth < 0 ? "▼" : "–"} {Math.abs(sectorGrowth).toFixed(2)}%
                     </p>
                 )}
+            </div>
+            {/* Market Sentiment */}
+            {loading ? (
+                <CircularProgress />
+            ) : (
+                <div className="mb-8 p-4 bg-white rounded shadow text-center">
+                    <h2 className="text-2xl font-semibold text-black mb-2">
+                        Market Sentiment as of {new Date(sectorSentiment?.date ?? "NULL").toLocaleDateString()}:
+                    </h2>
+                    <p
+                        className={`text-xl mt-1 font-semibold ${
+                            sectorSentiment?.label?.toLowerCase().includes("fear")
+                                ? "text-red-600"
+                                : sectorSentiment?.label?.toLowerCase() === "neutral"
+                                    ? "text-gray-500"
+                                    : "text-green-600"
+                        }`}
+                    >
+                        <span className="font-bold">{sectorSentiment?.sentiment.toFixed(2)}</span> – {sectorSentiment?.label}
+                    </p>
+                </div>
+            )}
             </div>
 
             {/* Heatmap Section */}

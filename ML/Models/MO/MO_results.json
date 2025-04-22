@@ -1,0 +1,8 @@
+{
+    "ticker": "MO",
+    "lastQuartersPrice": 52.08,
+    "predictedQuartersPrice": 40.022181659897406,
+    "percentChange": -30.12783871346183,
+    "val_mse": 61.640933732737544,
+    "test_mse": 53.51069474230311
+}

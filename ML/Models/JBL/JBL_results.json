@@ -1,0 +1,8 @@
+{
+    "ticker": "JBL",
+    "lastQuartersPrice": 154.92,
+    "predictedQuartersPrice": 140.10559071748997,
+    "percentChange": -10.573745991608497,
+    "val_mse": 27.4216740566237,
+    "test_mse": 49.504322881036806
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "SLB",
+    "lastQuartersPrice": 41.8,
+    "predictedQuartersPrice": 45.14837311333493,
+    "percentChange": 7.416376011887705,
+    "val_mse": 189.10253596649545,
+    "test_mse": 82.71278035779804
+}

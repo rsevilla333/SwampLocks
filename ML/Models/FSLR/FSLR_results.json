@@ -1,0 +1,8 @@
+{
+    "ticker": "FSLR",
+    "lastQuartersPrice": 126.43,
+    "predictedQuartersPrice": 139.82967037656437,
+    "percentChange": 9.582852008789523,
+    "val_mse": 1098.3831963990556,
+    "test_mse": 1457.9591865245477
+}

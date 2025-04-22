@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from "axios";
+import { cache } from 'react';
 
 interface Article {
     id: string;
@@ -19,7 +20,7 @@ export default function Articles({ ticker }: { ticker?: string }) {
    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
    
     useEffect(() => {
-        const fetchArticles = async () => {
+        const fetchArticles = cache(async () => {
             try {
                 let url;
                 if(ticker) {
@@ -36,7 +37,7 @@ export default function Articles({ ticker }: { ticker?: string }) {
             } finally {
                 setLoading(false);
             }
-        };
+        });
 
         fetchArticles();
     }, [ticker]);
@@ -72,11 +73,11 @@ export default function Articles({ ticker }: { ticker?: string }) {
                             <p className="mt-1 text-black">
                             <span
                                 className={`font-semibold ${
-                                    article.sentimentScore > 0.1
+                                    article.sentimentScore >= 0.35
                                         ? "text-green-500"
-                                        : article.sentimentScore < -0.1
-                                            ? "text-red-500"
-                                            : "text-yellow-500"
+                                        : article.sentimentScore >= -0.15
+                                            ? "text-yellow-600"
+                                            : "text-red-500"
                                 }`}
                             >
                                 {getSentimentLabel(article.sentimentScore)}

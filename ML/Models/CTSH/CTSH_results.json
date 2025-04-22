@@ -1,0 +1,8 @@
+{
+    "ticker": "CTSH",
+    "lastQuartersPrice": 76.5,
+    "predictedQuartersPrice": 69.13406938604165,
+    "percentChange": -10.654559581654777,
+    "val_mse": 82.28049620896945,
+    "test_mse": 110.97752896435182
+}

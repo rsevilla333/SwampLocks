@@ -1,0 +1,8 @@
+{
+    "ticker": "COR",
+    "lastQuartersPrice": 278.09,
+    "predictedQuartersPrice": 251.59796739082606,
+    "percentChange": -10.529509790523006,
+    "val_mse": 324.2285399592159,
+    "test_mse": 108.56588786516603
+}

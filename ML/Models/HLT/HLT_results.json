@@ -1,0 +1,8 @@
+{
+    "ticker": "HLT",
+    "lastQuartersPrice": 227.55,
+    "predictedQuartersPrice": 205.7652609009594,
+    "percentChange": -10.587180267288288,
+    "val_mse": 140.21639039904156,
+    "test_mse": 1130.6861497362445
+}

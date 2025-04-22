@@ -1,0 +1,8 @@
+{
+    "ticker": "AKAM",
+    "lastQuartersPrice": 80.5,
+    "predictedQuartersPrice": 89.09840946016693,
+    "percentChange": 9.650463473212746,
+    "val_mse": 85.90242403022255,
+    "test_mse": 134.97187997247644
+}

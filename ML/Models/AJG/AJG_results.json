@@ -1,0 +1,8 @@
+{
+    "ticker": "AJG",
+    "lastQuartersPrice": 284.46,
+    "predictedQuartersPrice": 257.1962364538372,
+    "percentChange": -10.60037422089426,
+    "val_mse": 359.3492923660463,
+    "test_mse": 93.98833810453408
+}

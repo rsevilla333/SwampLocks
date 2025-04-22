@@ -1,0 +1,8 @@
+{
+    "ticker": "MTB",
+    "lastQuartersPrice": 178.75,
+    "predictedQuartersPrice": 161.6995735002045,
+    "percentChange": -10.544509259187329,
+    "val_mse": 487.0799757517069,
+    "test_mse": 250.8564159034074
+}

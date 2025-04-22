@@ -1,0 +1,8 @@
+{
+    "ticker": "BKNG",
+    "lastQuartersPrice": 4990.87,
+    "predictedQuartersPrice": 4516.076910489645,
+    "percentChange": -10.51339689117199,
+    "val_mse": 42653.047058219905,
+    "test_mse": 180849.476011174
+}

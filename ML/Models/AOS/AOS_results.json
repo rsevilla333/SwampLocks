@@ -1,0 +1,8 @@
+{
+    "ticker": "AOS",
+    "lastQuartersPrice": 65.36,
+    "predictedQuartersPrice": 59.01902016543294,
+    "percentChange": -10.743959856996966,
+    "val_mse": 87.95040938120206,
+    "test_mse": 73.49074580035727
+}

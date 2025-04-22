@@ -1,0 +1,8 @@
+{
+    "ticker": "CTRA",
+    "lastQuartersPrice": 28.9,
+    "predictedQuartersPrice": 26.06542212491995,
+    "percentChange": -10.87485888966302,
+    "val_mse": 30.156771869040803,
+    "test_mse": 13.344926844820886
+}

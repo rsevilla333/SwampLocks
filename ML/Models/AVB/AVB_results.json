@@ -1,0 +1,8 @@
+{
+    "ticker": "AVB",
+    "lastQuartersPrice": 219.79,
+    "predictedQuartersPrice": 190.24211795670087,
+    "percentChange": -15.531724709890081,
+    "val_mse": 112.64570858338364,
+    "test_mse": 367.539047118523
+}

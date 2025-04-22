@@ -1,0 +1,8 @@
+{
+    "ticker": "WAT",
+    "lastQuartersPrice": 368.57,
+    "predictedQuartersPrice": 333.3366313904851,
+    "percentChange": -10.569906002392226,
+    "val_mse": 729.5997875109578,
+    "test_mse": 565.3204343821025
+}

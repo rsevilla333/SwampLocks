@@ -1,0 +1,8 @@
+{
+    "ticker": "SWK",
+    "lastQuartersPrice": 79.83,
+    "predictedQuartersPrice": 88.31907745397118,
+    "percentChange": 9.61182759001914,
+    "val_mse": 447.9355604920367,
+    "test_mse": 515.589987668489
+}

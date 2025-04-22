@@ -1,0 +1,8 @@
+{
+    "ticker": "CL",
+    "lastQuartersPrice": 93.7,
+    "predictedQuartersPrice": 84.677810662045,
+    "percentChange": -10.654726742951803,
+    "val_mse": 28.76851025814227,
+    "test_mse": 29.2387582424528
+}

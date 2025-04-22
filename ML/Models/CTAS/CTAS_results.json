@@ -1,0 +1,8 @@
+{
+    "ticker": "CTAS",
+    "lastQuartersPrice": 207.5,
+    "predictedQuartersPrice": 201.06992409625647,
+    "percentChange": -3.1979302387687314,
+    "val_mse": 484.3388134787537,
+    "test_mse": 59.0396897028076
+}

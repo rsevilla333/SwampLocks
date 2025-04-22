@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Collections.Generic;
+using System.IO;
+using CsvHelper;
 
 
 namespace SwampLocks.AlphaVantage.Service
@@ -32,9 +34,9 @@ namespace SwampLocks.AlphaVantage.Service
             ("Healthcare", "XLV"),
             ("Industrials", "XLI"),
             ("Information Technology", "XLK"),
-            ("Materials", "XLB"), // 
-            ("Real Estate", "XLRE"), // 30
-            ("Utilities", "XLU") // 22
+            ("Materials", "XLB"), 
+            ("Real Estate", "XLRE"), 
+            ("Utilities", "XLU") 
         };
 
         private List<string> _currencies = new List<string>
@@ -205,8 +207,7 @@ namespace SwampLocks.AlphaVantage.Service
                 results.Add($"{functionName}: ERROR - {ex.Message}");
             }
         }
-
-
+        
         public bool PopulateSector(string sectorName, string etf)
         {
             var sectorStocksTickers = _client.GetStocksFromETF(etf);
@@ -1381,6 +1382,47 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
                 Console.WriteLine($"Error adding stock splits {sectorName}: {ex.Message}");
                 return false;
             }
+        }
+        
+        public  void ImportSectorSentimentFromCsv(string csvFilePath, string sectorName)
+        {
+            var sector = _context.Sectors.FirstOrDefault(s => s.Name == sectorName);
+            if (sector == null)
+            {
+                Console.WriteLine($"Sector '{sectorName}' does not exist.");
+                return;
+            }
+
+            var sentimentsToAdd = new List<SectorSentiment>();
+
+            using (var reader = new StreamReader(csvFilePath))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                var records = csv.GetRecords<SectorSentimentCsvRow>();
+
+                foreach (var record in records)
+                {
+                    sentimentsToAdd.Add(new SectorSentiment
+                    {
+                        SectorName = sectorName,
+                        Date = record.Date,
+                        Sentiment = record.Sentiment,
+                        Label = record.Label
+                    });
+                }
+            }
+
+            _context.SectorSentiments.AddRange(sentimentsToAdd);
+            _context.SaveChanges();
+
+            Console.WriteLine($"Successfully imported {sentimentsToAdd.Count} sentiment records for sector '{sectorName}'.");
+        }
+        
+        private class SectorSentimentCsvRow
+        {
+            public DateTime Date { get; set; }
+            public decimal Sentiment { get; set; }
+            public string Label { get; set; }
         }
     }
 }

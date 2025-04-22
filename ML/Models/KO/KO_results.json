@@ -1,0 +1,8 @@
+{
+    "ticker": "KO",
+    "lastQuartersPrice": 62.03,
+    "predictedQuartersPrice": 64.44658850822316,
+    "percentChange": 3.7497539655102274,
+    "val_mse": 5.745558978283875,
+    "test_mse": 12.085509059188583
+}

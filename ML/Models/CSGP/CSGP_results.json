@@ -1,0 +1,8 @@
+{
+    "ticker": "CSGP",
+    "lastQuartersPrice": 71.82,
+    "predictedQuartersPrice": 79.51525387557096,
+    "percentChange": 9.677707735943153,
+    "val_mse": 75.44076807778565,
+    "test_mse": 73.18296915321726
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "RF",
+    "lastQuartersPrice": 23.66,
+    "predictedQuartersPrice": 21.323840462899767,
+    "percentChange": -10.955622844603408,
+    "val_mse": 3.4159099916236166,
+    "test_mse": 6.042021811676529
+}

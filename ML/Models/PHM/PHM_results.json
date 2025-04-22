@@ -1,0 +1,8 @@
+{
+    "ticker": "PHM",
+    "lastQuartersPrice": 102.8,
+    "predictedQuartersPrice": 92.91821354416629,
+    "percentChange": -10.634929449151166,
+    "val_mse": 36.3941350329552,
+    "test_mse": 188.74360028584545
+}

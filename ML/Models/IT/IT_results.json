@@ -1,0 +1,8 @@
+{
+    "ticker": "IT",
+    "lastQuartersPrice": 419.74,
+    "predictedQuartersPrice": 444.6071986843665,
+    "percentChange": 5.593071537741812,
+    "val_mse": 3428.6555673301423,
+    "test_mse": 828.604384664049
+}

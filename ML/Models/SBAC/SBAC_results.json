@@ -1,0 +1,8 @@
+{
+    "ticker": "SBAC",
+    "lastQuartersPrice": 203.32,
+    "predictedQuartersPrice": 224.94728559987914,
+    "percentChange": 9.614379449925114,
+    "val_mse": 256.2369229295557,
+    "test_mse": 548.2343188809901
+}

@@ -1,0 +1,8 @@
+{
+    "ticker": "DVA",
+    "lastQuartersPrice": 152.97,
+    "predictedQuartersPrice": 138.3278117427882,
+    "percentChange": -10.58513690973295,
+    "val_mse": 119.55748120065957,
+    "test_mse": 96.63597450131356
+}

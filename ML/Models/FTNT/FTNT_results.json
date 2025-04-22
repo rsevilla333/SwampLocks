@@ -1,0 +1,8 @@
+{
+    "ticker": "FTNT",
+    "lastQuartersPrice": 95.13,
+    "predictedQuartersPrice": 85.95092205161318,
+    "percentChange": -10.679440928946438,
+    "val_mse": 32.772698911727645,
+    "test_mse": 69.94302396710404
+}

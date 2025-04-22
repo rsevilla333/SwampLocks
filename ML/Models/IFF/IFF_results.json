@@ -1,0 +1,8 @@
+{
+    "ticker": "IFF",
+    "lastQuartersPrice": 83.96,
+    "predictedQuartersPrice": 82.4130272912681,
+    "percentChange": -1.8770972983003231,
+    "val_mse": 144.1344835167595,
+    "test_mse": 267.0117582637963
+}

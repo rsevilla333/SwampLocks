@@ -1,0 +1,8 @@
+{
+    "ticker": "O",
+    "lastQuartersPrice": 58.01,
+    "predictedQuartersPrice": 57.81417620964348,
+    "percentChange": -0.3387124113754192,
+    "val_mse": 65.71173974638906,
+    "test_mse": 37.4956941937456
+}

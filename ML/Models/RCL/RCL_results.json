@@ -1,0 +1,8 @@
+{
+    "ticker": "RCL",
+    "lastQuartersPrice": 232.75,
+    "predictedQuartersPrice": 210.57346633462168,
+    "percentChange": -10.531494803878871,
+    "val_mse": 641.9836849218833,
+    "test_mse": 1349.9570691467063
+}

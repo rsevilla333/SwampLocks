@@ -1,0 +1,8 @@
+{
+    "ticker": "GPC",
+    "lastQuartersPrice": 115.82,
+    "predictedQuartersPrice": 105.71182082318352,
+    "percentChange": -9.562014066263892,
+    "val_mse": 82.72873052125557,
+    "test_mse": 137.06405479135626
+}

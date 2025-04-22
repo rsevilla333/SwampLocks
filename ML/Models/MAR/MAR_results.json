@@ -1,0 +1,8 @@
+{
+    "ticker": "MAR",
+    "lastQuartersPrice": 238.2,
+    "predictedQuartersPrice": 223.99100024114819,
+    "percentChange": -6.343558332055488,
+    "val_mse": 665.6103949479194,
+    "test_mse": 529.2702534350113
+}

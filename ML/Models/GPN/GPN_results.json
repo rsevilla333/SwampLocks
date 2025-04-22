@@ -1,0 +1,8 @@
+{
+    "ticker": "GPN",
+    "lastQuartersPrice": 110.83,
+    "predictedQuartersPrice": 114.28304578497267,
+    "percentChange": 3.021485611671304,
+    "val_mse": 880.0815576085364,
+    "test_mse": 846.4178241555556
+}

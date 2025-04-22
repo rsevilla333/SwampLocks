@@ -1,0 +1,8 @@
+{
+    "ticker": "INTC",
+    "lastQuartersPrice": 22.71,
+    "predictedQuartersPrice": 25.21591308439055,
+    "percentChange": 9.937824087527448,
+    "val_mse": 21.208272777845554,
+    "test_mse": 47.410637854030206
+}
