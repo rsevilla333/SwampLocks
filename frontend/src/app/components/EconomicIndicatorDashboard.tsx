@@ -120,8 +120,10 @@ export default function EconomicIndicatorDashboard() {
             <div className="p-6 bg-white shadow-lg rounded-lg">
                 {loading ? (
                     <p className="text-center text-gray-500">Loading data...</p>
+                ) : selectedIndicator ? (
+                    <LineChartComponent data={data} indicator={selectedIndicator.name} />
                 ) : (
-                    <LineChartComponent data={data} indicator={selectedIndicator!.name} />
+                    <p className="text-center text-gray-500">No indicator selected.</p>
                 )}
             </div>
         </div>
