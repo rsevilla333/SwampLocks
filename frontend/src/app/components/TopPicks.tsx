@@ -78,7 +78,7 @@ const TopPicks: React.FC = () => {
                     <tr className="bg-gray-100">
                         <th className="px-6 py-3 border-b text-left text-sm font-semibold">Rank</th>
                         <th className="px-6 py-3 border-b text-left text-sm font-semibold">Ticker</th>
-                        <th className="px-6 py-3 border-b text-left text-sm font-semibold">RMSE</th>
+                        <th className="px-6 py-3 border-b text-left text-sm font-semibold">%Diff</th>
                         <th className="px-6 py-3 border-b text-left text-sm font-semibold">Return</th>
                         <th className="px-6 py-3 border-b text-left text-sm font-semibold">Score</th>
                     </tr>
