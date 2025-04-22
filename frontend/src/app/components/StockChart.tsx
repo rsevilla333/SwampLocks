@@ -5,7 +5,6 @@ import axios from "axios";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
 import CircularProgress from '@mui/material/CircularProgress';
 
-
 const timeframes = [
     { label: "Today", value: "1d" },
     { label: "1W", value: "1w" },
@@ -77,6 +76,11 @@ export default function StockChart({ ticker }: StockChartProps) {
                     date: new Date(item.date).toLocaleDateString(),
                     price: item.closingPrice
                 }));
+
+                processedData.sort(
+                    (a: { date: string; price: number }, b: { date: string; price: number }) =>
+                        new Date(a.date).getTime() - new Date(b.date).getTime()
+                );
 
                 const processedDailyData = dailyResponse.data.map((item: any) => ({
                     date: new Date(item.date),

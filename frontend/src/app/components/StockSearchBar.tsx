@@ -50,7 +50,7 @@ export default function StockSearchBar() {
         if (!ticker) return;
 
         try {
-            const response = await axios.get(`${API_BASE_URL}/api/financials/stocks/${ticker}/exists`);
+            const response = await fetch(`${API_BASE_URL}/api/financials/stocks/${ticker}/exists`, {next: { revalidate: 3600 }});
             if (response.status === 200) {
                 router.push(`/stock/${ticker}`);
             }

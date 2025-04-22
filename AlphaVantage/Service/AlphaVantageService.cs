@@ -34,9 +34,9 @@ namespace SwampLocks.AlphaVantage.Service
             ("Healthcare", "XLV"),
             ("Industrials", "XLI"),
             ("Information Technology", "XLK"),
-            ("Materials", "XLB"), // 
-            ("Real Estate", "XLRE"), // 30
-            ("Utilities", "XLU") // 22
+            ("Materials", "XLB"), 
+            ("Real Estate", "XLRE"), 
+            ("Utilities", "XLU") 
         };
 
         private List<string> _currencies = new List<string>
@@ -207,8 +207,7 @@ namespace SwampLocks.AlphaVantage.Service
                 results.Add($"{functionName}: ERROR - {ex.Message}");
             }
         }
-
-
+        
         public bool PopulateSector(string sectorName, string etf)
         {
             var sectorStocksTickers = _client.GetStocksFromETF(etf);

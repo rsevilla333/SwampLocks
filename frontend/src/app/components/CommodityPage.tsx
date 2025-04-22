@@ -32,6 +32,21 @@ export default function CommodityPage() {
     
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+    const CustomTooltip = ({ active, payload, label }: any) => {
+        if (active && payload && payload.length > 0) {
+            const price = payload[0].value;
+            const unit = payload[0].name; 
+            return (
+                <div className="bg-white p-2 rounded shadow text-sm text-gray-700 border border-gray-300">
+                    <p><strong>Date:</strong> {label}</p>
+                    <p><strong>Price:</strong> {price} {unit}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+    
     useEffect(() => {
         async function fetchCommodityData() {
             try {
@@ -99,10 +114,9 @@ export default function CommodityPage() {
                             <h3 className="text-xl text-secondary font-semibold text-center">{indicator.name}</h3>
                             <ResponsiveContainer width="100%" height={300}>
                                 <LineChart data={data}>
-                                    <XAxis  />
-                                    <YAxis  />
-                                    <Tooltip />
-                                    <Legend />
+                                    <Tooltip content={<CustomTooltip />} />
+                                    <XAxis dataKey="date" hide={true}/>
+                                    <Legend></Legend>
                                     <Line
                                         type="monotone"
                                         dataKey="price"

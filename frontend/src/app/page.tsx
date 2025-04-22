@@ -15,7 +15,6 @@ import {
 } from "recharts";
 import {router} from "next/client";
 
-
 interface SectorSentiment {
     sectorName: string;
     sentiment: number;
@@ -60,7 +59,7 @@ export default function Home() {
         const count = 100;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/financials/top-marketcap-with-change?count=${count}`);
+            const response = await fetch(`${API_BASE_URL}/api/financials/top-marketcap-with-change?count=${count}`, {next: { revalidate: 36000 }});
             console.log(response);
             if (!response.ok) {
                 throw new Error("Failed to fetch market cap data");
@@ -80,7 +79,7 @@ export default function Home() {
             const results: RankedSector[] = await Promise.all(
                 sectors.map(async (sector) => {
                     try {
-                        const res = await fetch(`${API_BASE_URL}/api/financials/sector-growth?sectorName=${sector.name}`);
+                        const res = await fetch(`${API_BASE_URL}/api/financials/sector-growth?sectorName=${sector.name}`, {next: { revalidate: 36000 }});
                         const score = await res.json();
                         return { ...sector, score };
                     } catch (err) {
@@ -100,7 +99,7 @@ export default function Home() {
     const fetchMarketSentiment = async (): Promise<SectorSentiment | null> => {
         try {
             const url = `${API_BASE_URL}/api/financials/sector/sentiment/__Market`;
-            const response = await fetch(url);
+            const response = await fetch(url, {next: { revalidate: 36000 }});
             console.log(response);
             if (!response.ok) throw new Error("Failed to fetch sector sentiment");
             const sentiment: SectorSentiment = await response.json();
@@ -189,8 +188,8 @@ export default function Home() {
                     )}
     
                     
-                    <div className="flex w-full max-w-7xl gap-8 max-h-full">
-                        
+                    <div className="flex flex-col w-full max-w-7xl gap-8 max-h-full">
+                        <h1 className="text-black text-2xl text-center">Sector Predictions (Next Quarter)</h1>
                         <div className="w-full flex flex-col gap-8">
                             {/* Sectors Section */}
                             <div className="w-full h-[600px]">
@@ -229,8 +228,8 @@ export default function Home() {
                             </div>
                             
                             {/* Top Movers */}
-                            <div className="min-w-full max-h-[550px] bg-transparent">
-                                <h2 className="text-black text-4xl items-center">Top Movers</h2>
+                            <div className="min-w-full max-h-[550px] bg-transparent gap-y-5">
+                                <h2 className="text-black text-2xl text-center py-2">Top Movers</h2>
                                 <TopMoverDashBoard />
                             </div>
                         </div>

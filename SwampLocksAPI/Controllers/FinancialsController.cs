@@ -18,7 +18,8 @@ namespace SwampLocksAPI.Controllers
         private readonly HttpClient _httpClient;
         private readonly EmailNotificationService _emailService;
         private readonly string _alphaKey;
-
+        private readonly string _modelURL;
+  
         public FinancialsController(FinancialContext context, HttpClient httpClient, EmailNotificationService emailService)
         {
              Env.Load();
@@ -26,6 +27,7 @@ namespace SwampLocksAPI.Controllers
             _context = context;
             _httpClient = httpClient;
             _alphaKey = Environment.GetEnvironmentVariable("ALPHA_VANTAGE");
+            _modelURL = Environment.GetEnvironmentVariable("ML_MODEL_URL");
             _emailService = emailService;
             
         }
@@ -231,7 +233,7 @@ namespace SwampLocksAPI.Controllers
             {
                 try
                 {
-                    var response = await httpClient.GetAsync($"https://swamplocksmlmodel.azurewebsites.net/api/MLModel?ticker={stock.Ticker}");
+                    var response = await httpClient.GetAsync($"{_modelURL}/api/MLModel?ticker={stock.Ticker}");
                     if (!response.IsSuccessStatusCode) continue;
 
                     var json = await response.Content.ReadAsStringAsync();
