@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SwampLocksDb.Models
 {
-    // Commodity indicator object/table
     public class CommodityIndicator
     {
         [Key]

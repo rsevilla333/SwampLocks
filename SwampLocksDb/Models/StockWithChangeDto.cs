@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SwampLocksDb.Models
 {
-    // Helper class to get stock with change
     public class StockWithChangeDto
     {
         public string Symbol { get; set; }

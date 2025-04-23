@@ -12,9 +12,8 @@ public class Program
 {
     public static void Main(string[] args)
     {
-	    // Test Database
 		ListSectors();
-	    ListStocksBySector();
+		ListStocksBySector();
     }
 
 	public static void ListStocksBySector()
@@ -36,10 +35,10 @@ public class Program
         		}
         		else
         		{
-           		 	Console.WriteLine(" No stocks found in this sector.");
+           		 	Console.WriteLine("  No stocks found in this sector.");
         		}	
 
-        		Console.WriteLine(); 
+        		Console.WriteLine(); // Adds a blank line for readability
 			}
 		}
     }
@@ -155,7 +154,6 @@ public class Program
 	}
 
 
-	// testDb
 	public static async Task testDB()
 	{
  		Console.WriteLine("Testting DB");

@@ -8,10 +8,8 @@ using SwampLocksDb.Models;
 using System.Text.Json;
 using SwampLocks.EmailSevice; 
 
-// SwampLocks API Controllers class
 namespace SwampLocksAPI.Controllers
 {
-    // Controller for managing financial data and user-related operations in the SwampLocks API
     [Route("api/[controller]")]
     [ApiController]
     public class FinancialsController : ControllerBase
@@ -22,7 +20,6 @@ namespace SwampLocksAPI.Controllers
         private readonly string _alphaKey;
         private readonly string _modelURL;
   
-        // Constructor initializes dependencies / loads environment variables
         public FinancialsController(FinancialContext context, HttpClient httpClient, EmailNotificationService emailService)
         {
              Env.Load();
@@ -35,7 +32,6 @@ namespace SwampLocksAPI.Controllers
             
         }
 
-        // Test endpoint to verify that the API is responsive
         [HttpGet("ping")]
 
         public async Task<ActionResult<string>> PingTest()
@@ -45,7 +41,6 @@ namespace SwampLocksAPI.Controllers
             return Ok("test with auto");
         }
         
-        // Registers a new user or confirms if one already exists, and sends a welcome email
         [HttpGet("login/{userEmail}/{name}")]
         public async Task<ActionResult> Login(string userEmail, string name)
         {
@@ -98,7 +93,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(new { message = "Welcome email sent successfully and user created.", userId =  newUser.UserId });
         }
 
-        // Retrieves all stocks from the database
         [HttpGet("stocks")]
         public async Task<ActionResult<List<Stock>>> GetAllStocks()
         {
@@ -112,7 +106,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(stocks);
         }
 
-        // Retrieves all sectors from the database
         [HttpGet("sectors")]
         public async Task<ActionResult<List<Stock>>> GetAllSectors()
         {
@@ -126,7 +119,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(sectors);
         }
         
-        // Gets the latest sentiment score for a specific sector
         [HttpGet("sector/sentiment/{sectorName}")]
         public async Task<ActionResult<SectorSentiment>> GetLatestSectorSentiment(string sectorName)
         {
@@ -143,7 +135,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(latestSentiment);
         }
         
-        // Gets top market cap stocks from sector/market
         [HttpGet("top-marketcap")]
         public ActionResult<List<StockData>> GetTopMarketCapStocks(
             [FromQuery] DateTime? date,
@@ -194,7 +185,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(topStocks);
         }
         
-        // Compiles and gets sector growth percentage from a sector 
         [HttpGet("sector-growth")]
         public async Task<ActionResult<decimal>> GetSectorGrowthPercentageAsync(
             [FromQuery] string sectorName,
@@ -268,7 +258,7 @@ namespace SwampLocksAPI.Controllers
             return Ok(Math.Round(weightedGrowthPercent, 2));
         }
 
-        // Get top market cap stocks from sector/market with their percentage change
+        
         [HttpGet("top-marketcap-with-change")]
         public ActionResult<List<StockWithChangeDto>> GetTopMarketCapWithChange(
             [FromQuery] DateTime? date,
@@ -342,7 +332,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(result);
         }
         
-        // Gets top movers from a sector/market
         [HttpGet("top-movers")]
         public ActionResult<List<StockWithChangeDto>> GetTopMovers(
             [FromQuery] DateTime? date,
@@ -414,7 +403,18 @@ namespace SwampLocksAPI.Controllers
             return Ok(result);
         }
         
-        // Gets all stock data from a ticker/stock
+        // MOCK DATA FOR ML MODEL
+        [HttpGet("sector/{name}/performance_ml")]
+        public ActionResult<decimal> GetSectorPerformanceML(string name)
+        {
+            // model logic would go here 
+            var random = new Random();
+            decimal mockScore = (decimal)random.NextDouble(); 
+
+            return Ok(Math.Round(mockScore, 4)); 
+        }
+        
+
         [HttpGet("stocks/{ticker}/data")]
         public async Task<ActionResult<List<StockData>>> GetStockData(string ticker)
         {
@@ -431,7 +431,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(stockData);
         }
         
-        // Adds a new stock holding
         [HttpPost("holdings")]
         public async Task<ActionResult<Holding>> AddHolding([FromBody] CreateHoldingDto dto)
         {
@@ -452,14 +451,12 @@ namespace SwampLocksAPI.Controllers
 
                 return CreatedAtAction(nameof(GetHoldingsByUser), new { userId = dto.UserId }, holding);
             }
-            
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
         
-        // Adds a new holding to a user
         [HttpPut("holdings/{holdingId}")]
         public async Task<IActionResult> UpdateHolding(int holdingId, [FromBody] CreateHoldingDto dto)
         {
@@ -481,7 +478,6 @@ namespace SwampLocksAPI.Controllers
             }
         }
         
-        // Deletes a user's holding 
         [HttpDelete("holdings/{holdingId}")]
         public async Task<IActionResult> DeleteHolding(int holdingId)
         {
@@ -494,7 +490,6 @@ namespace SwampLocksAPI.Controllers
             return NoContent();
         }
         
-        // Gets all user's holdings
         [HttpGet("user/holdings/{userId}/get-holdings")]
         public async Task<ActionResult<List<Holding>>> GetHoldingsByUser(Guid userId)
         {
@@ -506,7 +501,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(holdings);
         }
         
-        // Gets a stock's latest price
         [HttpGet("stocks/{ticker}/latest-price")]
         public async Task<ActionResult<decimal>> GetLatestStockPrice(string ticker)
         {
@@ -524,7 +518,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(latestEntry.ClosingPrice);
         }
         
-        // Gets a stocks intra-day stock data
         [HttpGet("stocks/{ticker}/todays_data")]
         public async Task<ActionResult<List<StockData>>> GetTodaysStockData(string ticker)
         {
@@ -571,7 +564,6 @@ namespace SwampLocksAPI.Controllers
             }
         }
         
-        // Gets stock data with filetered stock price
         [HttpGet("stocks/{ticker}/filtered_data")]
         public async Task<ActionResult<List<StockData>>> GetFilteredStockData(string ticker)
         {
@@ -637,10 +629,11 @@ namespace SwampLocksAPI.Controllers
             return Ok(stockData);
         }
 
-        // Checks if a ticker exists
+        
         [HttpGet("stocks/{ticker}/exists")]
         public async Task<ActionResult<bool>> CheckIfStockExists(string ticker)
         {
+            // Query your database to check if a stock with this ticker exists
             var stock = await _context.Stocks
                 .FirstOrDefaultAsync(s => s.Ticker == ticker);
 
@@ -654,7 +647,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(true);
         }
         
-        // autocompletes the tickers that fit the query
         [HttpGet("stocks/autocomplete")]
         public async Task<ActionResult<IEnumerable<string>>> GetMatchingStockTickers(string query)
         {
@@ -679,8 +671,7 @@ namespace SwampLocksAPI.Controllers
             return Ok(matchingStocks);
         }
 
-        
-        // Get stock data based on a timeframe
+
         [HttpGet("stocks/{ticker}/data/{timeframe}")]
         public async Task<ActionResult<List<StockData>>> GetStockData(string ticker, string timeframe)
         {
@@ -721,7 +712,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(stockData);
         }
 
-        // Get all articles objects realted to a stock
         [HttpGet("stocks/{ticker}/articles")]
         public async Task<ActionResult<List<Article>>> GetStockArticles(string ticker)
         {
@@ -733,7 +723,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(articles);
         }
         
-        // Get all article objects
         [HttpGet("stocks/articles/all")]
         public async Task<ActionResult<List<Article>>> GetAllStockArticles()
         {
@@ -745,7 +734,8 @@ namespace SwampLocksAPI.Controllers
             return Ok(articles);
         }
 
-        // Get all data from a commodity
+
+        
         [HttpGet("commodities/{commodityName}")]
         public async Task<ActionResult<List<CommodityData>>> GetCommodityData(string commodityName)
         {
@@ -762,7 +752,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(commodityData);
         }
         
-        // Get all commodity indicators
         [HttpGet("commodities/indicators")]
         public async Task<ActionResult<List<CommodityIndicator>>> GetCommodityIndicators()
         {
@@ -778,7 +767,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(indicators);
         }
         
-        // Gets all data from an economic indicator
         [HttpGet("economic_data/{indicatorName}")]
         public async Task<ActionResult<List<EconomicData>>> GetEconomicData(string indicatorName)
         {
@@ -795,7 +783,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(ecoData);
         }
         
-        // Get all economic indicators
         [HttpGet("economic_data/indicators")]
         public async Task<ActionResult<List<EconomicIndicator>>> GetEconomicIndicators()
         {
@@ -811,7 +798,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(indicators);
         }
 
-        // Gets all Balance Sheets from a ticker
         [HttpGet("balancesheets/{ticker}")]
         public async Task<ActionResult<List<StockBalanceSheet>>> GetBalanceSheets(string ticker)
         {
@@ -828,7 +814,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(balanceSheets);
         }
 
-        // Gets all Cashflow Statements from a ticker
         [HttpGet("cashflowstatements/{ticker}")]
         public async Task<ActionResult<List<CashFlowStatement>>> GetCashFlowStatements(string ticker)
         {
@@ -845,7 +830,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(cashFlowStatements);
         }
 
-        // Gets all Earning Statements from a ticker
         [HttpGet("earnings/{ticker}")]
         public async Task<ActionResult<List<StockEarningStatement>>> GetEarnings(string ticker)
         {
@@ -862,7 +846,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(earnings);
         }
 
-        // Gets all Income Statements from a ticker
         [HttpGet("incomestatements/{ticker}")]
         public async Task<ActionResult<List<IncomeStatement>>> GetIncomeStatements(string ticker)
         {
@@ -879,7 +862,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(incomeStatements);
         }
 
-        // Gets sector performace
         [HttpGet("sectorperformance/{sector}")]
         public async Task<ActionResult<List<SectorPerformance>>> GetSectorPerformance(string sector)
         {
@@ -896,7 +878,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(sectorPerformances);
         }
 
-        // Gets all stocks in a sector
 		[HttpGet("sectorstocks/{sectorName}")]
 		public async Task<ActionResult<List<Stock>>> GetStocksFromSector(string sectorName)
 		{
@@ -912,7 +893,6 @@ namespace SwampLocksAPI.Controllers
     		return Ok(stocks);
 		}  
         
-        // Gets all exchange rate data
         [HttpGet("ex_rates")]
         public async Task<ActionResult<List<ExchangeRate>>> GetExRates()
         {
@@ -928,7 +908,6 @@ namespace SwampLocksAPI.Controllers
             return Ok(exRates);
         }
         
-        // Gets todyas top movers
         [HttpGet("top_movers")]
         public async Task<ActionResult<List<MarketMovers>>> GetTopMovers()
         {
@@ -963,7 +942,7 @@ namespace SwampLocksAPI.Controllers
             }
         }
         
-        // Gets article preview
+        
         [HttpGet("article_preview/{url}")]
         public async Task<IActionResult> GetPreview([FromQuery] string url)
         {
@@ -979,8 +958,7 @@ namespace SwampLocksAPI.Controllers
                 return BadRequest("Failed to fetch link preview");
             }
         }
-        
-        // Updates the market capitalization value of a specific stock on a specific date
+
         [HttpPatch("stocks/data/{id}")]
         public async Task<IActionResult> UpdateMarketCap(string id, [FromBody] JsonPatchDocument<StockData> stockDataPatch)
         {
@@ -1017,7 +995,6 @@ namespace SwampLocksAPI.Controllers
             }
         }
 
-        // Batch updates public sentiment values for a given ticker across multiple dates
         [HttpPatch("stocks/data/update/{ticker}/publicsentiment")]
         public async Task<IActionResult> UpdatePublicSentiment(string ticker, [FromBody] List<KeyValuePair<string, JsonPatchDocument<StockData>>> stockDataPatches)
         {

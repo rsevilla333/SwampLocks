@@ -9,7 +9,6 @@ using System.Collections.Generic;
 
 namespace SwampLocksDb.Models
 {
-	// Exchange Rate object/table
     public class ExchangeRate
     {
 	//	[Key]

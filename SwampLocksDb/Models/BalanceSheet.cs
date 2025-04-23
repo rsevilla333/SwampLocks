@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwampLocksDb.Models
 {
-    // Balance Sheet's article object/table
     public class StockBalanceSheet
     {
         [Key, Column(Order = 0)]

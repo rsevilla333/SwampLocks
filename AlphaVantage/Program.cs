@@ -24,23 +24,17 @@ class Program
 		string smtpServer = Environment.GetEnvironmentVariable("EMAIL_SERVER") ?? "none";;
         string smtpUsername = Environment.GetEnvironmentVariable("EMAIL_USERNAME") ?? "none";
         string smtpPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? "none";
-        string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? "none";
         
-        // Intilize email Logger 
-        var emailLogger = new EmailNotificationService(smtpServer,smtpUsername, smtpPassword);
-        
-        // get context (db)
-        var context = new FinancialContext(); 
-        
-        // Initialize Alpha Vantage Client
         AlphaVantageClient client = new AlphaVantageClient(apiKey); // get client
+        var context = new FinancialContext(); // get context (db)
+
+		var emailLogger = new EmailNotificationService(smtpServer,smtpUsername, smtpPassword);
+		//await emailLogger.SendEmailNotification("rsevilla@ufl.edu", "TEST" , "please work");
         
-        // Initialize Alpha Vantage Service
         AlphaVantageService service = new AlphaVantageService(context, client, emailLogger); // get service
-		
-        // initilize CLI
-		var cli = new AlphaCLI(service);
-		cli.Run();
+        
+         var cli = new AlphaCLI(service);
+         cli.Run();
 
     }
 

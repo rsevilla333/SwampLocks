@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 namespace SwampLocksDb.Models
 {
-    // Market Mover object/table
     public class MarketMovers
     {
         public string? Ticker { get; set; }

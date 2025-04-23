@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwampLocksDb.Models
 {
-	// Stock Data article object/table
-	public class StockData
-	{
+public class StockData
+{
     	[Key]
    	 	public string Id => $"{Ticker}_{Date:yyyyMMdd}"; // Unique Identifier (Ticker + Date)
 

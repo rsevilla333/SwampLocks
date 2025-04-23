@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SwampLocksDb.Models
 {
-    // Sector Sentiment object/table
     public class SectorSentiment
     {
         [Key]

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwampLocksDb.Models
 {
-    // Cashflow Statement's article object/table
+    // Quaterly
     public class CashFlowStatement
     {
         [Key, Column(Order = 0)]

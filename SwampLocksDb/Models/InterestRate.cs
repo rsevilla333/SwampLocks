@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwampLocksDb.Models
 {
-    // Interest Rate object/table
     public class InterestRate
     {
         [Key]

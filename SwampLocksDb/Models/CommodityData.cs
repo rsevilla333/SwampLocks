@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwampLocksDb.Models
 {
-    // Commodity Data object/table
     public class CommodityData
     {
         [Key, Column(Order = 0)]

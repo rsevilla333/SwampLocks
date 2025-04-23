@@ -13,7 +13,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
 
-string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING2");
+string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 string? emailUsername = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
 string? emailServer = Environment.GetEnvironmentVariable("EMAIL_SERVER");
 string? emailPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");

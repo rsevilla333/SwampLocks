@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SwampLocksDb.Models
 {
-    // Economic Indicator object/table
     public class EconomicIndicator
     {
         [Key] public string Name { get; set; } = string.Empty; // Primary Key

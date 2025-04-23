@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwampLocksDb.Models
 {
-    // Economic Data object/table
     public class EconomicData
     {
         [Key, Column(Order = 0)]
