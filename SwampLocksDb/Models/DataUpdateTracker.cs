@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SwampLocksDb.Models
 {
+    // Data object tracker object/table
     public class DataUpdateTracker
     {
         [Key] public string DataType { get; set; } // E.g., "Commodity_WTI", "Economic_GDP", "Stock_AAPL"

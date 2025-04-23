@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SwampLocksDb.Models
 {
+    // Stock's article object/table
     public class Article
     {
         [Key]

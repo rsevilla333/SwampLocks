@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwampLocksDb.Models
 {
+	// Stock object/table
 	public class Stock
 	{
 	    [Key]

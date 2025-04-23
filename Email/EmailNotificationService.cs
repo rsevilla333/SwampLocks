@@ -4,6 +4,7 @@ using System.Net.Mail;
 
 namespace SwampLocks.EmailSevice
 {
+    // Email Service class 
     public class EmailNotificationService
     {
         private readonly string _smtpServer;
@@ -11,6 +12,7 @@ namespace SwampLocks.EmailSevice
         private readonly string _smtpPassword;
         private readonly int _serverPort;
 
+        // Email Service Construtor
         public EmailNotificationService(string server, string user, string password, int port = 465)
         {
             _smtpServer = server;
@@ -21,6 +23,7 @@ namespace SwampLocks.EmailSevice
             Console.WriteLine($"{_smtpServer} {_smtpUsername}  {_smtpPassword}");
         }
 
+        // Sends Email
         public Task SendEmailNotification(string recipient, string subject, string body)
         {
             var client = new SmtpClient(_smtpServer, 587)

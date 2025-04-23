@@ -18,12 +18,14 @@ using CsvHelper;
 
 namespace SwampLocks.AlphaVantage.Service
 {
+    // Alpha Vantage API Service Class
     public class AlphaVantageService
     {
         private readonly FinancialContext _context;
         private readonly AlphaVantageClient _client;
         private readonly EmailNotificationService _emailLogger;
 
+        // List of Sectors
         private List<(string Name, string Symbol)> _sectors = new List<(string, string)>
         {
             ("Communication Services", "XLC"),
@@ -39,9 +41,11 @@ namespace SwampLocks.AlphaVantage.Service
             ("Utilities", "XLU") 
         };
 
+        // List of Exchnage Rates
         private List<string> _currencies = new List<string>
         {
-            "EUR", "JPY", "BTC", "CAD", "AED", "AFN", "ALL", "AMD", "ANG", "AOA",
+           "EUR", "JPY", "BTC", 
+            "CAD", "AED", "AFN", "ALL", "AMD", "ANG", "AOA",
             "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF",
             "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BZD", "CAD", "CDF",
             "CHF", "CLF", "CLP", "CNH", "CNY", "COP", "CUP", "CVE", "CZK", "DJF",
@@ -60,6 +64,7 @@ namespace SwampLocks.AlphaVantage.Service
             "ZWL"
         };
 
+        // Constructor
         public AlphaVantageService(FinancialContext context, AlphaVantageClient client,
             EmailNotificationService emailLogger)
         {
@@ -68,6 +73,7 @@ namespace SwampLocks.AlphaVantage.Service
             _emailLogger = emailLogger ?? throw new ArgumentNullException(nameof(emailLogger));
         }
 
+        // Populates all exchange rates
         public void PopulateExchangeRates()
         {
             foreach (var currency in _currencies)
@@ -76,6 +82,7 @@ namespace SwampLocks.AlphaVantage.Service
             }
         }
 
+        // Populates Sectors
         public void PopulateSectors()
         {
             foreach (var (name, symbol) in _sectors)
@@ -84,6 +91,7 @@ namespace SwampLocks.AlphaVantage.Service
             }
         }
         
+        // Add all data related to a stock
         public void AddEverythingOnStock(string symbol, string sectorName)
         {
             var results = new List<string>();
@@ -113,7 +121,8 @@ namespace SwampLocks.AlphaVantage.Service
            }
 
         }
-        
+
+        // Add all stock data related to everything
         public void FetchAndUpdateEverything()
         {
             string subject;
@@ -128,13 +137,13 @@ namespace SwampLocks.AlphaVantage.Service
                bool updateReports = lastUpdated.HasValue && (DateTime.UtcNow - lastUpdated.Value).Days >= 90;
 
                // Execute and track results
-                TryExecute(PopulateExchangeRates, "PopulateExchangeRates", results);
-                TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllEconomicData", results);
-                TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllCommodityData", results);
+               TryExecute(PopulateExchangeRates, "PopulateExchangeRates", results);
+               TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllEconomicData", results);
+               TryExecute(FetchAndStoreAllEconomicData, "FetchAndStoreAllCommodityData", results);
 
                 foreach (var (sectorName, symbol) in _sectors)
                 {
-                    TryExecute(() => AddStockClosingPricePerSector(sectorName),
+                   TryExecute(() => AddStockClosingPricePerSector(sectorName),
                    $"AddStockClosingPricePerSector({sectorName})", results);
                     TryExecute(() => FetchAndStoreArticlesBySector(sectorName,DateTime.UtcNow),
                         $"FetchAndStoreArticlesBySector({sectorName})", results);
@@ -161,12 +170,12 @@ namespace SwampLocks.AlphaVantage.Service
                    _context.DataUpdateTrackers.First(d => d.DataType == "EcoIndicators").LastUpdated = DateTime.UtcNow;
                    _context.DataUpdateTrackers.First(d => d.DataType == "Commodities").LastUpdated = DateTime.UtcNow;
                    _context.DataUpdateTrackers.First(d => d.DataType == "Articles").LastUpdated = DateTime.UtcNow;
-
+                   
                    if (updateReports)
                    {
                        _context.DataUpdateTrackers.First(d => d.DataType == "Reports").LastUpdated = DateTime.UtcNow;
                    }
-
+                   
                    _context.DataUpdateTrackers.First(d => d.DataType == "StockData").LastUpdated = DateTime.UtcNow;
                    _context.SaveChanges();
 
@@ -186,7 +195,7 @@ namespace SwampLocks.AlphaVantage.Service
                 Console.WriteLine(updateResult);
             }
 
-             // Send Email Notification (Success or Error)
+              // Send Email Notification (Success or Error)
               _emailLogger.SendEmailNotification("rsevilla@ufl.edu", subject, updateResult);
               _emailLogger.SendEmailNotification("mdylewski@ufl.edu", subject, updateResult);
               _emailLogger.SendEmailNotification("andresportillo@ufl.edu", subject, updateResult);
@@ -208,6 +217,7 @@ namespace SwampLocks.AlphaVantage.Service
             }
         }
         
+        // Populates all stocks in a sector
         public bool PopulateSector(string sectorName, string etf)
         {
             var sectorStocksTickers = _client.GetStocksFromETF(etf);
@@ -221,6 +231,7 @@ namespace SwampLocks.AlphaVantage.Service
             return true;
         }
 
+        // Populates all financial reports of a sector
         public bool FetchAndStoreAllReportsFromSector(string sectorName, string reportType,
             Func<string, bool> fetchAndStoreByStock)
         {
@@ -275,7 +286,6 @@ namespace SwampLocks.AlphaVantage.Service
 
         public bool FetchAndStoreAllEarningStatementsFromStock(string ticker)
         {
-            // get response from client
             List<List<string>> earningStatements = _client.GetEarningStatementsByStock(ticker);
 
             var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports");
@@ -366,7 +376,7 @@ namespace SwampLocks.AlphaVantage.Service
             // loop through every cash flow statement in ticker
             foreach (var cashFlowStatementItem in cashFlowStatements)
             {
-                Console.WriteLine(cashFlowStatementItem[24]);
+               // Console.WriteLine(cashFlowStatementItem[24]);
                 DateTime date = DateTime.TryParse(cashFlowStatementItem[0], out var fde) ? fde : DateTime.MinValue;
 
                 if (date < lastUpdatedDate)
@@ -452,7 +462,7 @@ namespace SwampLocks.AlphaVantage.Service
 
                     // Add the new entry
                     _context.CashFlowStatements.Add(cashFlow);
-                    Console.WriteLine($"✅ Added Cash Flow Statement for: {ticker} (date: {date})");
+                //    Console.WriteLine($"✅ Added Cash Flow Statement for: {ticker} (date: {date})");
 
                 }
                 catch (Exception ex)
@@ -476,97 +486,97 @@ namespace SwampLocks.AlphaVantage.Service
             return true;
         }
 
-public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
-{
-	var trackDate = false;
-    try
+    public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
     {
-        List<List<string>> sheets = _client.GetBalanceSheetsByStock(ticker);
-
-        var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports");
-        DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
-
-        if (sheets == null || sheets.Count == 0)
+	    var trackDate = false;
+        try
         {
-            Console.WriteLine($"No balance sheet data found for {ticker}.");
-            return false;
-        }
+            List<List<string>> sheets = _client.GetBalanceSheetsByStock(ticker);
 
+            var lastUpdate = _context.DataUpdateTrackers.FirstOrDefault(d => d.DataType == "Reports");
+            DateTime lastUpdatedDate = lastUpdate?.LastUpdated ?? DateTime.MinValue;
 
-        var existingSheets = _context.StockBalanceSheets
-            .Where(b => b.Ticker == ticker)
-            .ToDictionary(b => b.FiscalYear); // FiscalYear → entity
-
-        List<StockBalanceSheet> newEntries = new();
-
-        foreach (var sheet in sheets)
-        {
-            try
+            if (sheets == null || sheets.Count == 0)
             {
-                int year = int.Parse(sheet[0].Substring(0, 4));
+                Console.WriteLine($"No balance sheet data found for {ticker}.");
+                return false;
+            }
 
-                if (year < lastUpdatedDate.Year && trackDate)
+
+            var existingSheets = _context.StockBalanceSheets
+                .Where(b => b.Ticker == ticker)
+                .ToDictionary(b => b.FiscalYear); // FiscalYear → entity
+
+            List<StockBalanceSheet> newEntries = new();
+
+            foreach (var sheet in sheets)
+            {
+                try
                 {
-                    Console.WriteLine("Data already up to date. Bye!!");
-                    break;
+                    int year = int.Parse(sheet[0].Substring(0, 4));
+
+                    if (year < lastUpdatedDate.Year && trackDate)
+                    {
+                        Console.WriteLine("Data already up to date. Bye!!");
+                        break;
+                    }
+
+                    var balanceSheet = new StockBalanceSheet
+                    {
+                        Ticker = ticker,
+                        FiscalYear = year,
+                        ReportedCurrency = sheet[1],
+                        TotalAssets = ParseDecimal(sheet[2]),
+                        TotalCurrentAssets = ParseDecimal(sheet[3]),
+                        CashAndCashEquivalents = ParseDecimal(sheet[4]),
+                        CashAndShortTermInvestments = ParseDecimal(sheet[5]),
+                        Inventory = ParseDecimal(sheet[6]),
+                        CurrentNetReceivables = ParseDecimal(sheet[7]),
+                        TotalNonCurrentAssets = ParseDecimal(sheet[8]),
+                        PropertyPlantEquipment = ParseDecimal(sheet[9]),
+                        IntangibleAssets = ParseDecimal(sheet[11]),
+                        Goodwill = ParseDecimal(sheet[13]),
+                        Investments = ParseDecimal(sheet[14]),
+                        LongTermInvestments = ParseDecimal(sheet[15]),
+                        ShortTermInvestments = ParseDecimal(sheet[16]),
+                        OtherCurrentAssets = ParseDecimal(sheet[18]),
+                        TotalLiabilities = ParseDecimal(sheet[19]),
+                        TotalCurrentLiabilities = ParseDecimal(sheet[20]),
+                        CurrentAccountsPayable = ParseDecimal(sheet[21]),
+                        DeferredRevenue = ParseDecimal(sheet[22]),
+                        CurrentDebt = ParseDecimal(sheet[23]),
+                        ShortTermDebt = ParseDecimal(sheet[24]),
+                        TotalNonCurrentLiabilities = ParseDecimal(sheet[25]),
+                        LongTermDebt = ParseDecimal(sheet[27]),
+                        OtherCurrentLiabilities = ParseDecimal(sheet[31]),
+                        TotalShareholderEquity = ParseDecimal(sheet[33]),
+                        TreasuryStock = ParseDecimal(sheet[34]),
+                        RetainedEarnings = ParseDecimal(sheet[35]),
+                        CommonStock = ParseDecimal(sheet[36]),
+                        CommonStockSharesOutstanding = long.TryParse(sheet[37], out var cso) ? cso : 0
+                    };
+
+                    if (existingSheets.TryGetValue(year, out var existing))
+                    {
+                        // Update existing values
+                        _context.Entry(existing).CurrentValues.SetValues(balanceSheet);
+                    }
+                    else
+                    {
+                        newEntries.Add(balanceSheet);
+                    }
                 }
-
-                var balanceSheet = new StockBalanceSheet
+                catch (Exception ex)
                 {
-                    Ticker = ticker,
-                    FiscalYear = year,
-                    ReportedCurrency = sheet[1],
-                    TotalAssets = ParseDecimal(sheet[2]),
-                    TotalCurrentAssets = ParseDecimal(sheet[3]),
-                    CashAndCashEquivalents = ParseDecimal(sheet[4]),
-                    CashAndShortTermInvestments = ParseDecimal(sheet[5]),
-                    Inventory = ParseDecimal(sheet[6]),
-                    CurrentNetReceivables = ParseDecimal(sheet[7]),
-                    TotalNonCurrentAssets = ParseDecimal(sheet[8]),
-                    PropertyPlantEquipment = ParseDecimal(sheet[9]),
-                    IntangibleAssets = ParseDecimal(sheet[11]),
-                    Goodwill = ParseDecimal(sheet[13]),
-                    Investments = ParseDecimal(sheet[14]),
-                    LongTermInvestments = ParseDecimal(sheet[15]),
-                    ShortTermInvestments = ParseDecimal(sheet[16]),
-                    OtherCurrentAssets = ParseDecimal(sheet[18]),
-                    TotalLiabilities = ParseDecimal(sheet[19]),
-                    TotalCurrentLiabilities = ParseDecimal(sheet[20]),
-                    CurrentAccountsPayable = ParseDecimal(sheet[21]),
-                    DeferredRevenue = ParseDecimal(sheet[22]),
-                    CurrentDebt = ParseDecimal(sheet[23]),
-                    ShortTermDebt = ParseDecimal(sheet[24]),
-                    TotalNonCurrentLiabilities = ParseDecimal(sheet[25]),
-                    LongTermDebt = ParseDecimal(sheet[27]),
-                    OtherCurrentLiabilities = ParseDecimal(sheet[31]),
-                    TotalShareholderEquity = ParseDecimal(sheet[33]),
-                    TreasuryStock = ParseDecimal(sheet[34]),
-                    RetainedEarnings = ParseDecimal(sheet[35]),
-                    CommonStock = ParseDecimal(sheet[36]),
-                    CommonStockSharesOutstanding = long.TryParse(sheet[37], out var cso) ? cso : 0
-                };
-
-                if (existingSheets.TryGetValue(year, out var existing))
-                {
-                    // Update existing values
-                    _context.Entry(existing).CurrentValues.SetValues(balanceSheet);
-                }
-                else
-                {
-                    newEntries.Add(balanceSheet);
+                    Console.WriteLine($"❌ Error processing balance sheet for {ticker}: {ex.Message}");
+                    continue;
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Error processing balance sheet for {ticker}: {ex.Message}");
-                continue;
-            }
-        }
 
-        if (newEntries.Count > 0)
-        {
-            _context.StockBalanceSheets.AddRange(newEntries);
-        }
+            if (newEntries.Count > 0)
+            {
+                _context.StockBalanceSheets.AddRange(newEntries);
+            }
 
        	 	_context.SaveChanges();
         	Console.WriteLine($"✅ Successfully inserted/updated {sheets.Count} balance sheets for {ticker}.");
@@ -585,9 +595,7 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
     	return decimal.TryParse(input, out var val) ? val : 0;
 	}
 
-
-
-
+    
         public bool FetchAndStoreAllIncomeStatementsFromStock(string ticker)
         {
             // get response from client
@@ -668,7 +676,7 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
 
                     // Add the new entry
                     _context.IncomeStatements.Add(incomeStatement);
-                    Console.WriteLine($"✅ Added Income Statement for: {ticker} (date: {date})");
+                   // Console.WriteLine($"✅ Added Income Statement for: {ticker} (date: {date})");
 
                 }
                 catch (Exception ex)
@@ -692,6 +700,7 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
             return true;
         }
 
+        // Populate all articles from a sector
         public void FetchAndStoreArticlesBySector(string sectorName, DateTime to)
         {
             try
@@ -727,7 +736,7 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
             }
         }
 		
-        public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime to, bool trackDate = true)
+        public bool FetchAndStoreArticlesByStock(string ticker, DateTime from, DateTime to, bool trackDate = false)
         {
             try
             {
@@ -950,10 +959,10 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
             {
                 List<string> economicIndicators = new List<string>
                 {
-                    "GDP",
-                    "GDPPC",
-                    "10Y-TCMR",
-                    "30Y-TCMR",
+                    // "GDP",
+                    // "GDPPC",
+                    // "10Y-TCMR",
+                    // "30Y-TCMR",
                     "7Y-TCMR",
                     "5Y-TCMR",
                     "2Y-TCMR",
@@ -1023,6 +1032,7 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
                     var existingEntry = _context.EconomicDataPoints
                         .AsNoTracking()
                         .FirstOrDefault(b => b.IndicatorName == indicator && b.Date == date);
+                    
 
                     if (existingEntry != null)
                     {
@@ -1209,8 +1219,9 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
 				}
 
                 // Check if the exchange rate already exists in the database
-                bool exists = _context.ExchangeRates
-                    .Any(r => r.Date == date && r.TargetCurrency == symbol);
+                // bool exists = _context.ExchangeRates
+                //     .Any(r => r.Date == date && r.TargetCurrency == symbol);
+                bool exists = false;
 
                 if (!exists)
                 {
@@ -1222,7 +1233,7 @@ public bool FetchAndStoreAllBalanceSheetsFromStock(string ticker)
                         Rate = rate.Item2
                     });
 
-					Console.WriteLine($"Added Exchange Rate for {symbol} @ {date}");
+				//	Console.WriteLine($"Added Exchange Rate for {symbol} @ {date}");
                 }
 				else 
 				{

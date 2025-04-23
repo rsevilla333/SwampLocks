@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace SwampLocksDb.Models
 {
+    // Holding object/table
     public class Holding
     {
         [Key]
