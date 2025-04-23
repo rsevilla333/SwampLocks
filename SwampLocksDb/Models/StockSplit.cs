@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SwampLocksDb.Models
 {
+    // Stock Split object/table
     public class StockSplit
     {
         [Key]

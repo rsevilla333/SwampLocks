@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SwampLocksDb.Models
 {
+        // Sector Performace object/table
         public class SectorPerformance
         {
             [Key] public string Id => $"{SectorName}_{Date:yyyyMMdd}";

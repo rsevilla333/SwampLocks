@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwampLocksDb.Models
 {
+    // Income Statement's object/table
     public class IncomeStatement
     {
         [Key]

@@ -11,6 +11,7 @@ using System.Globalization;
 
 namespace SwampLocks.AlphaVantage.Client
 {
+	// Alpha Vantage API Client Class
     public class AlphaVantageClient
     {
         private WebClient client;

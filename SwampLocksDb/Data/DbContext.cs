@@ -51,6 +51,14 @@ namespace SwampLocksDb.Data
             }
             
             Env.Load();
+            
+            string connStr = Environment.GetEnvironmentVariable("CONNECTION_STRING2");
+
+            if (string.IsNullOrEmpty(connStr))
+                throw new InvalidOperationException("❌ CONNECTION_STRING is missing from environment.");
+
+            optionsBuilder.UseSqlServer(connStr);
+            return;
 
             string databaseName = Environment.GetEnvironmentVariable("DB_NAME") ?? "";
             string serverName = Environment.GetEnvironmentVariable("SERVER_NAME") ?? "";

@@ -14,6 +14,7 @@ using DotNetEnv;
 
 namespace SwampLocks.AlphaVantage.CLI
 {
+    // Alpha Vantage DB population Class
     public class AlphaCLI
     {
         private AlphaVantageService _service;
